@@ -85,6 +85,7 @@ export default class AhoCorasick {
       while (state > 0 && !(l in this.gotoFn[state])) {
         state = this.failure[state]
       }
+      // 使用 object ，表情符号出现问题
       if (!(l in this.gotoFn[state])) {
         continue
       }

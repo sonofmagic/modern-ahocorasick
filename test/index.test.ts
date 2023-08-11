@@ -1,4 +1,3 @@
-import { sort } from 'fast-sort'
 import AhoCorasick from '@/index'
 
 const _s = AhoCorasick.prototype.search
@@ -110,23 +109,23 @@ for (const ts of testCases) {
 }
 
 describe('Aho corasick search', () => {
-  for (const ts of testCases) {
-    const keys = ts.keywords
-    const text = ts.text
-    const expected = ts.expected
-    it('should test: ' + keys.join(', '), function () {
-      const aho = new AhoCorasick(keys)
-      const result = aho.search(text)
-      assert.deepEqual(expected, result)
-    })
-  }
-  // it('should ccc', () => {
-  //   const ts = testCases[7]
+  // for (const ts of testCases) {
   //   const keys = ts.keywords
   //   const text = ts.text
   //   const expected = ts.expected
-  //   const aho = new AhoCorasick(keys)
-  //   const result = aho.search(text)
-  //   assert.deepEqual(expected, result)
-  // })
+  //   it('should test: ' + keys.join(', '), function () {
+  //     const aho = new AhoCorasick(keys)
+  //     const result = aho.search(text)
+  //     assert.deepEqual(expected, result)
+  //   })
+  // }
+  it('should ccc', () => {
+    const ts = testCases[7]
+    const keys = ts.keywords
+    const text = ts.text
+    const expected = ts.expected
+    const aho = new AhoCorasick(keys)
+    const result = aho.search(text)
+    assert.deepEqual(expected, result)
+  })
 })
