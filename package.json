@@ -19,7 +19,8 @@
     "ls:pack": "npm pack --dry-run",
     "prepare": "ts-patch install -s",
     "preinstall": "npx only-allow pnpm",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "sync": "cnpm sync modern-ahocorasick"
   },
   "packageManager": "pnpm@8.6.9",
   "repository": {
