@@ -76,12 +76,12 @@ export default class AhoCorasick {
     }
   }
 
-  search(string: string) {
+  search(str: string) {
     let state = 0
     const results: [number, string[]][] = []
     // eslint-disable-next-line unicorn/no-for-loop
-    for (let i = 0; i < string.length; i++) {
-      const l = string[i]
+    for (let i = 0; i < str.length; i++) {
+      const l = str[i]
       while (state > 0 && !(l in this.gotoFn[state])) {
         state = this.failure[state]
       }
