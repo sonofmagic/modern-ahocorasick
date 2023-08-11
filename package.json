@@ -1,7 +1,7 @@
 {
-  "name": "npm-lib-rollup-template",
+  "name": "modern-ahocorasick",
   "version": "0.0.0",
-  "description": "npm-lib-rollup-template",
+  "description": "modern-ahocorasick",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "types/index.d.ts",
@@ -24,7 +24,7 @@
   "packageManager": "pnpm@8.6.9",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sonofmagic/npm-lib-rollup-template.git"
+    "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
   },
   "files": [
     "dist",
@@ -38,9 +38,9 @@
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sonofmagic/npm-lib-rollup-template/issues"
+    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
   },
-  "homepage": "https://github.com/sonofmagic/npm-lib-rollup-template#readme",
+  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
   "devDependencies": {
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-commonjs": "^25.0.3",
@@ -63,6 +63,7 @@
     "eslint-config-icebreaker": "^1.2.2",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "fast-sort": "^3.4.0",
     "klaw": "^4.1.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
