@@ -18,7 +18,6 @@
     "format": "pnpm prettier --check \"src/**/*.{ts,js}\" -w",
     "ls:pack": "npm pack --dry-run",
     "prepare": "ts-patch install -s",
-    "preinstall": "npx only-allow pnpm",
     "semantic-release": "semantic-release",
     "sync": "cnpm sync modern-ahocorasick"
   },
