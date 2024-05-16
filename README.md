@@ -15,13 +15,13 @@ this pkg has `cjs` and `esm` format, and have `.d.ts` file.
 ## Usage
 
 ```ts
-// cjs
-const AhoCorasick = require('modern-ahocorasick');
 // esm
 import AhoCorasick from 'modern-ahocorasick'
+// cjs
+const AhoCorasick = require('modern-ahocorasick')
 
-const ac = new AhoCorasick(['keyword1', 'keyword2', 'etc']);
-const results = ac.search('should find keyword1 at position 19 and keyword2 at position 47.');
+const ac = new AhoCorasick(['keyword1', 'keyword2', 'etc'])
+const results = ac.search('should find keyword1 at position 19 and keyword2 at position 47.')
 
 // [ [ 19, [ 'keyword1' ] ], [ 47, [ 'keyword2' ] ] ]
 ```
