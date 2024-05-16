@@ -12,7 +12,7 @@ export default class AhoCorasick {
 
   _buildTables(keywords: string[]) {
     const gotoFn: Record<number, Record<string, number>> = {
-      0: {}
+      0: {},
     }
     const output: Record<number, string[]> = {}
 
@@ -22,7 +22,8 @@ export default class AhoCorasick {
       for (const l of word) {
         if (gotoFn[curr] && l in gotoFn[curr]) {
           curr = gotoFn[curr][l]
-        } else {
+        }
+        else {
           state++
           gotoFn[curr][l] = state
           gotoFn[state] = {}
@@ -61,7 +62,8 @@ export default class AhoCorasick {
             const fs = gotoFn[state][l]
             failure[s] = fs
             output[s] = [...output[s], ...output[fs]]
-          } else {
+          }
+          else {
             failure[s] = 0
           }
         }
@@ -72,14 +74,14 @@ export default class AhoCorasick {
     return {
       gotoFn,
       output,
-      failure
+      failure,
     }
   }
 
   search(str: string) {
     let state = 0
     const results: [number, string[]][] = []
-    // eslint-disable-next-line unicorn/no-for-loop
+
     for (let i = 0; i < str.length; i++) {
       const l = str[i]
       while (state > 0 && !(l in this.gotoFn[state])) {
