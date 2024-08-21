@@ -1,11 +1,20 @@
 {
   "name": "modern-ahocorasick",
-  "version": "0.0.0",
-  "description": "modern-ahocorasick",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "0.0.0",
+  "packageManager": "pnpm@9.7.1",
+  "description": "modern-ahocorasick",
+  "author": "SonOfMagic <qq1324318532@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
+  },
+  "keywords": [],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -15,6 +24,9 @@
     },
     "./*": "./*"
   },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
@@ -23,6 +35,10 @@
       ]
     }
   },
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
     "dev": "tsup --watch --sourcemap",
     "build:dev": "tsup --sourcemap",
@@ -37,44 +53,28 @@
     "semantic-release": "semantic-release",
     "sync": "cnpm sync modern-ahocorasick"
   },
-  "packageManager": "pnpm@9.1.1",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
-  },
-  "files": [
-    "dist",
-    "types"
-  ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "keywords": [],
-  "author": "SonOfMagic <qq1324318532@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
-  },
-  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
   "devDependencies": {
-    "@icebreakers/eslint-config": "^0.2.0",
-    "@tsconfig/recommended": "^1.0.6",
+    "@icebreakers/eslint-config": "^0.3.22",
+    "@tsconfig/recommended": "^1.0.7",
     "@types/klaw": "^3.0.6",
-    "@types/lodash": "^4.17.4",
+    "@types/lodash": "^4.17.7",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.12.12",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@types/node": "^22.4.2",
+    "@vitest/coverage-v8": "^2.0.5",
     "cross-env": "^7.0.3",
     "defu": "^6.1.4",
     "del": "^7.1.0",
-    "eslint": "9.3.0",
+    "eslint": "9.9.0",
     "klaw": "^4.1.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "semantic-release": "^23.1.1",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "semantic-release": "^24.1.0",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   }
 }
