@@ -2,7 +2,7 @@ import AhoCorasick from '@/index'
 
 const _s = AhoCorasick.prototype.search
 AhoCorasick.prototype.search = function (string) {
-  const results = _s.call(this, string).map(function (result) {
+  const results = _s.call(this, string).map((result) => {
     result[1] = result[1].sort()
     return result
   })
@@ -13,7 +13,7 @@ const testCases = [
   {
     keywords: ['hero', 'heroic'],
     text: 'hero',
-    expected: [[3, ['hero']]]
+    expected: [[3, ['hero']]],
   },
   {
     keywords: ['hero', 'heroic', 'heroism'],
@@ -24,24 +24,24 @@ const testCases = [
       [24, ['hero']],
       [26, ['heroic']],
       [38, ['hero']],
-      [41, ['heroism']]
-    ]
+      [41, ['heroism']],
+    ],
   },
   {
     keywords: ['keyword1', 'keyword2', 'etc'],
     text: 'should find keyword1 at position 19 and keyword2 at position 30.',
     expected: [
       [19, ['keyword1']],
-      [47, ['keyword2']]
-    ]
+      [47, ['keyword2']],
+    ],
   },
   {
     keywords: ['he', 'she', 'his', 'hers'],
     text: 'she was expecting his visit',
     expected: [
       [2, ['he', 'she']],
-      [20, ['his']]
-    ]
+      [20, ['his']],
+    ],
   },
   {
     keywords: ['çp?', 'éâà'],
@@ -49,8 +49,8 @@ const testCases = [
     expected: [
       [2, ['éâà']],
       [16, ['éâà']],
-      [25, ['çp?']]
-    ]
+      [25, ['çp?']],
+    ],
   },
   {
     keywords: ['**', '666', 'his', 'n', '\\', '\n'],
@@ -59,16 +59,16 @@ const testCases = [
       [0, ['\n']],
       // [20, ['his']]
       [6, ['666']],
-      [12, ['\n']]
-    ]
+      [12, ['\n']],
+    ],
   },
   {
     keywords: ['Федеральной', 'ной', 'idea'],
     text: '! Федеральной I have no idea what this means.',
     expected: [
       [12, ['Федеральной', 'ной']],
-      [27, ['idea']]
-    ]
+      [27, ['idea']],
+    ],
   },
   // {
   //   keywords: ['bla', '😁', '😀', '😀😁😀'],
@@ -88,14 +88,20 @@ const testCases = [
     text: '-  (╯°□°）╯︵ ┻━┻ ',
     expected: [
       [7, ['°□°']],
-      [14, ['┻━┻']]
-    ]
+      [14, ['┻━┻']],
+    ],
   },
   {
     keywords: ['.com.au', '.com'],
     text: 'www.yahoo.com',
-    expected: [[12, ['.com']]]
-  }
+    expected: [[12, ['.com']]],
+  },
+  // not matched
+  {
+    keywords: ['.com.au', '.com'],
+    text: 'www.example.org',
+    expected: [],
+  },
 ] as {
   keywords: string[]
   text: string
@@ -108,15 +114,20 @@ for (const ts of testCases) {
   }
 }
 
-describe('Aho corasick search', () => {
+describe('aho corasick search', () => {
   for (const ts of testCases) {
     const keys = ts.keywords
     const text = ts.text
     const expected = ts.expected
-    it('should test: ' + keys.join(', '), function () {
+    it(`should test: ${keys.join(', ')}`, () => {
       const aho = new AhoCorasick(keys)
       const result = aho.search(text)
       assert.deepEqual(expected, result)
+    })
+    it(`should match: ${keys.join(', ')}`, () => {
+      const aho = new AhoCorasick(keys)
+      const result = aho.match(text)
+      assert.deepEqual(expected.length > 0, result)
     })
   }
   // it('should ccc', () => {
