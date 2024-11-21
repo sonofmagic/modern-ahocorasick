@@ -102,4 +102,27 @@ export default class AhoCorasick {
 
     return results
   }
+
+  match(str: string) {
+    let state = 0
+
+    for (let i = 0; i < str.length; i++) {
+      const l = str[i]
+      while (state > 0 && !(l in this.gotoFn[state])) {
+        state = this.failure[state]
+      }
+      // 使用 object ，表情符号出现问题
+      if (!(l in this.gotoFn[state])) {
+        continue
+      }
+
+      state = this.gotoFn[state][l]
+
+      if (this.output[state].length > 0) {
+        return true
+      }
+    }
+
+    return false
+  }
 }
