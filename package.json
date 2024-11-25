@@ -43,14 +43,18 @@
     "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
   },
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "keywords": [],
+  "keywords": [
+    "ahocorasick",
+    "modern",
+    "cjs",
+    "js"
+  ],
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -58,24 +62,24 @@
   },
   "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
   "devDependencies": {
-    "@icebreakers/eslint-config": "^0.1.0",
-    "@tsconfig/recommended": "^1.0.6",
+    "@icebreakers/eslint-config": "^0.7.3",
+    "@tsconfig/recommended": "^1.0.8",
     "@types/klaw": "^3.0.6",
-    "@types/lodash": "^4.17.1",
+    "@types/lodash": "^4.17.13",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.12.12",
+    "@types/node": "^22.9.3",
     "@types/semantic-release": "^20.0.6",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/coverage-v8": "^2.1.5",
     "cross-env": "^7.0.3",
     "defu": "^6.1.4",
-    "del": "^7.1.0",
-    "eslint": "9.2.0",
+    "del": "^8.0.0",
+    "eslint": "9.15.0",
     "klaw": "^4.1.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "semantic-release": "^23.1.1",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "semantic-release": "^24.2.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.5"
   }
 }
