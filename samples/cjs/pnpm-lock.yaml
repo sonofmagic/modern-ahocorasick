@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       modern-ahocorasick:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.0.1
+        version: 2.0.1
 
 packages:
 
-  modern-ahocorasick@2.0.0:
-    resolution: {integrity: sha512-9dJtiP929+N58iEfF5kw6E6Yz9W91eS0akbippUJrVN0ca1w/qGlQPRGPfjwqeLgR6tvNNsMqA1uPIeB/15jEA==}
+  modern-ahocorasick@2.0.1:
+    resolution: {integrity: sha512-Z/7AU4ceonxL/tkQqg2LJIIlHQNGddcGNg2E28cf6jowoRawl/5t577NpdKd2bKV/kT3lcctgrSAf8pjnFMR5Q==}
 
 snapshots:
 
-  modern-ahocorasick@2.0.0: {}
+  modern-ahocorasick@2.0.1: {}
