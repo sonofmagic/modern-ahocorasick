@@ -1,0 +1,16 @@
+{
+  "name": "esm",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "modern-ahocorasick": "^2.0.0"
+  }
+}

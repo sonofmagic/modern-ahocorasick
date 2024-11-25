@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      modern-ahocorasick:
+        specifier: ^2.0.0
+        version: 2.0.0
+
+packages:
+
+  modern-ahocorasick@2.0.0:
+    resolution: {integrity: sha512-9dJtiP929+N58iEfF5kw6E6Yz9W91eS0akbippUJrVN0ca1w/qGlQPRGPfjwqeLgR6tvNNsMqA1uPIeB/15jEA==}
+
+snapshots:
+
+  modern-ahocorasick@2.0.0: {}
