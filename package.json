@@ -63,7 +63,7 @@
     "@types/klaw": "^3.0.6",
     "@types/lodash": "^4.17.1",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.12.12",
+    "@types/node": "^22.0.0",
     "@types/semantic-release": "^20.0.6",
     "@vitest/coverage-v8": "^1.6.0",
     "cross-env": "^7.0.3",
