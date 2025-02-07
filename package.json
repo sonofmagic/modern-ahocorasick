@@ -37,7 +37,7 @@
     "semantic-release": "semantic-release",
     "sync": "cnpm sync modern-ahocorasick"
   },
-  "packageManager": "pnpm@9.1.0",
+  "packageManager": "pnpm@9.15.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
