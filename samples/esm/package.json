@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "modern-ahocorasick": "^2.0.1"
+    "modern-ahocorasick": "^2.0.2"
   }
 }
