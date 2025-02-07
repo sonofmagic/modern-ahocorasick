@@ -102,6 +102,21 @@ const testCases = [
     text: 'www.example.org',
     expected: [],
   },
+  // surrogate pair
+  // U+20BAF: 𠮟
+  {
+    keywords: ['𠮟', '𠮟る'],
+    text: '人を𠮟る',
+    expected: [[2, ['𠮟']], [3, ['𠮟る']]],
+  },
+  // grapheme cluster
+  // family: 👨‍👩‍👧‍👦
+  // codepoints: 1F468 200D 1F469 200D 1F467 200D 1F466
+  {
+    keywords: ['👨‍👩‍👧‍👦'],
+    text: '😁👨‍👩‍👧‍👦😀',
+    expected: [[1, ['👨‍👩‍👧‍👦']]],
+  },
 ] as {
   keywords: string[]
   text: string

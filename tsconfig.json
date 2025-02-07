@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES2022",
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
