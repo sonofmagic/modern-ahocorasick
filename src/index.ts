@@ -18,14 +18,17 @@ export default class AhoCorasick {
 
     let state = 0
     for (const word of keywords) {
+      const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+      const iterator = segmenter.segment(word)[Symbol.iterator]()
       let curr = 0
-      for (const l of word) {
-        if (gotoFn[curr] && l in gotoFn[curr]) {
-          curr = gotoFn[curr][l]
+      for (const l of iterator) {
+        const segment = l.segment
+        if (gotoFn[curr] && segment in gotoFn[curr]) {
+          curr = gotoFn[curr][segment]
         }
         else {
           state++
-          gotoFn[curr][l] = state
+          gotoFn[curr][segment] = state
           gotoFn[state] = {}
           curr = state
           output[state] = []
@@ -81,21 +84,26 @@ export default class AhoCorasick {
   search(str: string) {
     let state = 0
     const results: [number, string[]][] = []
+    const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    const iterator = segmenter.segment(str)[Symbol.iterator]()
+    let count = -1
 
-    for (let i = 0; i < str.length; i++) {
-      const l = str[i]
-      while (state > 0 && !(l in this.gotoFn[state])) {
+    for (const l of iterator) {
+      const segment = l.segment
+      count++
+      while (state > 0 && !(segment in this.gotoFn[state])) {
         state = this.failure[state]
       }
-      if (!(l in this.gotoFn[state])) {
+      // 使用 object ，表情符号出现问题
+      if (!(segment in this.gotoFn[state])) {
         continue
       }
 
-      state = this.gotoFn[state][l]
+      state = this.gotoFn[state][segment]
 
       if (this.output[state].length > 0) {
         const foundStrs = this.output[state]
-        results.push([i, foundStrs])
+        results.push([count, foundStrs])
       }
     }
 
@@ -104,17 +112,20 @@ export default class AhoCorasick {
 
   match(str: string) {
     let state = 0
+    const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    const iterator = segmenter.segment(str)[Symbol.iterator]()
 
-    for (let i = 0; i < str.length; i++) {
-      const l = str[i]
-      while (state > 0 && !(l in this.gotoFn[state])) {
+    for (const l of iterator) {
+      const segment = l.segment
+      while (state > 0 && !(segment in this.gotoFn[state])) {
         state = this.failure[state]
       }
-      if (!(l in this.gotoFn[state])) {
+      // 使用 object ，表情符号出现问题
+      if (!(segment in this.gotoFn[state])) {
         continue
       }
 
-      state = this.gotoFn[state][l]
+      state = this.gotoFn[state][segment]
 
       if (this.output[state].length > 0) {
         return true
