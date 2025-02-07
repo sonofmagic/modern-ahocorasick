@@ -1,11 +1,25 @@
 {
   "name": "modern-ahocorasick",
-  "version": "0.0.0",
-  "description": "modern-ahocorasick",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "0.0.0",
+  "packageManager": "pnpm@9.15.5",
+  "description": "modern-ahocorasick",
+  "author": "SonOfMagic <qq1324318532@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
+  },
+  "keywords": [
+    "ahocorasick",
+    "modern",
+    "cjs",
+    "js"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -15,6 +29,9 @@
     },
     "./*": "./*"
   },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
@@ -23,6 +40,9 @@
       ]
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsup --watch --sourcemap",
     "build:dev": "tsup --sourcemap",
@@ -37,30 +57,10 @@
     "semantic-release": "semantic-release",
     "sync": "cnpm sync modern-ahocorasick"
   },
-  "packageManager": "pnpm@9.15.5",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
-  },
-  "files": [
-    "dist"
-  ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "keywords": [
-    "ahocorasick",
-    "modern",
-    "cjs",
-    "js"
-  ],
-  "author": "SonOfMagic <qq1324318532@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
-  },
-  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
   "devDependencies": {
     "@icebreakers/eslint-config": "^0.7.13",
     "@tsconfig/recommended": "^1.0.8",
