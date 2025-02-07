@@ -10,13 +10,13 @@ importers:
     dependencies:
       modern-ahocorasick:
         specifier: ^2.0.2
-        version: 2.0.2
+        version: 2.0.3
 
 packages:
 
-  modern-ahocorasick@2.0.2:
-    resolution: {integrity: sha512-qMPR7bQNCcQ258O1yNFvk6f9CQMT6AFIz0Sg6GbRIRcPFNsKYe1XTKGG8O/6oQu9yJiu7tFMqUiQ5c0B/zc5lQ==}
+  modern-ahocorasick@2.0.3:
+    resolution: {integrity: sha512-3vsbnf5DmpsaE8Ye892HecJU7kaT2svsIBXNhne1J080WlU9RKjTtE5PgX+OCc2huqGqGYO+rVEsJlJJuQj+Qw==}
 
 snapshots:
 
-  modern-ahocorasick@2.0.2: {}
+  modern-ahocorasick@2.0.3: {}
