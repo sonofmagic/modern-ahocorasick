@@ -2,7 +2,7 @@
   "name": "modern-ahocorasick",
   "type": "module",
   "version": "0.0.0",
-  "packageManager": "pnpm@9.15.5",
+  "packageManager": "pnpm@10.2.1",
   "description": "modern-ahocorasick",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
