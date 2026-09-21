@@ -32,7 +32,7 @@ interface Match<T> {
 | `leftmost-first`   | Earliest start; input order breaks ties.                                           |
 | `leftmost-longest` | Earliest start; longest match wins, then input order.                              |
 
-Non-overlapping strategies skip candidates overlapping a selected match. Adjacent matches are allowed. They collect and sort all candidates, which costs memory proportional to the total number of matches.
+Non-overlapping strategies skip candidates overlapping a selected match. Adjacent matches are allowed. They retain one best candidate per start in a window bounded by the longest keyword in graphemes, without collecting and sorting all occurrences. Search still retains its selected result array.
 
 ```ts
 ac.search(text, { strategy: 'leftmost-longest' })
@@ -40,21 +40,29 @@ ac.search(text, { strategy: 'leftmost-longest' })
 
 ## match(text)
 
-Returns a boolean and stops after the first hit. Use it when you only need presence, not every result.
+Returns a boolean and stops after the first hit without creating a match object. Use it when you only need presence, not every result.
 
-## iterate(text)
+## count(text)
 
-Lazily emits all matches in the same order as default `search()`. It accepts a complete string, not chunks. Iteration avoids retaining an entire result array; the input text and dictionary remain alive.
+Returns the total number of occurrences, including overlaps and duplicate entries, equal to `search(text).length`. It uses aggregate state counts without creating match objects or walking output links. Empty text or an empty dictionary returns `0`. Invalid text throws `TypeError`; a count exceeding `Number.MAX_SAFE_INTEGER` throws `RangeError`. No strategy option is accepted.
 
 ```ts
-for (const hit of ac.iterate(text)) {
+new AhoCorasick(['a', 'aa', 'a']).count('aaa') // 8
+```
+
+## iterate(text, options?)
+
+Lazily emits matches in the same order as `search(text, options)`, with the same three strategies and `all` as default. Text and options are validated immediately, and the strategy is captured at call time. It accepts a complete string, not chunks. Iteration avoids retaining an entire result array; the input text and dictionary remain alive. Non-overlapping strategies use an O(L) candidate window and may look ahead up to the longest keyword's L graphemes to settle a result. Each iterator has independent state.
+
+```ts
+for (const hit of ac.iterate(text, { strategy: 'leftmost-longest' })) {
   console.log(hit.pattern, text.slice(hit.start, hit.end))
 }
 ```
 
 ## replace(text, replacement, options?)
 
-Replaces non-overlapping original ranges once. Default strategy is `leftmost-longest`; `leftmost-first` is also accepted, `all` is rejected. A callback receives `(match, originalSubstring)` and must return a string. String replacements are literal: `$&` has no special meaning. Inserted text is not searched again.
+Replaces non-overlapping original ranges once. Default strategy is `leftmost-longest`; `leftmost-first` is also accepted, `all` is rejected. A callback receives `(match, originalSubstring)` and must return a string. String replacements are literal: `$&` has no special meaning. Inserted text is not searched again. Selected matches are consumed incrementally, although output text and intermediate string pieces still require memory.
 
 ```ts
 new AhoCorasick(['cat']).replace('cat cat', '$&') // '$& $&'

@@ -43,6 +43,10 @@ assert.deepEqual(ac.search('ushers'), [
   { pattern: 'hers', patternIndex: 2, start: 2, end: 6, data: undefined },
 ])
 assert.deepEqual([...ac.iterate('ushers')], ac.search('ushers'))
+assert.equal(ac.count('ushers'), 3)
+for (const strategy of ['all', 'leftmost-first', 'leftmost-longest']) {
+  assert.deepEqual([...ac.iterate('ushers', { strategy })], ac.search('ushers', { strategy }))
+}
 assert.equal(ac.replace('ushers', 'X'), 'uXrs')
 assert.equal(new AhoCorasick([{ pattern: 'cat', data: '猫' }]).replace('😀cat', match => match.data), '😀猫')
 assert.equal(ac.match('xyz'), false)
@@ -63,6 +67,10 @@ const ac = new AhoCorasick([{ pattern: 'he', data: { id: 1 } }])
 const typed: AhoCorasick<{ id: number }> = ac
 const results: Match<{ id: number }>[] = typed.search('he')
 const iterator: IterableIterator<Match<{ id: number }>> = ac.iterate('he')
+const count: number = ac.count('he')
+const selected: IterableIterator<Match<{ id: number }>> = ac.iterate('he', { strategy: 'leftmost-longest' })
+void count
+void selected
 const replaced: string = ac.replace('he', (match, text) => String(match.data?.id) + text)
 void iterator
 void replaced

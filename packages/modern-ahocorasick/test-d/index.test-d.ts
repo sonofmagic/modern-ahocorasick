@@ -7,6 +7,7 @@ const matcher = new AhoCorasick(inputs)
 expectType<Match<{ id: string }>[]>(matcher.search('she'))
 expectType<IterableIterator<Match<{ id: string }>>>(matcher.iterate('she'))
 expectType<boolean>(matcher.match('she'))
+expectType<number>(matcher.count('she'))
 expectType<string>(matcher.replace('she', (match, text) => {
   expectType<{ id: string } | undefined>(match.data)
   expectType<string>(text)
@@ -17,11 +18,14 @@ const options: SearchOptions = { strategy }
 const replaceOptions: ReplaceOptions = { strategy }
 const replacement: Replacement<{ id: string }> = match => match.pattern
 expectType<Match<{ id: string }>[]>(matcher.search('she', options))
+expectType<IterableIterator<Match<{ id: string }>>>(matcher.iterate('she', options))
 expectType<string>(matcher.replace('she', replacement, replaceOptions))
 expectType<Match<unknown>[]>(new AhoCorasick(['he'] as const).search('he'))
 expectType<Match<{ id: number }>[]>(new AhoCorasick([{ pattern: 'a', data: { id: 1 } }]).search('a'))
 expectError(new AhoCorasick([123]))
 expectError(matcher.search(123))
+expectError(matcher.count(123))
+expectError(matcher.iterate('she', { strategy: 'unknown' }))
 expectError(matcher.search('she', { strategy: 'unknown' }))
 expectError(matcher.replace('she', '', { strategy: 'all' }))
 expectError(matcher.replace('she', () => 123))

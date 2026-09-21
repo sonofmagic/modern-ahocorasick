@@ -1,6 +1,6 @@
 import type { AutomatonNode } from './internal.js'
 import type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
-import { buildAutomaton } from './internal.js'
+import { advance, buildAutomaton } from './internal.js'
 
 export type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
 
@@ -26,28 +26,14 @@ function resolveStrategy(options: SearchOptions | undefined, fallback: MatchStra
   return strategy
 }
 
-function selectMatches<T>(matches: Match<T>[], strategy: MatchStrategy): Match<T>[] {
-  if (strategy === 'all') {
-    return matches
-  }
-  matches.sort((a, b) => a.start - b.start
-    || (strategy === 'leftmost-longest' ? b.end - a.end : 0)
-    || a.patternIndex - b.patternIndex)
-  const selected: Match<T>[] = []
-  let end = 0
-  for (const match of matches) {
-    if (match.start >= end) {
-      selected.push(match)
-      end = match.end
-    }
-  }
-  return selected
-}
-
 /** An immutable compiled dictionary for exact grapheme-cluster matching. */
 export default class AhoCorasick<T = unknown> {
   readonly #nodes: AutomatonNode[]
   readonly #patterns: Pattern<T>[]
+  readonly #maxLength: number
+  /** Pattern lengths in graphemes; string.length and public ranges use UTF-16. */
+  readonly #lengths: Uint32Array
+  readonly #counts: Uint32Array
   readonly #segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
 
   constructor(patterns: readonly PatternInput<T>[]) {
@@ -68,26 +54,61 @@ export default class AhoCorasick<T = unknown> {
       }
       return { pattern, data: typeof input === 'string' ? undefined : input.data }
     })
-    this.#nodes = buildAutomaton(this.#patterns, this.#segmenter)
+    const { nodes, lengths, counts, maxLength } = buildAutomaton(this.#patterns, this.#segmenter)
+    this.#nodes = nodes
+    this.#lengths = lengths
+    this.#counts = counts
+    this.#maxLength = maxLength
   }
 
   /** All matches, optionally reduced to a non-overlapping selection. */
   search(text: string, options?: SearchOptions): Match<T>[] {
-    assertText(text)
-    const strategy = resolveStrategy(options, 'all')
-    return selectMatches(Array.from(this.#scan(text)), strategy)
+    const matches: Match<T>[] = []
+    for (const match of this.iterate(text, options)) {
+      matches.push(match)
+    }
+    return matches
   }
 
-  /** Lazily emit all matches in end/length/input order. Validates text immediately. */
-  iterate(text: string): IterableIterator<Match<T>> {
+  /** Lazily emit the chosen strategy's results. Validates arguments immediately. */
+  iterate(text: string, options?: SearchOptions): IterableIterator<Match<T>> {
     assertText(text)
-    return this.#scan(text)
+    const strategy = resolveStrategy(options, 'all')
+    return strategy === 'all' ? this.#scan(text) : this.#select(text, strategy)
+  }
+
+  /** Count all occurrences, including overlaps and duplicate dictionary entries. */
+  count(text: string): number {
+    assertText(text)
+    if (this.#patterns.length === 0) {
+      return 0
+    }
+    let state = 0
+    let count = 0
+    for (const { segment } of this.#segmenter.segment(text)) {
+      state = advance(this.#nodes, state, segment)
+      count += this.#counts[state]
+      if (!Number.isSafeInteger(count)) {
+        throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
+      }
+    }
+    return count
   }
 
   /** Stop scanning as soon as a match is found. */
   match(text: string): boolean {
     assertText(text)
-    return !this.#scan(text).next().done
+    if (this.#patterns.length === 0) {
+      return false
+    }
+    let state = 0
+    for (const { segment } of this.#segmenter.segment(text)) {
+      state = advance(this.#nodes, state, segment)
+      if (this.#counts[state] !== 0) {
+        return true
+      }
+    }
+    return false
   }
 
   /** Replace selected original ranges once; replacement strings are literal. */
@@ -100,7 +121,7 @@ export default class AhoCorasick<T = unknown> {
     if (strategy === 'all') {
       throw new TypeError('replace requires a non-overlapping strategy')
     }
-    const selected = selectMatches(Array.from(this.#scan(text)), strategy)
+    const selected = this.#select(text, strategy)
     const parts: string[] = []
     let cursor = 0
     for (const match of selected) {
@@ -123,12 +144,10 @@ export default class AhoCorasick<T = unknown> {
     }
     let state = 0
     for (const { segment, index } of this.#segmenter.segment(text)) {
-      let next = this.#nodes[state].next.get(segment)
-      while (next === undefined && state !== 0) {
-        state = this.#nodes[state].failure
-        next = this.#nodes[state].next.get(segment)
+      state = advance(this.#nodes, state, segment)
+      if (this.#counts[state] === 0) {
+        continue
       }
-      state = next ?? 0
       const end = index + segment.length
       // Own terminals are longest, followed by progressively shorter suffixes.
       for (let output = state; output !== -1; output = this.#nodes[output].output) {
@@ -136,6 +155,84 @@ export default class AhoCorasick<T = unknown> {
           const { pattern, data } = this.#patterns[patternIndex]
           yield { pattern, patternIndex, start: end - pattern.length, end, data }
         }
+      }
+    }
+  }
+
+  * #select(text: string, strategy: Exclude<MatchStrategy, 'all'>): Generator<Match<T>> {
+    const capacity = this.#maxLength
+    if (capacity === 0) {
+      return
+    }
+    // One numeric candidate per possible start, never one object per occurrence.
+    // Stamps distinguish reused ring slots, including slots skipped by a winner.
+    const stamps: number[] = []
+    const candidates: number[] = []
+    const starts: number[] = []
+    let state = 0
+    let position = 0
+    let cursor = 0
+    let lastCandidateStart = -1
+    for (const { segment, index } of this.#segmenter.segment(text)) {
+      state = advance(this.#nodes, state, segment)
+      position++
+      if (this.#counts[state] === 0 && cursor > lastCandidateStart) {
+        continue
+      }
+      if (cursor > lastCandidateStart) {
+        // Defer empty-window advancement until a candidate actually arrives.
+        cursor = Math.max(cursor, position - capacity)
+      }
+      const end = index + segment.length
+      for (let output = this.#counts[state] === 0 ? -1 : state; output !== -1; output = this.#nodes[output].output) {
+        for (const patternIndex of this.#nodes[output].terminals) {
+          const pattern = this.#patterns[patternIndex]
+          const length = this.#lengths[patternIndex]
+          const start = position - length
+          if (start < cursor) {
+            continue
+          }
+          lastCandidateStart = Math.max(lastCandidateStart, start)
+          const slot = start % capacity
+          const previous = candidates[slot]
+          if (stamps[slot] !== start
+            || (strategy === 'leftmost-first'
+              ? patternIndex < previous
+              : length > this.#lengths[previous]
+                || (length === this.#lengths[previous] && patternIndex < previous))) {
+            stamps[slot] = start
+            candidates[slot] = patternIndex
+            starts[slot] = end - pattern.pattern.length
+          }
+        }
+      }
+      // No future match can start here once the longest pattern would have ended.
+      while (cursor <= position - capacity) {
+        const slot = cursor % capacity
+        if (stamps[slot] === cursor) {
+          const patternIndex = candidates[slot]
+          const { pattern, data } = this.#patterns[patternIndex]
+          const start = starts[slot]
+          cursor += this.#lengths[patternIndex]
+          yield { pattern, patternIndex, start, end: start + pattern.length, data }
+        }
+        else {
+          cursor++
+        }
+      }
+    }
+    // End of input settles every remaining candidate without further lookahead.
+    while (cursor <= lastCandidateStart) {
+      const slot = cursor % capacity
+      if (stamps[slot] === cursor) {
+        const patternIndex = candidates[slot]
+        const { pattern, data } = this.#patterns[patternIndex]
+        const start = starts[slot]
+        cursor += this.#lengths[patternIndex]
+        yield { pattern, patternIndex, start, end: start + pattern.length, data }
+      }
+      else {
+        cursor++
       }
     }
   }

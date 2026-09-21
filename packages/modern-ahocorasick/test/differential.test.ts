@@ -46,7 +46,7 @@ it('agrees with a naive grapheme matcher across seeded random dictionaries and t
   function word(length: number) {
     return Array.from({ length }, () => alphabet[integer(alphabet.length)]).join('')
   }
-  for (let trial = 0; trial < 200; trial++) {
+  for (let trial = 0; trial < 1000; trial++) {
     const patterns = Array.from({ length: integer(12) }, () => word(1 + integer(5)))
     if (patterns.length) {
       patterns.push(patterns[0])
@@ -57,12 +57,14 @@ it('agrees with a naive grapheme matcher across seeded random dictionaries and t
     expect(ac.search(text), `trial ${trial}`).toEqual(all)
     expect([...ac.iterate(text)]).toEqual(all)
     expect(ac.match(text)).toBe(all.length > 0)
+    expect(ac.count(text)).toBe(all.length)
     for (const match of all) {
       expect(text.slice(match.start, match.end)).toBe(match.pattern)
     }
     for (const strategy of ['leftmost-first', 'leftmost-longest'] as const) {
       const expected = naive(text, patterns, strategy)
       expect(ac.search(text, { strategy })).toEqual(expected)
+      expect([...ac.iterate(text, { strategy })]).toEqual(expected)
       let replaced = text
       for (const match of [...expected].reverse()) {
         replaced = `${replaced.slice(0, match.start)}X${replaced.slice(match.end)}`

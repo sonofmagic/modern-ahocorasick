@@ -41,7 +41,7 @@ const graphemeEndExclusive = [...segmenter.segment(text.slice(0, match.end))].le
 ## Stop accessing internal tables
 
 `gotoFn`, `output`, `failure` and `_buildTables` are no longer public or mutable.
-Construct a new matcher to change the dictionary. Use `search`, `iterate` and
+Construct a new matcher to change the dictionary. Use `search`, `iterate`, `count` and
 `match` for queries. Mutating returned results cannot modify the dictionary.
 
 ## Validate empty and invalid keywords
@@ -59,9 +59,16 @@ application entries. Non-overlapping replacement chooses the earliest start and,
 by default, the longest keyword at that start. Set `strategy: 'leftmost-first'`
 when dictionary order should decide ties instead.
 
-`iterate` is lazy all-match iteration over a complete string. It does not accept
-chunks, apply normalization or fold case. A first iterator result is the
-first-ending match, not necessarily the leftmost match.
+`iterate(text, options?)` lazily emits the same results as `search(text, options)`.
+It defaults to all-match iteration and also supports both non-overlapping
+strategies. It accepts complete strings, not chunks, and does not normalize or
+fold case. With `all`, the first result is the first-ending match, not necessarily
+the leftmost match. Selected strategies may look ahead by the longest keyword's
+grapheme length before settling a result, using a bounded candidate window.
+
+Use `count(text)` instead of `search(text).length` when only the number of
+occurrences matters. It includes overlaps and duplicates without creating match
+objects. Counts above `Number.MAX_SAFE_INTEGER` throw `RangeError`.
 
 ## TypeScript and CommonJS
 

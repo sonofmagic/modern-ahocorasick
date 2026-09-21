@@ -1,0 +1,109 @@
+{
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "baselineRef": "a4181b054b2d2c85e83fe4201b1417c879db2f30",
+  "v3BaselineRef": "4f6dd786602014bd8e6f46c324ece54ba97a1b50",
+  "implementationSha256": "ded679b6ae0e48084bc9f7b501b13201ed3b09a592501ba77ee4153b8ae206e2",
+  "samples": 7,
+  "rounds": 7,
+  "operations": [
+    "match"
+  ],
+  "note": "Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. v3-before count uses search().length; selected iteration uses search().values(). Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. v2 output grouping differs. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "long-text",
+      "variant": "v2",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {
+        "match": {
+          "ms": 0.03667545703124997,
+          "madMs": 0.0038222695312499777,
+          "betweenRoundsMadMs": 0,
+          "roundMediansMs": [
+            0.03667545703124997
+          ],
+          "utf16UnitsPerSecond": 14178419087.100262
+        }
+      },
+      "dictionaryHeapBytes": 2860,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 9060640,
+      "checks": {}
+    },
+    {
+      "scenario": "long-text",
+      "variant": "v3-before",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {
+        "match": {
+          "ms": 0.02986165234374999,
+          "madMs": 0.001897785156249998,
+          "betweenRoundsMadMs": 0.002076332031249961,
+          "roundMediansMs": [
+            0.036632972656249985,
+            0.02986165234374999,
+            0.034520667968749974,
+            0.028785320312499918,
+            0.028633628906249986,
+            0.027785320312500028,
+            0.03702230078125002
+          ],
+          "utf16UnitsPerSecond": 17413637866.185776
+        }
+      },
+      "dictionaryHeapBytes": 5218.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 8705496,
+      "checks": {
+        "search": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "first": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "longest": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "replaceFirst": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7",
+        "replaceLongest": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7"
+      }
+    },
+    {
+      "scenario": "long-text",
+      "variant": "v3",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {
+        "match": {
+          "ms": 0.02946598437500003,
+          "madMs": 0.0014282226562499223,
+          "betweenRoundsMadMs": 0.0006842460937500627,
+          "roundMediansMs": [
+            0.02946598437500003,
+            0.03362028124999994,
+            0.02898502343749998,
+            0.03224869531250002,
+            0.028912109374999995,
+            0.030461097656249936,
+            0.02878173828124997
+          ],
+          "utf16UnitsPerSecond": 17647467445.248024
+        }
+      },
+      "dictionaryHeapBytes": 5653.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 9105280,
+      "checks": {
+        "search": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "first": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "longest": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "replaceFirst": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7",
+        "replaceLongest": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": []
+}

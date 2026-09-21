@@ -1,7 +1,7 @@
 # modern-ahocorasick
 
 Aho–Corasick multi-pattern matching for Unicode text, with sliceable ranges,
-keyword metadata, lazy iteration and non-overlapping replacement.
+keyword metadata, allocation-light counting, lazy iteration and non-overlapping replacement.
 
 **v3 is in development and is not published yet.** The committed package version
 is the release baseline; the pending major change intent prepares 3.0.0 when a
@@ -105,10 +105,12 @@ matcher.search('abc', { strategy: 'leftmost-longest' }).map(m => m.pattern)
 // ['ab']
 ```
 
-### `iterate(text)`
+### `iterate(text, options?)`
 
-Returns an `IterableIterator<Match<T>>` over all matches in the same order as
-`search(text)`. It scans lazily and does not collect all matches. Each iterator has
+Returns an `IterableIterator<Match<T>>` in the same order as `search(text, options)`.
+It accepts the same three strategies and defaults to `all`. It scans lazily and
+does not collect all matches. Non-overlapping strategies may look ahead by up to
+the longest keyword in graphemes before settling a result. Each iterator has
 independent scan state; stopping one does not affect the matcher or other iterators.
 The input is a complete string, not a stream of chunks.
 
@@ -121,12 +123,26 @@ for (const match of matcher.iterate(text)) {
 }
 ```
 
-The first emitted match is the earliest-ending match, which can differ from the
-leftmost match. Use a non-overlapping search strategy when start priority matters.
+With `all`, the first emitted match is the earliest-ending match, which can differ
+from the leftmost match. Use a non-overlapping iteration or search strategy when
+start priority matters. Text and options are validated immediately, and the
+strategy is captured when `iterate()` is called.
+
+### `count(text)`
+
+Returns the total number of occurrences, including overlaps and duplicate entries,
+just like `search(text).length`, without constructing match objects or traversing
+output links. An empty dictionary or empty text returns `0`. Invalid text throws
+`TypeError`; a total above `Number.MAX_SAFE_INTEGER` throws `RangeError` rather
+than returning a rounded count. This method always counts the `all` strategy.
+
+```ts
+new AhoCorasick(['a', 'aa', 'a']).count('aaa') // 8
+```
 
 ### `match(text)`
 
-Returns a boolean and stops scanning on its first hit. Its signature is unchanged
+Returns a boolean and stops scanning on its first hit without constructing a match object. Its signature is unchanged
 from v2. An empty dictionary or empty text returns `false`.
 
 ### `replace(text, replacement, options?)`
@@ -155,19 +171,32 @@ framework. The library does not generate HTML.
 ## Performance and memory
 
 The dictionary is compiled once into private trie nodes, failure links and output
-links. Inherited matches are not copied into every node. Searches share one scan
-implementation and reuse the instance's segmenter.
+links. Inherited matches are not copied into every node. Private integer arrays also store aggregate
+occurrence counts per state and grapheme lengths per pattern, trading dictionary
+memory for queries that do not enumerate outputs. All methods share the transition
+rule and reuse the instance's segmenter.
 
-If `z` is the number of matches, collecting all results uses O(z) additional
-storage. Non-overlapping search and replacement first collect candidates, then
-sort them in O(z log z) time. `iterate()` avoids that result collection, although
-it still keeps the input string and dictionary alive. Unicode segmentation has
-its own engine-dependent cost.
+For `g` input graphemes, `z` occurrences, `k` selected results and longest keyword
+length `L` in graphemes (excluding engine-dependent Unicode segmentation costs):
 
-Run `pnpm benchmark` from the source repository to compare v3 with the pinned v2
-implementation. See the repository's `docs/benchmarks.md` for methodology and
-measured tradeoffs. Throughput and retained heap are measured separately; no
-universal speedup is promised.
+- `count()` scans in O(g) time and O(1) additional scan state; `match()` can stop early.
+- All-match search/iteration takes O(g + z) time. `search()` retains O(z) results;
+  `iterate()` does not retain a result array.
+- Non-overlapping strategies process candidates in O(g + z) time with an O(L)
+  candidate window, without collecting or sorting all occurrences. Iteration creates
+  only selected match objects; `search()` additionally retains O(k) results.
+- `replace()` consumes selected matches incrementally, but still allocates its
+  output string and intermediate pieces. It is not a bounded-memory output stream.
+
+All iterators retain the input string and dictionary. Early exit avoids subsequent
+scanning; selected strategies may need up to L graphemes of lookahead. Inputs are
+complete strings, not chunks. High-output scans are not free, and segmentation
+itself is provided by the runtime's `Intl.Segmenter`.
+
+Run `pnpm benchmark` to compare the current build with pinned pre-optimization v3
+and v2 implementations. See `docs/benchmarks.md` in the source repository for
+methodology, throughput, retained heap and separate process peak-RSS measurements.
+No universal speedup is promised.
 
 ## License
 

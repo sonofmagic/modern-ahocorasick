@@ -21,10 +21,12 @@ describe('v3 contracts', () => {
     expect(empty.search('text')).toEqual([])
     expect([...empty.iterate('text')]).toEqual([])
     expect(empty.match('text')).toBe(false)
+    expect(empty.count('text')).toBe(0)
     expect(empty.replace('text', 'x')).toBe('text')
     const ac = new AhoCorasick(['a'])
     expect(ac.search('')).toEqual([])
     expect(ac.match('')).toBe(false)
+    expect(ac.count('')).toBe(0)
     expect(ac.replace('', 'x')).toBe('')
   })
 
@@ -52,12 +54,14 @@ describe('v3 contracts', () => {
     expect(() => ac.search(text)).toThrow(TypeError)
     expect(() => ac.iterate(text)).toThrow(TypeError)
     expect(() => ac.match(text)).toThrow(TypeError)
+    expect(() => ac.count(text)).toThrow(TypeError)
     expect(() => ac.replace(text, '')).toThrow(TypeError)
   })
 
   it.each([null, 'all', [], 1, { strategy: 'unknown' }, { strategy: null }, { strategy: 1 }])('rejects invalid options: %j', (options) => {
     const ac = new AhoCorasick([])
     expect(() => ac.search('', options as SearchOptions)).toThrow(TypeError)
+    expect(() => ac.iterate('', options as SearchOptions)).toThrow(TypeError)
     expect(() => ac.replace('', '', options as ReplaceOptions)).toThrow(TypeError)
   })
 

@@ -26,6 +26,8 @@ Aho–Corasick 将多个关键词编译成 Trie，并借助 failure 链接扫描
 
 构建使用节点数组、Map 转移边以及带队列游标的广度优先 failure 构建。扫描沿 failure 与 output 链接前进；大量命中的输出必然消耗相应时间。工作台在可取消的 Worker 中生成有规模限制的完整轨迹，修改文本时复用词典，仅对不超过 150 个状态的图进行布局；更大的词典使用分页状态表。参阅[工作台限制和操作说明](./visualization#输入规模与响应能力)以及[计算与传输实测](https://github.com/icelib/modern-ahocorasick/blob/main/docs/workbench-performance.md)。工作台用于教学，不用于大型语料性能测试。
 
+设输入有 g 个字素、z 次命中，最长关键词有 L 个字素，枚举耗时为 O(g + z)。非重叠策略维护 O(L) 候选窗口，无需收集并排序 z 次命中；结果数组和替换字符串另需存储空间。只有确认后续更长关键词不会改变选择时，候选才会输出。预计算状态命中总数使 `count()` 的扫描耗时为 O(g)、额外扫描状态为 O(1)，也使 `match()` 无需创建结果即可停止。这些复杂度不包含运行时的 Unicode 分段成本。词条字素长度和命中总数增加词典存储，但不复制继承输出列表。
+
 参阅[实测 v2/v3 性能取舍](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks.md)，不承诺全面加速。
 
 参考文献：Aho 与 Corasick，_Efficient string matching: an aid to bibliographic search_（1975）。本库源自 [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick)，工作台重写了[原可视化页面](https://brunorb.github.io/ahocorasick/visualization.html)的能力。

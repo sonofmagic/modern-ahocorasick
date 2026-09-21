@@ -32,7 +32,7 @@ interface Match<T> {
 | `leftmost-first`   | 优先最左起点，同起点按关键词输入顺序。                 |
 | `leftmost-longest` | 优先最左起点，同起点选择最长匹配，再按输入顺序。       |
 
-非重叠策略会跳过与已选匹配重叠的候选，相邻匹配可同时保留。这两种策略先收集并排序所有候选，因此内存占用与全部命中数量相关。
+非重叠策略会跳过与已选匹配重叠的候选，相邻匹配可同时保留。这两种策略在以最长关键词字素数为界的窗口中，每个起点只保留最佳候选，无需收集并排序全部命中。搜索仍会保存选中结果的数组。
 
 ```ts
 ac.search(text, { strategy: 'leftmost-longest' })
@@ -40,21 +40,29 @@ ac.search(text, { strategy: 'leftmost-longest' })
 
 ## match(text)
 
-返回布尔值，首次命中即停止。只需判断是否命中时使用。
+返回布尔值，首次命中即停止，不创建匹配对象。只需判断是否命中时使用。
 
-## iterate(text)
+## count(text)
 
-惰性输出全部匹配，顺序与默认 `search()` 相同。接受完整字符串，不支持分块输入。无需保存整个结果数组，但仍持有原文和词典。
+返回全部出现次数，包含重叠与重复词条，等于 `search(text).length`。直接累加状态的命中总数，不创建匹配对象，也不遍历 output 链。空文本或空词典返回 `0`。非法文本抛出 `TypeError`；计数超过 `Number.MAX_SAFE_INTEGER` 时抛出 `RangeError`。不接受策略选项。
 
 ```ts
-for (const hit of ac.iterate(text)) {
+new AhoCorasick(['a', 'aa', 'a']).count('aaa') // 8
+```
+
+## iterate(text, options?)
+
+惰性输出匹配，顺序与 `search(text, options)` 相同，支持相同的三种策略，默认 `all`。调用时立即校验文本和选项并保存策略。接受完整字符串，不支持分块输入。无需保存整个结果数组，但仍持有原文和词典。非重叠策略使用 O(L) 候选窗口，为确定结果，最多需要前瞻最长关键词的 L 个字素。每个迭代器的状态独立。
+
+```ts
+for (const hit of ac.iterate(text, { strategy: 'leftmost-longest' })) {
   console.log(hit.pattern, text.slice(hit.start, hit.end))
 }
 ```
 
 ## replace(text, replacement, options?)
 
-在原文范围上执行一次非重叠替换。默认 `leftmost-longest`，也接受 `leftmost-first`，不接受 `all`。回调收到 `(match, originalSubstring)`，必须返回字符串。字符串替换按字面值处理，`$&` 没有特殊含义，不重新扫描替换内容。
+在原文范围上执行一次非重叠替换。默认 `leftmost-longest`，也接受 `leftmost-first`，不接受 `all`。回调收到 `(match, originalSubstring)`，必须返回字符串。字符串替换按字面值处理，`$&` 没有特殊含义，不重新扫描替换内容。选中匹配逐步消费，但输出文本和中间字符串片段仍占用内存。
 
 ```ts
 new AhoCorasick(['cat']).replace('cat cat', '$&') // '$& $&'

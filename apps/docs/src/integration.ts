@@ -9,7 +9,7 @@ const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
 export function compile(keywords: string) {
   const patterns = parseKeywords(keywords)
   const matcher = new AhoCorasick(patterns)
-  const automaton = buildAutomaton(
+  const { nodes: automaton } = buildAutomaton(
     patterns.map(pattern => ({ pattern })),
     segmenter,
   )
