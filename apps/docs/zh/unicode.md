@@ -15,21 +15,23 @@ ac.search(text)
 
 ## 精确边界与字符形式
 
-关键词必须匹配完整字素。`e` 不匹配 `é` 的内部；单个人物 emoji 不匹配 ZWJ 家庭内部。规范等价的形式不会自动视为相同：`é` 与 `é` 是不同输入。库不执行规范化或大小写折叠。
+关键词必须匹配完整字素。`e` 不匹配 `é` 的内部；单个人物 emoji 不匹配 ZWJ 家庭内部。规范等价的形式不会自动视为相同：`é` 与 `é` 是不同输入。核心构造器不执行归一化或大小写折叠。
 
-如果应用需要规范化，请一致处理关键词与文本。返回坐标将针对**变换后的文本**，不能在没有单独映射的情况下用于原文。
-
-## 大小写处理
-
-默认区分大小写。仅针对 ASCII 的简单忽略大小写示例：
+需要归一化或完整 Unicode 大小写折叠，并保留原文位置时，可使用 v3.1.0+ 的
+`modern-ahocorasick/text` 入口：
 
 ```ts
-const text = 'Hello WORLD'
-const ac = new AhoCorasick(['hello', 'world'])
-ac.search(text.toLowerCase())
+import TextMatcher from 'modern-ahocorasick/text'
+
+const matcher = new TextMatcher(['STRASSE', 'é'], { normalization: 'NFC', caseFold: true })
+const text = 'Straße e\u0301'
+matcher.search(text).map(hit => text.slice(hit.start, hit.end))
+// ['Straße', 'e\u0301']
 ```
 
-Unicode 小写转换可能改变长度与分词（例如 `İ`），不可假设转换后的坐标仍适用于原文。库没有内置忽略大小写选项。
+适配器保留原始字素边界，不需要调用方自行处理大小写转换后的偏移。展开后只覆盖部分
+字素的命中会被过滤，例如 `s` 不会匹配 `ß` 的一半。详见
+[转换语义与成本](./api#可选归一化与大小写折叠)。核心构造器仍区分大小写，且不做归一化。
 
 ## 空输入
 

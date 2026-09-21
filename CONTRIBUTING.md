@@ -79,3 +79,19 @@ After building, deployment stamps `/build-info.json` with the checkout SHA, outs
 For local Cloudflare routing checks, build with `pnpm docs:build`, then run `pnpm --filter @modern-ahocorasick/docs preview:cloudflare --port 8789`. Set `DOCS_E2E_CLOUDFLARE=1` when running `pnpm test:docs:e2e` to test that server. Set `DOCS_E2E_BASE_URL=https://aho.icebreaker.top` when running the docs workspace's `test:e2e` command to test production. A local `deploy:check` dry run validates the Wrangler configuration without publishing.
 
 To roll back normally, revert the affected commit on `main` and push; CI validates and deploys the reverted tree. For an urgent rollback with Cloudflare credentials available, run `pnpm --filter @modern-ahocorasick/docs exec wrangler versions list`, then `pnpm --filter @modern-ahocorasick/docs exec wrangler rollback <version-id>`. Verify `/build-info.json` afterward and follow with a Git revert so the next successful CI deployment preserves the rollback. npm publication follows the version PR workflow above and remains independent of website deployments.
+
+## Unicode data and enhancement benchmarks
+
+The optional `modern-ahocorasick/text` entry uses the pinned Unicode 17
+CaseFolding fixture and includes its Unicode License V3. Regenerate the compact
+mapping with `node scripts/generate-case-folding.mjs`; the generator verifies the
+source SHA-256 and performs no network request. Update the pinned fixture, hash,
+license and conformance tests together when changing Unicode versions.
+
+`BENCH_BASELINE_REF=<commit> pnpm benchmark` compares the current bundle against a
+historical single-entry implementation. `node --expose-gc scripts/benchmark-scale.mjs`
+measures 10k/100k/1m dictionaries in fresh processes. Run benchmarks sequentially
+on an idle machine, report retained heap plus buffers separately from peak RSS,
+and retain construction/scan regressions alongside improvements. The scale test
+allows up to 8 GiB of JS heap in its child processes. Do not run heavy benchmarks
+concurrently with tests or other benchmarks.

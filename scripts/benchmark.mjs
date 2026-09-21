@@ -11,13 +11,13 @@ import { median, time } from './benchmark-utils.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const script = fileURLToPath(import.meta.url)
-const baselineRef = 'a78f4c8d6b2e511a74271409c30f66d3f8057197'
+const baselineRef = process.env.BENCH_BASELINE_REF ?? 'a78f4c8d6b2e511a74271409c30f66d3f8057197'
 const samples = 7
 const rounds = Number(process.env.BENCH_ROUNDS ?? 5)
 assert.ok(Number.isInteger(rounds) && rounds >= 1 && rounds <= 9, 'BENCH_ROUNDS must be between 1 and 9')
 const strategies = ['all', 'leftmost-first', 'leftmost-longest']
 const requestedOperations = process.env.BENCH_OPERATIONS?.split(',')
-const operationNames = ['build', 'search', 'match', 'count', ...strategies.map(strategy => `iterate:${strategy}`), ...strategies.slice(1).flatMap(strategy => [`search:${strategy}`, `replace:${strategy}`])]
+const operationNames = ['build', 'load', 'search', 'match', 'count', 'countByPattern', ...strategies.map(strategy => `iterate:${strategy}`), ...strategies.slice(1).flatMap(strategy => [`search:${strategy}`, `replace:${strategy}`])]
 assert.ok(requestedOperations === undefined || requestedOperations.every(operation => operationNames.includes(operation)), 'Unknown BENCH_OPERATIONS entry')
 const scenarios = {
   'ascii-tiny': { patterns: ['a', 'ab', 'b'], text: 'ab' },
@@ -66,7 +66,19 @@ let sink
 
 function operations(Constructor, patterns, text) {
   const ac = new Constructor(patterns)
+  const saved = ac.serialize?.()
   const ops = {
+    load: () => saved === undefined ? new Constructor(patterns) : Constructor.deserialize(saved),
+    countByPattern: () => {
+      if (ac.countByPattern) {
+        return ac.countByPattern(text)
+      }
+      const counts = Array.from({ length: patterns.length }).fill(0)
+      for (const hit of ac.iterate(text)) {
+        counts[hit.patternIndex]++
+      }
+      return counts
+    },
     build: () => new Constructor(patterns),
     search: () => ac.search(text),
     match: () => ac.match(text),
@@ -131,6 +143,7 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
     const count = result.length
     const checks = {
       search: digest(result),
+      frequencies: digest(ops.countByPattern()),
       first: digest(ac.search(text, { strategy: 'leftmost-first' })),
       longest: digest(ac.search(text, { strategy: 'leftmost-longest' })),
       replaceFirst: digest(ac.replace(text, 'X', { strategy: 'leftmost-first' })),
@@ -145,7 +158,7 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
   }
 }
 else {
-  const source = (ref, path) => stripTypeScriptTypes(execFileSync('git', ['show', `${ref}:${path}`], { cwd: root, encoding: 'utf8' }))
+  const source = (ref, path) => stripTypeScriptTypes(execFileSync('git', ['show', `${ref}:${path}`], { cwd: root, encoding: 'utf8' }), { mode: 'transform' })
   const baseline = `${source(baselineRef, 'packages/modern-ahocorasick/src/internal.ts')}\n${source(baselineRef, 'packages/modern-ahocorasick/src/index.ts').replace(/^import \{[^}]+\} from '\.\/internal\.js';?\s*$/m, '')}`
   const sources = { 'v3-before': baseline, 'v3': '' }
   const results = []
@@ -223,7 +236,7 @@ else {
     samples,
     rounds,
     operations: requestedOperations ?? operationNames,
-    note: 'v3-before is the pre-ASCII v3 implementation. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
+    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load compares validated restoration against rebuilding the baseline dictionary from patterns; saving is excluded. countByPattern compares state aggregation against baseline iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
     results,
     memory,
     regressions,

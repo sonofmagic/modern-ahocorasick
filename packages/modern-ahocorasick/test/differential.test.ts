@@ -23,8 +23,19 @@ it('agrees with a naive grapheme matcher across seeded random dictionaries and t
     expect([...ac.iterate(text)]).toEqual(all)
     expect(ac.match(text)).toBe(all.length > 0)
     expect(ac.count(text)).toBe(all.length)
+    expect(ac.countByPattern(text)).toEqual(patterns.map((_, i) => all.filter(hit => hit.patternIndex === i).length))
     for (const match of all) {
       expect(text.slice(match.start, match.end)).toBe(match.pattern)
+    }
+    if (trial % 5 === 0) {
+      const restored = AhoCorasick.deserialize(ac.serialize())
+      expect(restored.search(text)).toEqual(all)
+      for (const strategy of ['all', 'leftmost-first', 'leftmost-longest'] as const) {
+        const stream = restored.createStream({ strategy })
+        const hits = Array.from({ length: text.length }, (_, i) => text.slice(i, i + 1)).flatMap(chunk => stream.write(chunk))
+        hits.push(...stream.finish())
+        expect(hits).toEqual(ac.search(text, { strategy }))
+      }
     }
     for (const strategy of ['leftmost-first', 'leftmost-longest'] as const) {
       const expected = naive(text, patterns, strategy)

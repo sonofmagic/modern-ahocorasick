@@ -1,0 +1,65 @@
+{
+  "node": "v24.11.1",
+  "cpu": "Apple M4 Pro",
+  "icu": "77.1",
+  "unicode": "16.0",
+  "baselineRef": "c15a10e8f7ed44143edc0e74202064cb9c7b81c7",
+  "implementationSha256": "63d7f02deb141ff99c6ca4a7e5e523ea9cff4743b3f3a7b128cc7f535e90c7dc",
+  "note": "One fresh process per size/variant; construction is a cold single observation, count averages 100 scans after warmup. Retained heap excludes input strings and includes a single dictionary; ArrayBuffer storage is separate. Build peak RSS includes runtime, input, temporary builder and compact tables. This is a scale/feasibility measurement, not a universal performance ranking.",
+  "results": [
+    {
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 26.346292000000002,
+      "countMs": 0.3602012499999999,
+      "dictionaryHeapBytes": 16422528,
+      "dictionaryBufferBytes": 240036,
+      "buildPeakRssBytes": 103727104
+    },
+    {
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 31.765625,
+      "countMs": 0.24906249999999994,
+      "dictionaryHeapBytes": 571088,
+      "dictionaryBufferBytes": 1680360,
+      "buildPeakRssBytes": 117063680
+    },
+    {
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 150.751333,
+      "countMs": 0.48515000000000014,
+      "dictionaryHeapBytes": 162988048,
+      "dictionaryBufferBytes": 2400036,
+      "buildPeakRssBytes": 401391616
+    },
+    {
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 171.256666,
+      "countMs": 0.2794187499999998,
+      "dictionaryHeapBytes": 3657928,
+      "dictionaryBufferBytes": 16800360,
+      "buildPeakRssBytes": 427245568
+    },
+    {
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1488.110042,
+      "countMs": 0.5930770799999983,
+      "dictionaryHeapBytes": 1636054032,
+      "dictionaryBufferBytes": 24000036,
+      "buildPeakRssBytes": 2350366720
+    },
+    {
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 1764.09025,
+      "countMs": 0.30842791000000036,
+      "dictionaryHeapBytes": 35868888,
+      "dictionaryBufferBytes": 168000360,
+      "buildPeakRssBytes": 2417967104
+    }
+  ]
+}

@@ -1,32 +1,32 @@
 # Engineering roadmap
 
-The target is a lightweight, zero-runtime-dependency JS/TS library for exact
-Unicode grapheme matching. Speed, retained memory, construction cost, original
-UTF-16 offsets and independently verified semantics all matter. No single-machine
-benchmark establishes an industry-wide ranking.
+The library remains a zero-runtime-dependency JS/TS matcher with exact Unicode
+graphemes and original UTF-16 ranges by default. New APIs target v3.1.0; their
+semantics and limitations are documented in the [API guide](https://aho.icebreaker.top/api).
 
-| Stage | Work                                                                                      | Evidence required                                                                                               |
-| ----- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| P0    | Safe ASCII construction/count/presence scanning, Unicode conformance, external benchmarks | Native-reference parity, three browser engines, reproducible speed and memory report                            |
-| P1    | Compact automaton storage                                                                 | Build peak, retained heap/buffers and scan latency for 10k, 100k and 1m patterns                                |
-| P2    | Dedicated non-overlapping selection                                                       | Reduce enumeration of discarded outputs on dense suffixes and duplicates without changing tie-breaking          |
-| P3    | Per-pattern counts                                                                        | Aggregate state visits through failure links; avoid occurrence objects and output enumeration                   |
-| P4    | Chunked Unicode scanning                                                                  | Whole-input equivalence, cross-chunk graphemes, cancellation, EOF and explicit buffer behavior                  |
-| P5    | Optional text-processing extensions                                                       | Separately specified normalization, case folding, word boundaries, original-offset mapping and compiled loading |
+| Stage | Implemented behavior                                             | Verification                                                                                           |
+| ----- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| P0    | Safe ASCII construction/count/presence                           | Native-reference, Unicode corpus and three-browser conformance                                         |
+| P1    | Interned symbols and compact numeric scan tables                 | 10k/100k/1m retained heap, buffers, build peak RSS and scan latency                                    |
+| P2    | Duplicate and dominated-output pruning in selected scans         | Randomized sort/greedy oracle, lazy lookahead, dense suffix/duplicate benchmarks                       |
+| P3    | `countByPattern()` via state-visit propagation                   | Independent Unicode occurrence counts, duplicate and absent entries                                    |
+| P4    | `createStream()` with EOF, cancellation and explicit tail limits | Every UTF-16 split, Unicode corpus, random streams and original offsets                                |
+| P5    | Word boundaries, compiled persistence and optional text adapter  | Boundary-before-selection, structural validation, Unicode 17 folding corpus and original-range mapping |
 
-P0 is the current implementation scope. Later stages require separate designs;
-this table does not reserve public method names or promise release dates.
+See [enhancement measurements](./benchmarks-enhancements.md) and the
+[implementation design](./plans/2026-09-22-matcher-enhancements.md). Memory savings
+refer to the retained dictionary, not the temporary build peak. Smaller dictionaries
+may pay extra construction/lookup costs; no universal speedup is claimed.
 
-The default constructor, CommonJS contract, exact matching and independent match
-objects remain stable. Large Unicode tables, WASM and platform adapters should
-remain optional rather than increasing the default core's initialization cost.
+The default constructor, direct CommonJS contract and independent match objects
+remain stable. Unicode folding data lives only in `modern-ahocorasick/text`.
+The optional adapter processes complete strings; core streams preserve exact
+Unicode matching and support word boundaries with line buffering. Future work can
+extend streaming to mapped transformations and reduce temporary construction
+memory, but neither is implied by the current APIs.
 
-A grapheme may contain an arbitrarily long run of combining characters, so exact
-chunked processing cannot promise a fixed-size pending Unicode tail without an
-explicit resource policy. Normalization and case folding can change lengths and
-need an original-text mapping; simply transforming strings and subtracting a
-pattern length is not sufficient.
-
-Version PR preparation runs automatically on main pushes; npm publication remains
-manual. Each publishable step records a pnpm change intent and
-must pass repository, packed-consumer, type, browser and relevant benchmark checks.
+Ordinary main pushes prepare a version PR. Merging a version commit whose subject
+starts with `chore(release): version packages` publishes automatically. Manual
+`prepare` and `publish` modes remain recovery options. Keep version PRs open when
+publication is not requested. Publishable changes carry pnpm change intents and
+pass repository, packed-consumer, declaration, browser and benchmark checks.

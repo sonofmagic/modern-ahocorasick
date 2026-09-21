@@ -15,21 +15,24 @@ The workbench displays grapheme end indices `1` and `2` for these matches. The l
 
 ## Exact boundaries and spelling
 
-A pattern must match complete graphemes. `e` does not match inside `é`; an individual person emoji does not match inside a ZWJ family. Canonically equivalent spellings are not automatically equal: `é` and `é` are different inputs. No normalization or case folding is performed.
+A pattern must match complete graphemes. `e` does not match inside `é`; an individual person emoji does not match inside a ZWJ family. Canonically equivalent spellings are not automatically equal: `é` and `é` are different inputs. The core constructor performs no normalization or case folding.
 
-If your application normalizes text, normalize the patterns and text consistently before matching. Returned offsets then refer to the **transformed text**, and cannot safely index the original without a separate mapping.
-
-## Case handling
-
-Matching is case-sensitive. For a simple ASCII-only case-insensitive use case:
+For opt-in normalization and full Unicode case folding with original offsets, use
+`TextMatcher` from `modern-ahocorasick/text` (v3.1.0+):
 
 ```ts
-const text = 'Hello WORLD'
-const ac = new AhoCorasick(['hello', 'world'])
-ac.search(text.toLowerCase())
+import TextMatcher from 'modern-ahocorasick/text'
+
+const matcher = new TextMatcher(['STRASSE', 'é'], { normalization: 'NFC', caseFold: true })
+const text = 'Straße e\u0301'
+matcher.search(text).map(hit => text.slice(hit.start, hit.end))
+// ['Straße', 'e\u0301']
 ```
 
-General Unicode lowercasing can change length and segmentation (for example `İ`). Do not assume transformed indices remain valid for the original string. The library deliberately does not add a case-insensitive option.
+Unlike manually lowercasing input, the adapter retains original boundaries. It
+rejects matches covering only part of an expanded grapheme, so `s` does not match
+half of `ß`. See [transformation semantics and costs](./api#optional-normalization-and-case-folding).
+The core constructor remains case-sensitive and performs no normalization.
 
 ## Empty inputs
 

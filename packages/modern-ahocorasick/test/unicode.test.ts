@@ -61,6 +61,11 @@ it('conforms to the runtime Unicode grapheme corpus, including original match of
     // Prefixes exercise fast scanning and fallback; expectations always use
     // the native reference because a prefix can change the first boundary.
     verifyCases(AhoCorasick, ['', 'a', 'xyz\r\n', 'ascii prefix xyz\r\n'].map(prefix => ({ patterns, text: prefix + text })))
+    const ac = new AhoCorasick(patterns)
+    const stream = ac.createStream()
+    const hits = Array.from({ length: text.length }, (_, index) => text.slice(index, index + 1)).flatMap(chunk => stream.write(chunk))
+    hits.push(...stream.finish())
+    expect(hits, line).toEqual(ac.search(text))
     tested++
   }
   expect(tested).toBeGreaterThan(500)
