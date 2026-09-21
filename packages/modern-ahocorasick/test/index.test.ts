@@ -114,35 +114,21 @@ const testCases = [
   expected: [number, string[]][]
 }[]
 
-for (const ts of testCases) {
-  for (const x of ts.expected) {
-    x[1] = x[1].sort()
-  }
-}
-
-describe('aho corasick search', () => {
-  for (const ts of testCases) {
-    const keys = ts.keywords
-    const text = ts.text
-    const expected = ts.expected
-    it(`should test: ${keys.join(', ')}`, () => {
-      const aho = new AhoCorasick(keys)
-      const result = aho.search(text).map(([index, matches]) => [index, [...matches].sort()])
-      assert.deepEqual(expected, result)
-    })
-    it(`should match: ${keys.join(', ')}`, () => {
-      const aho = new AhoCorasick(keys)
-      const result = aho.match(text)
-      assert.deepEqual(expected.length > 0, result)
+describe('original v2 matching corpus with v3 ranges', () => {
+  for (const { keywords, text, expected } of testCases) {
+    it(`searches and matches ${keywords.join(', ')}`, () => {
+      const segments = Array.from(new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text))
+      const matches = expected.flatMap(([position, patterns]) => {
+        const end = segments[position].index + segments[position].segment.length
+        return patterns.map(pattern => ({ pattern, patternIndex: keywords.indexOf(pattern), start: end - pattern.length, end, data: undefined }))
+      }).sort((a, b) => a.end - b.end || b.pattern.length - a.pattern.length || a.patternIndex - b.patternIndex)
+      const matcher = new AhoCorasick(keywords)
+      expect(matcher.search(text)).toEqual(matches)
+      expect([...matcher.iterate(text)]).toEqual(matches)
+      expect(matcher.match(text)).toBe(matches.length > 0)
+      for (const match of matches) {
+        expect(text.slice(match.start, match.end)).toBe(match.pattern)
+      }
     })
   }
-  // it('should ccc', () => {
-  //   const ts = testCases[7]
-  //   const keys = ts.keywords
-  //   const text = ts.text
-  //   const expected = ts.expected
-  //   const aho = new AhoCorasick(keys)
-  //   const result = aho.search(text).map(([index, matches]) => [index, [...matches].sort()])
-  //   assert.deepEqual(expected, result)
-  // })
 })

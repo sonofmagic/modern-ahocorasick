@@ -27,7 +27,7 @@ try {
   const installed = path.join(temporary, 'node_modules/modern-ahocorasick')
   mkdirSync(installed, { recursive: true })
   run('tar', ['-xzf', path.join(temporary, tarball), '-C', installed, '--strip-components=1'])
-  for (const file of ['README.md', 'LICENSE', 'dist/index.js', 'dist/index.cjs', 'dist/index.d.ts', 'dist/index.d.cts']) {
+  for (const file of ['README.md', 'MIGRATION.md', 'LICENSE', 'dist/index.js', 'dist/index.cjs', 'dist/index.d.ts', 'dist/index.d.cts']) {
     assert.ok(existsSync(path.join(installed, file)), `Missing packed file: ${file}`)
   }
   const manifest = JSON.parse(readFileSync(path.join(installed, 'package.json'), 'utf8'))
@@ -36,10 +36,17 @@ try {
   assert.ok(!existsSync(path.join(installed, 'src')), 'source is not part of the published package')
   const checks = `
 const ac = new AhoCorasick(['he', 'she', 'hers'])
-assert.deepEqual(ac.search('ushers'), [[3, ['she', 'he']], [5, ['hers']]])
+assert.deepEqual(ac.search('ushers'), [
+  { pattern: 'she', patternIndex: 1, start: 1, end: 4, data: undefined },
+  { pattern: 'he', patternIndex: 0, start: 2, end: 4, data: undefined },
+  { pattern: 'hers', patternIndex: 2, start: 2, end: 6, data: undefined },
+])
+assert.deepEqual([...ac.iterate('ushers')], ac.search('ushers'))
+assert.equal(ac.replace('ushers', 'X'), 'uXrs')
+assert.equal(new AhoCorasick([{ pattern: 'cat', data: '猫' }]).replace('😀cat', match => match.data), '😀猫')
 assert.equal(ac.match('xyz'), false)
 assert.equal(ac.match('she'), true)
-assert.deepEqual(new AhoCorasick(['👨‍👩‍👧‍👦']).search('😁👨‍👩‍👧‍👦😀'), [[1, ['👨‍👩‍👧‍👦']]])
+assert.deepEqual(new AhoCorasick(['👨‍👩‍👧‍👦']).search('😁👨‍👩‍👧‍👦😀'), [{ pattern: '👨‍👩‍👧‍👦', patternIndex: 0, start: 2, end: 13, data: undefined }])
 `
   writeFileSync(path.join(temporary, 'consumer.mjs'), `import assert from 'node:assert/strict'
 import AhoCorasick from 'modern-ahocorasick'
@@ -51,15 +58,22 @@ ${checks}`)
   run(process.execPath, ['consumer.mjs'])
   run(process.execPath, ['consumer.cjs'])
   const types = `
-const ac = new AhoCorasick(['he'])
-const results: [number, string[]][] = ac.search('he')
+const ac = new AhoCorasick([{ pattern: 'he', data: { id: 1 } }])
+const typed: AhoCorasick<{ id: number }> = ac
+const results: Match<{ id: number }>[] = typed.search('he')
+const iterator: IterableIterator<Match<{ id: number }>> = ac.iterate('he')
+const replaced: string = ac.replace('he', (match, text) => String(match.data?.id) + text)
+void iterator
+void replaced
 const found: boolean = ac.match('he')
 void results
 void found
 `
   writeFileSync(path.join(temporary, 'consumer.mts'), `import AhoCorasick from 'modern-ahocorasick'
+import type { Match } from 'modern-ahocorasick'
 ${types}`)
   writeFileSync(path.join(temporary, 'consumer.cts'), `import AhoCorasick = require('modern-ahocorasick')
+import type { Match } from 'modern-ahocorasick'
 ${types}`)
   writeFileSync(path.join(temporary, 'tsconfig.json'), JSON.stringify({
     compilerOptions: { module: 'NodeNext', moduleResolution: 'NodeNext', target: 'ES2022', strict: true, noEmit: true, types: [], skipLibCheck: false },

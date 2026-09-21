@@ -5,8 +5,10 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   target: 'es2022',
   clean: true,
-  dts: true,
+  // tsc preserves the CommonJS export assignment and its type namespace.
+  dts: false,
+  onSuccess: 'tsc -p tsconfig.build.json',
   exports: false,
-  outExtensions: ({ format }) => ({ js: format === 'cjs' ? '.cjs' : '.js', dts: format === 'cjs' ? '.d.cts' : '.d.ts' }),
+  outExtensions: ({ format }) => ({ js: format === 'cjs' ? '.cjs' : '.js' }),
   cjsDefault: true,
 })

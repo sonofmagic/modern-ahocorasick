@@ -1,35 +1,24 @@
 import AhoCorasick from '@/index'
 
-describe('usage', () => {
-  it('example 1', () => {
-    const keywords = ['cat', 'bat', 'rat']
-    const ac = new AhoCorasick(keywords)
+it('provides ranges for highlighting without emitting HTML', () => {
+  const text = '😀 the cat chased the rat'
+  const matches = new AhoCorasick(['cat', 'rat']).search(text)
+  expect(matches.map(({ start, end }) => text.slice(start, end))).toEqual(['cat', 'rat'])
+  expect(matches.map(({ start, end }) => [start, end])).toEqual([[7, 10], [22, 25]])
+})
 
-    const text = 'the cat chased the rat while a bat flew by'
-    const matches = ac.search(text)
+it('uses application metadata for replacement', () => {
+  const ac = new AhoCorasick([
+    { pattern: 'cat', data: { id: 'animal-cat', replacement: '猫' } },
+    { pattern: 'dog', data: { id: 'animal-dog', replacement: '狗' } },
+  ])
+  expect(ac.replace('cat and dog', match => match.data!.replacement)).toBe('猫 and 狗')
+})
 
-    expect(matches).toEqual([
-      [6, ['cat']],
-      [21, ['rat']],
-      [33, ['bat']],
-    ])
-  })
-
-  it('example 2', () => {
-    const ac = new AhoCorasick(['abc', '123'])
-    expect(ac.match('hello abc world')).toBe(true)
-    expect(ac.match('hello world')).toBe(false)
-  })
-
-  it('example 3', () => {
-    const keywords = ['hello', 'world']
-    const ac = new AhoCorasick(keywords.map(k => k.toLowerCase()))
-
-    const text = 'Hello World'
-    const matches = ac.search(text.toLowerCase())
-    expect(matches).toEqual([
-      [4, ['hello']],
-      [10, ['world']],
-    ])
-  })
+it('allows callers to stop iteration after their first result', () => {
+  const ac = new AhoCorasick(['abc', '123'])
+  const first = ac.iterate('hello abc 123').next().value!
+  expect(first.pattern).toBe('abc')
+  expect(ac.match('hello abc world')).toBe(true)
+  expect(ac.match('hello world')).toBe(false)
 })

@@ -46,6 +46,7 @@
     }
   },
   "files": [
+    "MIGRATION.md",
     "dist"
   ],
   "publishConfig": {
