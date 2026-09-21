@@ -176,6 +176,18 @@ occurrence counts per state and grapheme lengths per pattern, trading dictionary
 memory for queries that do not enumerate outputs. All methods share the transition
 rule and reuse the instance's segmenter.
 
+Dictionary construction, `count()` and `match()` scan a leading ASCII run without
+allocating a segment object per character. CRLF remains one grapheme. Before a possible ASCII/Unicode join,
+it leaves the boundary unsettled and hands the suffix to `Intl.Segmenter`; it
+does not re-enter the fast path. A bounded probe of at most eight UTF-16 units routes short mixed prefixes
+directly to native segmentation, avoiding cursor setup before a nearby Unicode hit.
+There is no whole-input ASCII preflight, so early-exit queries and iterators remain
+lazy. This changes no matching, normalization, case or offset semantics.
+`search()`, `iterate()` and `replace()` retain native segmentation: cursor-based
+result generation did not meet the performance regression budget.
+Unicode behavior follows the runtime's ICU/Unicode version; engines may disagree
+on newly introduced characters.
+
 For `g` input graphemes, `z` occurrences, `k` selected results and longest keyword
 length `L` in graphemes (excluding engine-dependent Unicode segmentation costs):
 
@@ -191,10 +203,11 @@ length `L` in graphemes (excluding engine-dependent Unicode segmentation costs):
 All iterators retain the input string and dictionary. Early exit avoids subsequent
 scanning; selected strategies may need up to L graphemes of lookahead. Inputs are
 complete strings, not chunks. High-output scans are not free, and segmentation
-itself is provided by the runtime's `Intl.Segmenter`.
+for Unicode suffixes is provided by the runtime's `Intl.Segmenter`.
 
-Run `pnpm benchmark` to compare the current build with pinned pre-optimization v3
-and v2 implementations. See `docs/benchmarks.md` in the source repository for
+Run `pnpm benchmark` to compare the current build with pinned pre-ASCII v3.
+`pnpm benchmark:external` compares printable ASCII with `ahocorasick@1.0.2` and
+per-pattern `indexOf`; `pnpm benchmark:history` retains the older v3/v2 comparison. See `docs/benchmarks.md` in the source repository for
 methodology, throughput, retained heap and separate process peak-RSS measurements.
 No universal speedup is promised.
 

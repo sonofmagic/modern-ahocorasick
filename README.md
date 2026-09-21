@@ -176,6 +176,18 @@ occurrence counts per state and grapheme lengths per pattern, trading dictionary
 memory for queries that do not enumerate outputs. All methods share the transition
 rule and reuse the instance's segmenter.
 
+Dictionary construction, `count()` and `match()` scan a leading ASCII run without
+allocating a segment object per character. CRLF remains one grapheme. Before a possible ASCII/Unicode join,
+it leaves the boundary unsettled and hands the suffix to `Intl.Segmenter`; it
+does not re-enter the fast path. A bounded probe of at most eight UTF-16 units routes short mixed prefixes
+directly to native segmentation, avoiding cursor setup before a nearby Unicode hit.
+There is no whole-input ASCII preflight, so early-exit queries and iterators remain
+lazy. This changes no matching, normalization, case or offset semantics.
+`search()`, `iterate()` and `replace()` retain native segmentation: cursor-based
+result generation did not meet the performance regression budget.
+Unicode behavior follows the runtime's ICU/Unicode version; engines may disagree
+on newly introduced characters.
+
 For `g` input graphemes, `z` occurrences, `k` selected results and longest keyword
 length `L` in graphemes (excluding engine-dependent Unicode segmentation costs):
 
@@ -191,10 +203,11 @@ length `L` in graphemes (excluding engine-dependent Unicode segmentation costs):
 All iterators retain the input string and dictionary. Early exit avoids subsequent
 scanning; selected strategies may need up to L graphemes of lookahead. Inputs are
 complete strings, not chunks. High-output scans are not free, and segmentation
-itself is provided by the runtime's `Intl.Segmenter`.
+for Unicode suffixes is provided by the runtime's `Intl.Segmenter`.
 
-Run `pnpm benchmark` to compare the current build with pinned pre-optimization v3
-and v2 implementations. See `docs/benchmarks.md` in the source repository for
+Run `pnpm benchmark` to compare the current build with pinned pre-ASCII v3.
+`pnpm benchmark:external` compares printable ASCII with `ahocorasick@1.0.2` and
+per-pattern `indexOf`; `pnpm benchmark:history` retains the older v3/v2 comparison. See `docs/benchmarks.md` in the source repository for
 methodology, throughput, retained heap and separate process peak-RSS measurements.
 No universal speedup is promised.
 
@@ -252,7 +265,7 @@ The bilingual VitePress 2 site (pinned to `2.0.0-alpha.20`) lives in `apps/docs`
 - `pnpm docs:build`: build the library and static documentation.
 - `pnpm docs:preview`: serve the built documentation locally.
 - `pnpm benchmark:docs`: measure dictionary reuse, rescan time and retained/transfer heap; see [workbench measurements](./docs/workbench-performance.md).
-- `pnpm test:docs:e2e`: build and run Playwright desktop/mobile checks. Install Chromium once with `pnpm --filter @modern-ahocorasick/docs exec playwright install chromium`.
+- `pnpm test:docs:e2e`: build and run Playwright desktop/mobile checks. Install the browser engines once with `pnpm --filter @modern-ahocorasick/docs exec playwright install chromium firefox webkit`.
 
 The workbench includes strategy comparison, safe original-text highlighting, literal replacement preview, copyable TypeScript, versioned JSON import/export and explicit share links. Playback supports backward steps, timeline seeking and jumps to matches. Grapheme/UTF-16 coordinates, state prefix/suffix inspection and inherited-output origins stay linked to the scan. Computation runs in a cancellable Worker with dictionary reuse, bounded inputs and paginated displays; the graph supports dragging, zooming and failure links. See the bilingual visualization pages for input limits and sharing behavior. It uses a shared repository-internal builder without exposing automaton state in the npm API. The private docs workspace is not published. The site is deployed to Cloudflare Workers Static Assets.
 

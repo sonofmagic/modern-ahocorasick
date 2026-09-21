@@ -44,7 +44,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @modern-ahocorasick/docs exec playwright install --with-deps chromium
+      - run: pnpm --filter @modern-ahocorasick/docs exec playwright install --with-deps chromium firefox webkit
       - run: pnpm test:docs:e2e
         env:
           DOCS_E2E_CLOUDFLARE: '1'
@@ -96,6 +96,6 @@ jobs:
         run: pnpm --filter @modern-ahocorasick/docs exec playwright install --with-deps chromium
       - name: Verify production workbench
         if: steps.latest.outputs.current == 'true'
-        run: pnpm --filter @modern-ahocorasick/docs test:e2e
+        run: pnpm --filter @modern-ahocorasick/docs test:e2e --project=desktop --project=mobile-dark
         env:
           DOCS_E2E_BASE_URL: https://aho.icebreaker.top

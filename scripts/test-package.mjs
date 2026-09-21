@@ -34,6 +34,12 @@ try {
   assert.equal(manifest.name, 'modern-ahocorasick')
   assert.notEqual(manifest.private, true)
   assert.ok(!existsSync(path.join(installed, 'dist/internal.d.ts')), 'private builder has no package entry')
+  for (const file of ['dist/internal.js', 'dist/internal.cjs']) {
+    assert.ok(!existsSync(path.join(installed, file)), 'private scanner has no package entry')
+  }
+  for (const file of ['dist/index.d.ts', 'dist/index.d.cts']) {
+    assert.doesNotMatch(readFileSync(path.join(installed, file), 'utf8'), /asciiPrefix|graphemeRuns|AsciiCursor|buildAutomaton/)
+  }
   assert.ok(!existsSync(path.join(installed, 'src')), 'source is not part of the published package')
   const checks = `
 const ac = new AhoCorasick(['he', 'she', 'hers'])
@@ -52,6 +58,8 @@ assert.equal(new AhoCorasick([{ pattern: 'cat', data: '猫' }]).replace('😀cat
 assert.equal(ac.match('xyz'), false)
 assert.equal(ac.match('she'), true)
 assert.deepEqual(new AhoCorasick(['👨‍👩‍👧‍👦']).search('😁👨‍👩‍👧‍👦😀'), [{ pattern: '👨‍👩‍👧‍👦', patternIndex: 0, start: 2, end: 13, data: undefined }])
+assert.equal(new AhoCorasick(['e']).count('abc e\\u0301'), 0)
+assert.deepEqual(new AhoCorasick(['\\r', '\\n', '\\r\\n']).search('a\\r\\nb').map(({ pattern, start, end }) => [pattern, start, end]), [['\\r\\n', 1, 3]])
 `
   writeFileSync(path.join(temporary, 'consumer.mjs'), `import assert from 'node:assert/strict'
 import AhoCorasick from 'modern-ahocorasick'
