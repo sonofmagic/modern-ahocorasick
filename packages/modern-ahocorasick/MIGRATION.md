@@ -1,8 +1,7 @@
 # Migrating from v2 to v3
 
 v3 is a major API change. ESM default imports, direct CommonJS `require()` and
-`match(text): boolean` remain supported. This guide describes the pending v3
-release; it does not imply that 3.0.0 has already been published.
+`match(text): boolean` remain supported. v3 is available on npm. Use this guide when upgrading from v2.
 
 ## Replace grouped tuples with match objects
 

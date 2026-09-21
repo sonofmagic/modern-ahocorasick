@@ -1,6 +1,6 @@
 # 快速开始
 
-本站对应工作区中**尚未发布的 v3**。npm 当前的 v2 使用不同的结果结构，请参阅 [v2 → v3 迁移说明](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md)。
+本站介绍已在 npm 发布的 **v3**。从 v2 升级会改变匹配结果结构，请参阅 [v2 → v3 迁移说明](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md)。
 
 ## 安装
 
@@ -8,7 +8,7 @@
 pnpm add modern-ahocorasick
 ```
 
-v3 发布前，请在此仓库构建工作区包后运行示例。发布 npm 与网站部署均需单独执行。
+以下示例可直接使用已发布的 v3 包运行。
 
 ## ESM 与 CommonJS
 

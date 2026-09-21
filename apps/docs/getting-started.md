@@ -1,6 +1,6 @@
 # Getting started
 
-These pages target the **unreleased v3** workspace. The current published v2 package has a different result format; see the [migration guide](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md).
+These pages describe **v3**, available on npm. Upgrading from v2 changes the result format; see the [migration guide](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md).
 
 ## Install
 
@@ -8,7 +8,7 @@ These pages target the **unreleased v3** workspace. The current published v2 pac
 pnpm add modern-ahocorasick
 ```
 
-Until v3 is published, run the examples against this repository's workspace build. Publishing and deployment are separate, explicit actions.
+The examples below work with the published v3 package.
 
 ## ESM and CommonJS
 
