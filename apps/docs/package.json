@@ -8,7 +8,10 @@
     "preview": "vitepress preview . --host 127.0.0.1",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "preview:cloudflare": "wrangler dev --local --ip 127.0.0.1",
+    "deploy": "node ../../scripts/stamp-docs-build.mjs && wrangler deploy",
+    "deploy:check": "wrangler deploy --dry-run"
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.1.1",
@@ -23,6 +26,7 @@
     "@playwright/test": "^1.63.0",
     "@types/d3-selection": "^3.0.12",
     "@types/d3-zoom": "^3.0.8",
-    "vue-tsc": "^3.3.11"
+    "vue-tsc": "^3.3.11",
+    "wrangler": "4.135.0"
   }
 }

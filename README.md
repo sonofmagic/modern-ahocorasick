@@ -194,7 +194,7 @@ a new engine requirement on consumers of the library.
 
 ## Releases
 
-Pushing `main` runs CI only. npm publication requires an explicit manual run of
+Pushing `main` runs CI and deploys the documentation after all checks pass. npm publication requires an explicit manual run of
 the **Release** GitHub Actions workflow on `main`.
 
 1. Record a change with `pnpm change modern-ahocorasick --bump patch --summary "Describe the change"`.
@@ -216,6 +216,8 @@ Use `pnpm change status` to inspect the combined plan; the v3 major intent sched
 
 ## Documentation and algorithm workbench
 
+Read the [English documentation](https://aho.icebreaker.top/) or [中文文档](https://aho.icebreaker.top/zh/), and try the [algorithm workbench](https://aho.icebreaker.top/visualization).
+
 The bilingual VitePress 2 site (pinned to `2.0.0-alpha.20`) lives in `apps/docs` (English by default, Chinese at `/zh/`). Start it with `pnpm docs:dev`, then open the local URL printed in the terminal. The command builds the workspace library automatically.
 
 - `pnpm docs:build`: build the library and static documentation.
@@ -223,6 +225,18 @@ The bilingual VitePress 2 site (pinned to `2.0.0-alpha.20`) lives in `apps/docs`
 - `pnpm benchmark:docs`: measure dictionary reuse, rescan time and retained/transfer heap; see [workbench measurements](./docs/workbench-performance.md).
 - `pnpm test:docs:e2e`: build and run Playwright desktop/mobile checks. Install Chromium once with `pnpm --filter @modern-ahocorasick/docs exec playwright install chromium`.
 
-The workbench includes strategy comparison, safe original-text highlighting, literal replacement preview, copyable TypeScript, versioned JSON import/export and explicit share links. Playback supports backward steps, timeline seeking and jumps to matches. Grapheme/UTF-16 coordinates, state prefix/suffix inspection and inherited-output origins stay linked to the scan. Computation runs in a cancellable Worker with dictionary reuse, bounded inputs and paginated displays; the graph supports dragging, zooming and failure links. See the bilingual visualization pages for input limits and sharing behavior. It uses a shared repository-internal builder without exposing automaton state in the npm API. The private docs workspace is not published. No website deployment is configured.
+The workbench includes strategy comparison, safe original-text highlighting, literal replacement preview, copyable TypeScript, versioned JSON import/export and explicit share links. Playback supports backward steps, timeline seeking and jumps to matches. Grapheme/UTF-16 coordinates, state prefix/suffix inspection and inherited-output origins stay linked to the scan. Computation runs in a cancellable Worker with dictionary reuse, bounded inputs and paginated displays; the graph supports dragging, zooming and failure links. See the bilingual visualization pages for input limits and sharing behavior. It uses a shared repository-internal builder without exposing automaton state in the npm API. The private docs workspace is not published. The site is deployed to Cloudflare Workers Static Assets.
 
 Original library and visualization credit: [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick), [reference visualization](https://brunorb.github.io/ahocorasick/visualization.html). Modern library maintained by SonOfMagic.
+
+### Website deployment and rollback
+
+`apps/docs/wrangler.jsonc` configures `modern-ahocorasick-docs`, the static build directory, clean URLs, real 404 responses and the `aho.icebreaker.top` Custom Domain. Cloudflare manages its DNS and HTTPS. There is no server-side application code or database.
+
+The CI deployment job runs only for `main` pushes or manual CI runs on `main`, after the six Node/OS checks and the local Cloudflare browser suite succeed. Deployments are serialized and skip commits that are no longer the tip of `main`. The job uses the `icelib` organization Secrets `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`. The token needs access to Workers deployment and the domain's zone; credentials are not embedded in site assets.
+
+After building, deployment stamps `/build-info.json` with the checkout SHA, outside Turbo's cached build. The job verifies the HTTPS pages, 404 behavior and exact SHA, then runs the browser suite against production. `pnpm docs:verify-deployment https://aho.icebreaker.top <commit-sha>` repeats the HTTP checks.
+
+For local Cloudflare routing checks, build with `pnpm docs:build`, then run `pnpm --filter @modern-ahocorasick/docs preview:cloudflare --port 8789`. Set `DOCS_E2E_CLOUDFLARE=1` when running `pnpm test:docs:e2e` to test that server. Set `DOCS_E2E_BASE_URL=https://aho.icebreaker.top` when running the docs workspace's `test:e2e` command to test production. A local `deploy:check` dry run validates the Wrangler configuration without publishing.
+
+To roll back normally, revert the affected commit on `main` and push; CI validates and deploys the reverted tree. For an urgent rollback with Cloudflare credentials available, run `pnpm --filter @modern-ahocorasick/docs exec wrangler versions list`, then `pnpm --filter @modern-ahocorasick/docs exec wrangler rollback <version-id>`. Verify `/build-info.json` afterward and follow with a Git revert so the next successful CI deployment preserves the rollback. npm releases remain manual and independent of website deployments.

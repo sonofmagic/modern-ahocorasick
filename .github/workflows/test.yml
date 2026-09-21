@@ -46,3 +46,56 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @modern-ahocorasick/docs exec playwright install --with-deps chromium
       - run: pnpm test:docs:e2e
+        env:
+          DOCS_E2E_CLOUDFLARE: '1'
+          WRANGLER_SEND_METRICS: 'false'
+
+  deploy-docs:
+    needs: [check, docs-browser]
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: docs-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm docs:build
+      - name: Only deploy the latest main commit
+        id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest_sha=$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq '.sha')
+          if [ "$latest_sha" = "$GITHUB_SHA" ]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping outdated commit $GITHUB_SHA; main is $latest_sha."
+            echo "current=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Deploy documentation
+        if: steps.latest.outputs.current == 'true'
+        run: pnpm --filter @modern-ahocorasick/docs deploy
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WRANGLER_SEND_METRICS: 'false'
+      - name: Verify HTTPS, routes and deployed commit
+        if: steps.latest.outputs.current == 'true'
+        run: pnpm docs:verify-deployment https://aho.icebreaker.top "$GITHUB_SHA"
+        env:
+          DOCS_VERIFY_ATTEMPTS: '30'
+      - name: Install browser for production checks
+        if: steps.latest.outputs.current == 'true'
+        run: pnpm --filter @modern-ahocorasick/docs exec playwright install --with-deps chromium
+      - name: Verify production workbench
+        if: steps.latest.outputs.current == 'true'
+        run: pnpm --filter @modern-ahocorasick/docs test:e2e
+        env:
+          DOCS_E2E_BASE_URL: https://aho.icebreaker.top

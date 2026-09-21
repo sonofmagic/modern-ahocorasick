@@ -115,3 +115,8 @@ pnpm-publish-summary.json
 playwright-report/
 test-results/
 .playwright-cli/
+
+# Cloudflare local state and local credentials
+.wrangler/
+.dev.vars
+.dev.vars.*

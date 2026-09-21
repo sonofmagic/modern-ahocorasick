@@ -43,7 +43,9 @@
     "docs:preview": "pnpm --filter @modern-ahocorasick/docs preview",
     "test:docs:e2e": "pnpm docs:build && pnpm --filter @modern-ahocorasick/docs test:e2e",
     "lint:styles": "stylelint \"apps/docs/src/*.vue\" \"apps/docs/.vitepress/theme/*.css\"",
-    "benchmark:docs": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-docs.mjs"
+    "benchmark:docs": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-docs.mjs",
+    "docs:deploy": "pnpm docs:build && pnpm --filter @modern-ahocorasick/docs deploy",
+    "docs:verify-deployment": "node scripts/verify-docs-deployment.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",

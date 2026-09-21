@@ -17,3 +17,5 @@
 
 - The workbench's Worker owns dictionary/trace caching. Keep input edits cancellable and all browser inputs bounded; graph layout is capped and tables/results are paginated. Never silently truncate matches. The lab uses the public API; trace parity belongs in tests.
 - Keep share/import format versioned and validated, preserve original text, and recompute imported results. Only explicit user actions create share links; render input as text, never HTML or executable replacement code.
+
+- Documentation production is https://aho.icebreaker.top on Workers Static Assets. Keep deploy-docs gated on all CI checks and main, serialize deployments and skip stale commits. Cloudflare credentials stay scoped to the deploy step. Keep the npm Release workflow manual. Validate clean URLs, 404, deployed SHA and the browser workbench after deployment.

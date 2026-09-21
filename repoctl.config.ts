@@ -6,7 +6,7 @@ export default defineMonorepoConfig({
     upgrade: { skipOverwrite: true },
   },
   tooling: {
-    eslint: { vue: true, ignores: ['**/dist/**', '**/coverage/**', '**/.turbo/**', '**/.vitepress/cache/**', '**/test-results/**', '**/playwright-report/**'] },
+    eslint: { vue: true, ignores: ['**/dist/**', '**/coverage/**', '**/.turbo/**', '**/.wrangler/**', '**/.vitepress/cache/**', '**/test-results/**', '**/playwright-report/**'] },
     vitest: {
       includeWorkspaceRootConfig: false,
       coverageExclude: ['**/dist/**', '**/test-d/**'],
