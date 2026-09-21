@@ -31,7 +31,7 @@ const ac = new AhoCorasick(['he'])
 console.log(ac.match('ushers')) // true
 ```
 
-CommonJS returns the constructor directly. TypeScript declarations require TypeScript 5.3 or newer. The runtime requires `Intl.Segmenter`; development tooling requires Node ≥22.13.
+CommonJS returns the constructor directly. TypeScript declarations require TypeScript 5.3 or newer. The runtime requires `Intl.Segmenter`; development tooling requires Node 22.22.1+, 24.11+, or 26+, with pnpm 12.5.1.
 
 ## Develop this site
 

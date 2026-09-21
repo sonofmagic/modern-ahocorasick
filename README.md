@@ -175,7 +175,7 @@ universal speedup is promised.
 
 ## Development
 
-Use Node.js 22.13 or newer and pnpm 12.4.2. The private root workspace manages
+Use Node.js 22.22.1+, 24.11+, or 26+ and pnpm 12.5.1. The private root workspace manages
 repoctl, Turborepo and shared tooling. The published library lives in
 `packages/modern-ahocorasick`; v3 replaces grouped matches with UTF-16 ranges while preserving module entry paths.
 
@@ -215,7 +215,7 @@ Use `pnpm change status` to inspect the combined plan; the v3 major intent sched
 
 ## Documentation and algorithm workbench
 
-The bilingual VitePress site lives in `apps/docs` (English by default, Chinese at `/zh/`). Start it with `pnpm docs:dev`, then open the local URL printed in the terminal. The command builds the workspace library automatically.
+The bilingual VitePress 2 site (pinned to `2.0.0-alpha.20`) lives in `apps/docs` (English by default, Chinese at `/zh/`). Start it with `pnpm docs:dev`, then open the local URL printed in the terminal. The command builds the workspace library automatically.
 
 - `pnpm docs:build`: build the library and static documentation.
 - `pnpm docs:preview`: serve the built documentation locally.

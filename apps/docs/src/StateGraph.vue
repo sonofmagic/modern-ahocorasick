@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Point } from '@dagrejs/dagre'
 import type { ZoomBehavior } from 'd3-zoom'
 import type { GraphNode } from './graph'
 import type { Language } from './i18n'
@@ -52,7 +53,7 @@ const layout = computed(() => {
   }))
   const edges = props.nodes.flatMap(node =>
     node.edges.map((edge) => {
-      const points = graph.edge(String(node.id), String(edge.target)).points
+      const points: Point[] = graph.edge(String(node.id), String(edge.target)).points
       const label = points[Math.floor(points.length / 2)]
       return {
         from: node.id,

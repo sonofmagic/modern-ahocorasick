@@ -31,7 +31,7 @@ const ac = new AhoCorasick(['he'])
 console.log(ac.match('ushers')) // true
 ```
 
-CommonJS 直接返回构造函数。类型声明需要 TypeScript 5.3 或更新版本。运行环境需要 `Intl.Segmenter`；开发工具要求 Node ≥22.13。
+CommonJS 直接返回构造函数。类型声明需要 TypeScript 5.3 或更新版本。运行环境需要 `Intl.Segmenter`；开发工具要求 Node 22.22.1+、24.11+ 或 26+，使用 pnpm 12.5.1。
 
 ## 本地开发文档站
 
