@@ -81,7 +81,7 @@ jobs:
           fi
       - name: Deploy documentation
         if: steps.latest.outputs.current == 'true'
-        run: pnpm --filter @modern-ahocorasick/docs deploy
+        run: pnpm --filter @modern-ahocorasick/docs run deploy
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

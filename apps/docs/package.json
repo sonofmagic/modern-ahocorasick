@@ -11,7 +11,7 @@
     "test:e2e": "playwright test",
     "preview:cloudflare": "wrangler dev --local --ip 127.0.0.1",
     "deploy": "node ../../scripts/stamp-docs-build.mjs && wrangler deploy",
-    "deploy:check": "wrangler deploy --dry-run"
+    "deploy:check": "pnpm run deploy --dry-run"
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.1.1",
