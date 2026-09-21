@@ -20,9 +20,11 @@ const props = defineProps<{
   nodes: GraphNode[]
   current: number
   active: { from: number, to: number, kind: string } | undefined
+  inspected: number | undefined
   showFailure: boolean
   language: Language
 }>()
+const emit = defineEmits<{ inspect: [id: number] }>()
 const t = computed(() => messages[props.language])
 const svg = ref<SVGSVGElement>()
 const transform = ref('')
@@ -53,7 +55,10 @@ const layout = computed(() => {
   }))
   const edges = props.nodes.flatMap(node =>
     node.edges.map((edge) => {
-      const points: Point[] = graph.edge(String(node.id), String(edge.target)).points
+      const points: Point[] = graph.edge(
+        String(node.id),
+        String(edge.target),
+      ).points
       const label = points[Math.floor(points.length / 2)]
       return {
         from: node.id,
@@ -176,7 +181,7 @@ onBeforeUnmount(() => {
       ref="svg"
       class="state-graph"
       tabindex="0"
-      role="img"
+      role="group"
       :aria-label="`${t.graph}. ${t.graphHelp}`"
       @keydown="key"
     >
@@ -246,8 +251,19 @@ onBeforeUnmount(() => {
           v-for="node in layout.nodes"
           :key="node.id"
           class="graph-node"
-          :class="{ current: current === node.id, terminal: node.terminal }"
+          :class="{
+            current: current === node.id,
+            terminal: node.terminal,
+            inspected: inspected === node.id,
+          }"
+          role="button"
+          tabindex="0"
+          :aria-label="`${t.state} ${node.id}: ${JSON.stringify(node.prefix)}`"
+          :aria-pressed="inspected === node.id"
           :transform="`translate(${node.x},${node.y})`"
+          @click="emit('inspect', node.id)"
+          @keydown.enter.prevent="emit('inspect', node.id)"
+          @keydown.space.prevent="emit('inspect', node.id)"
         >
           <circle r="21" />
           <circle v-if="node.terminal" class="terminal-ring" r="16" />
@@ -340,6 +356,24 @@ text {
   fill: var(--vp-c-bg-soft);
   stroke: var(--vp-c-brand-1);
   stroke-width: 4;
+}
+
+.graph-node {
+  cursor: pointer;
+}
+
+.graph-node.inspected > circle:first-child {
+  stroke-width: 3;
+  stroke-dasharray: 3 2;
+}
+
+.graph-node:focus-visible {
+  outline: none;
+}
+
+.graph-node:focus-visible > circle:first-child {
+  stroke: var(--vp-c-brand-1);
+  stroke-width: 5;
 }
 
 .graph-node .terminal-ring {

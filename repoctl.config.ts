@@ -10,7 +10,7 @@ export default defineMonorepoConfig({
     vitest: {
       includeWorkspaceRootConfig: false,
       coverageExclude: ['**/dist/**', '**/test-d/**'],
-      overrides: { test: { coverage: { include: ['packages/*/src/**/*.ts', 'apps/docs/src/{trace,player,storage,integration}.ts'] } } },
+      overrides: { test: { coverage: { include: ['packages/*/src/**/*.ts', 'apps/docs/src/{trace,player,storage,integration,experiment,computation}.ts'] } } },
     },
     vitestProject: { globals: true, testTimeout: 60_000 },
   },

@@ -1,6 +1,7 @@
 import type { Match } from 'modern-ahocorasick'
 import type { GraphNode } from './graph'
 import type { Language } from './i18n'
+import { limits } from './limits'
 
 export interface TraceStep {
   kind: 'transition' | 'fallback' | 'skip' | 'hit'
@@ -22,24 +23,33 @@ export function trace(
   nodes: GraphNode[],
   patterns: readonly string[],
   text: string,
+  segments: Iterable<{ segment: string, index: number }> = new Intl.Segmenter(
+    undefined,
+    { granularity: 'grapheme' },
+  ).segment(text),
 ): TraceStep[] {
   const steps: TraceStep[] = []
+  const transitions = nodes.map(
+    node => new Map(node.edges.map(edge => [edge.label, edge.target])),
+  )
+  const append = (step: TraceStep) => {
+    if (steps.length >= limits.steps) {
+      throw new RangeError('trace limit')
+    }
+    steps.push(step)
+  }
   let state = 0
   let grapheme = 0
-  for (const { segment, index } of new Intl.Segmenter(undefined, {
-    granularity: 'grapheme',
-  }).segment(text)) {
-    let next = nodes[state].edges.find(
-      edge => edge.label === segment,
-    )?.target
+  for (const { segment, index } of segments) {
+    let next = transitions[state].get(segment)
     while (next === undefined && state !== 0) {
       const to = nodes[state].failure
-      steps.push({ kind: 'fallback', from: state, to, grapheme, segment })
+      append({ kind: 'fallback', from: state, to, grapheme, segment })
       state = to
-      next = nodes[state].edges.find(edge => edge.label === segment)?.target
+      next = transitions[state].get(segment)
     }
     const to = next ?? 0
-    steps.push({
+    append({
       kind: next === undefined ? 'skip' : 'transition',
       from: state,
       to,
@@ -50,7 +60,7 @@ export function trace(
     const end = index + segment.length
     for (const patternIndex of nodes[state].patternIndices) {
       const pattern = patterns[patternIndex]
-      steps.push({
+      append({
         kind: 'hit',
         from: state,
         to: state,

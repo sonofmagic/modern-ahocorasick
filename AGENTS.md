@@ -14,3 +14,6 @@
 - Run `pnpm test:docs:e2e` for workbench or documentation changes. Keep one cancellable player timeout, cancel on input/reset/unmount, and preserve blocked-storage behavior.
 
 - Keep TypeScript on 6.x until repoctl, typescript-eslint and vue-tsc support the TypeScript 7 compiler API. VitePress 2 is currently pinned to an exact prerelease; run docs E2E when updating it.
+
+- The workbench's Worker owns dictionary/trace caching. Keep input edits cancellable and all browser inputs bounded; graph layout is capped and tables/results are paginated. Never silently truncate matches. The lab uses the public API; trace parity belongs in tests.
+- Keep share/import format versioned and validated, preserve original text, and recompute imported results. Only explicit user actions create share links; render input as text, never HTML or executable replacement code.

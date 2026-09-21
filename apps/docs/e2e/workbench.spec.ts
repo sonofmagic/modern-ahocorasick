@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 import { expect, test } from '@playwright/test'
 
 for (const locale of ['', '/zh']) {
@@ -208,4 +209,183 @@ test('bilingual static pages, links, search, theme and code copy', async ({
     expect(await page.locator('html').getAttribute('class')).not.toBe(before)
   }
   expect(errors).toEqual([])
+})
+
+for (const locale of ['', '/zh']) {
+  test(`${locale || 'en'} strategies, replacement, seek and state inspector`, async ({
+    page,
+  }) => {
+    await page.goto(`${locale}/visualization`)
+    const button = (en: string, zh: string) =>
+      page.getByRole('button', { name: locale ? zh : en, exact: true })
+    await expect(page.getByTestId('lab-count')).toHaveText('3')
+    await button('Next match', '下一个命中').click()
+    await expect(page.getByTestId('progress')).toHaveText('5 / 10')
+    await expect(page.getByTestId('selected-slice')).toHaveText('"she"')
+    await button('Next match', '下一个命中').click()
+    await expect(page.getByTestId('progress')).toHaveText('6 / 10')
+    await button('Previous match', '上一个命中').click()
+    await expect(page.getByTestId('progress')).toHaveText('5 / 10')
+    await button('Previous step', '上一步').click()
+    await expect(page.getByTestId('structured-results')).toHaveText('[]')
+    await page.locator('#timeline').fill('10')
+    await expect(page.getByTestId('grouped-results')).toHaveText(
+      '[[3,["she","he"]],[5,["hers"]]]',
+    )
+    await page.locator('#timeline').fill('0')
+    await page.locator('.match-result').filter({ hasText: '#0 "he"' }).click()
+    await expect(page.getByTestId('progress')).toHaveText('6 / 10')
+    await expect(page.getByTestId('selected-slice')).toHaveText('"he"')
+    await expect(page.locator('.tape-cell.matched')).toHaveCount(2)
+    await page.locator('.graph-node').filter({ hasText: /^5$/ }).focus()
+    await page.keyboard.press('Enter')
+    await expect(page.getByTestId('inspector')).toContainText('"she"')
+    await expect(page.getByTestId('inspector')).toContainText('"he"')
+    await page.locator('#example').selectOption('overlap')
+    await expect(page.getByTestId('lab-count')).toHaveText('13')
+    await page.locator('#replacement').fill('$&')
+    await expect(page.getByTestId('replacement-preview')).toHaveText('$&$&')
+    await page.locator('#strategy').selectOption('leftmost-first')
+    await expect(page.getByTestId('lab-count')).toHaveText('4')
+    await expect(page.getByTestId('replacement-preview')).toHaveText(
+      '$&$&$&$&',
+    )
+    await page.locator('#strategy').selectOption('leftmost-longest')
+    await expect(page.getByTestId('lab-count')).toHaveText('2')
+    await expect(page.getByTestId('replacement-preview')).toHaveText('$&$&')
+    await page.locator('#example').selectOption('emoji')
+    await expect(page.getByTestId('lab-count')).toHaveText('2')
+    await page.locator('.match-result').first().click()
+    await expect(page.getByTestId('selected-slice')).toHaveText('"👨‍👩‍👧‍👦"')
+    await expect(page.locator('.tape-cell.matched')).toHaveCount(1)
+    await expect(page.locator('.tape-cell.matched')).toContainText('[3, 14)')
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true)
+  })
+}
+
+test('share links, export/import, code copy fallback and extended session restore', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: async () => {
+          throw new Error('blocked')
+        },
+      },
+    })
+  })
+  await page.goto('/visualization')
+  await page.locator('#example').selectOption('combining')
+  await page.locator('#strategy').selectOption('leftmost-first')
+  await page.locator('#replacement').fill('<tag>$&')
+  await page.getByRole('checkbox').check()
+  await expect(page.getByTestId('lab-count')).toHaveText('3')
+  await page.reload()
+  await expect(page.locator('#strategy')).toHaveValue('leftmost-first')
+  await expect(page.locator('#replacement')).toHaveValue('<tag>$&')
+  await expect(page.getByRole('checkbox')).toBeChecked()
+  await page.getByRole('button', { name: 'Copy TypeScript' }).click()
+  await expect(page.locator('.sharing textarea')).toHaveValue(
+    /import AhoCorasick/,
+  )
+  const originalUrl = page.url()
+  await page.getByRole('button', { name: 'Copy share link' }).click()
+  const link = await page.locator('.sharing textarea').inputValue()
+  expect(page.url()).toBe(originalUrl)
+  expect(link).toContain('#workbench=')
+  const downloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Export JSON' }).click()
+  const download = await downloadPromise
+  const stream = await download.createReadStream()
+  const chunks: Buffer[] = []
+  for await (const chunk of stream!) {
+    // Read the actual download, including complete results beyond the UI page.
+    chunks.push(chunk)
+  }
+  const exported = JSON.parse(Buffer.concat(chunks).toString())
+  expect(exported.version).toBe(1)
+  expect(exported.results).toHaveLength(3)
+  expect(exported.replaced).toBe('<tag>$& <tag>$&t <tag>$&')
+  await page.locator('#keywords').fill('x')
+  await page.goto(link)
+  await expect(page.locator('#keywords')).toHaveValue('é,é,e')
+  await expect(page.getByTestId('lab-count')).toHaveText('3')
+  await page
+    .locator('input[type=file]')
+    .setInputFiles({
+      name: 'example.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(
+        JSON.stringify({
+          ...exported,
+          input: { ...exported.input, text: 'éé' },
+        }),
+      ),
+    })
+  await expect(page.locator('#search-text')).toHaveValue('éé')
+  await expect(page.getByTestId('lab-count')).toHaveText('2')
+  await page
+    .locator('input[type=file]')
+    .setInputFiles({
+      name: 'bad.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from('{'),
+    })
+  await expect(page.getByTestId('share-notice')).toContainText(
+    'Invalid configuration',
+  )
+  await expect(page.locator('#search-text')).toHaveValue('éé')
+  await page.locator('#search-text').fill('<img>é')
+  await expect(page.getByTestId('highlighted-text')).toHaveText('<img>é')
+  await expect(page.locator('.workbench img')).toHaveCount(0)
+})
+
+test('large inputs stay bounded, recover from limits and cancel stale computations', async ({
+  page,
+}) => {
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.goto('/visualization')
+  await page.locator('#keywords').fill('a')
+  await page.locator('#search-text').fill('ab'.repeat(10000))
+  await expect(page.getByTestId('lab-count')).toHaveText('10000')
+  await expect(page.locator('.tape-cell')).toHaveCount(100)
+  await expect(page.locator('.match-result')).toHaveCount(100)
+  await page.locator('#timeline').fill('40000')
+  await expect(page.getByTestId('progress')).toHaveText('40000 / 40000')
+  await expect(page.locator('.tape-cell.selected')).toContainText('G19999')
+  await page.locator('#keywords').fill('a,a,a,a')
+  await expect(page.getByRole('alert')).toContainText('limit exceeded')
+  await page.locator('#keywords').fill('a'.repeat(180))
+  await page.locator('#search-text').fill('a'.repeat(180))
+  await expect(page.getByTestId('lab-count')).toHaveText('1')
+  await expect(page.locator('.graph-limit')).toBeVisible()
+  await expect(page.locator('.graph-node')).toHaveCount(0)
+  await page.locator('.match-result').click()
+  await expect(page.getByTestId('current-state')).toHaveText('180')
+  await expect(page.locator('tr[aria-current=step]')).toContainText('180')
+  await page.locator('#search-text').fill('x'.repeat(20001))
+  await expect(page.getByRole('alert')).toContainText('limit exceeded')
+  await page.locator('#example').selectOption('emoji')
+  await page.locator('#example').selectOption('classic')
+  await expect(page.getByTestId('lab-count')).toHaveText('3')
+  await expect(page.getByTestId('progress')).toHaveText('0 / 10')
+  expect(errors).toEqual([])
+})
+
+test('copies runnable code and explicit share links to an available clipboard', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/visualization')
+  await expect(page.getByTestId('lab-count')).toHaveText('3')
+  await page.getByRole('button', { name: 'Copy TypeScript' }).click()
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('import AhoCorasick from \'modern-ahocorasick\'')
+  await page.getByRole('button', { name: 'Copy share link' }).click()
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain('#workbench=')
+  await expect(page.getByTestId('share-notice')).toHaveText('Copied.')
+  expect(new URL(page.url()).hash).toBe('')
 })

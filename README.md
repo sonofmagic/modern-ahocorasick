@@ -204,8 +204,9 @@ the **Release** GitHub Actions workflow on `main`.
 4. Review and merge that PR, then run **Release** with `mode: publish`.
    repoctl publishes prepared versions and creates the package version tag and GitHub release.
 
-The workflow uses `GITHUB_TOKEN` and the existing `NPM_TOKEN` secret. Repository
-Actions settings must allow GitHub Actions to create pull requests. If the version
+The workflow uses `GITHUB_TOKEN` for repository operations and npm trusted publishing
+via GitHub OIDC for npm publication. Repository Actions settings must allow GitHub
+Actions to create pull requests. If the version
 PR was created with `GITHUB_TOKEN`, manually run CI for its branch before merging,
 because GitHub does not automatically trigger workflows from that token's events.
 Keep the workflow manual-only when upgrading repoctl managed assets.
@@ -219,8 +220,9 @@ The bilingual VitePress 2 site (pinned to `2.0.0-alpha.20`) lives in `apps/docs`
 
 - `pnpm docs:build`: build the library and static documentation.
 - `pnpm docs:preview`: serve the built documentation locally.
+- `pnpm benchmark:docs`: measure dictionary reuse, rescan time and retained/transfer heap; see [workbench measurements](./docs/workbench-performance.md).
 - `pnpm test:docs:e2e`: build and run Playwright desktop/mobile checks. Install Chromium once with `pnpm --filter @modern-ahocorasick/docs exec playwright install chromium`.
 
-The visualizer includes pause/resume, stepping, live speed changes, grapheme indices, UTF-16 results, draggable/zoomable goto graphs, failure links and state tables. It uses a shared repository-internal builder without exposing automaton state in the npm API. The private docs workspace is not published. No website deployment is configured.
+The workbench includes strategy comparison, safe original-text highlighting, literal replacement preview, copyable TypeScript, versioned JSON import/export and explicit share links. Playback supports backward steps, timeline seeking and jumps to matches. Grapheme/UTF-16 coordinates, state prefix/suffix inspection and inherited-output origins stay linked to the scan. Computation runs in a cancellable Worker with dictionary reuse, bounded inputs and paginated displays; the graph supports dragging, zooming and failure links. See the bilingual visualization pages for input limits and sharing behavior. It uses a shared repository-internal builder without exposing automaton state in the npm API. The private docs workspace is not published. No website deployment is configured.
 
 Original library and visualization credit: [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick), [reference visualization](https://brunorb.github.io/ahocorasick/visualization.html). Modern library maintained by SonOfMagic.

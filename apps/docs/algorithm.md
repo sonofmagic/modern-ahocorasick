@@ -20,11 +20,11 @@ The visualizer's educational grouping is `[[3, ['she', 'he']], [5, ['hers']]]`. 
 
 The text tape highlights the grapheme currently being considered. Solid blue edges are goto transitions; dashed orange edges are failure links. The active fallback remains visible even when other failure links are hidden. Double-ring nodes are terminal states. Tables use numeric state order and show inherited outputs without changing compiled state.
 
-Each match event appends exactly one structured result. A reset cancels playback and clears results; continuing resumes from the next event. Changing inputs rebuilds the trace and cancels the old timer.
+Each match event reveals exactly one structured result. A reset clears playback progress; the lab continues to show the complete search. Seeking backward or forward projects the same immutable trace and pauses playback. Select a state to inspect its prefix, failure suffix, own terminals, and inherited-output sources. Changing dictionary/text inputs cancels playback and any stale computation.
 
 ## Cost and scope
 
-Building uses a node array, Map edges and breadth-first failure construction with a queue cursor. Scanning follows failure/output links; emitting many matches necessarily costs time proportional to the output. The workbench materializes the entire trace and lays out the whole dictionary, so it is intended for learning with small examples, not benchmarking large corpora.
+Building uses a node array, Map edges and breadth-first failure construction with a queue cursor. Scanning follows failure/output links; emitting many matches necessarily costs time proportional to the output. The workbench generates a bounded, complete trace in a cancellable Worker, reuses dictionaries for text edits, and only lays out graphs of up to 150 states. Larger dictionaries use paginated state tables. See the [workbench limits and controls](./visualization#input-size-and-responsiveness) and [measured computation/transfer costs](https://github.com/icelib/modern-ahocorasick/blob/main/docs/workbench-performance.md). It remains a teaching tool rather than a large-corpus benchmark.
 
 Read the [measured v2/v3 tradeoffs](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks.md). No blanket speedup is promised.
 
