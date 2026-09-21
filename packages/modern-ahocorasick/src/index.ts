@@ -1,21 +1,12 @@
+import type { AutomatonNode } from './internal.js'
 import type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
+import { buildAutomaton } from './internal.js'
 
 export type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
 
 interface Pattern<T> {
   pattern: string
   data: T | undefined
-}
-
-interface Node {
-  next: Map<string, number>
-  failure: number
-  output: number
-  terminals: number[]
-}
-
-function createNode(): Node {
-  return { next: new Map(), failure: 0, output: -1, terminals: [] }
 }
 
 function assertText(text: string): void {
@@ -55,7 +46,7 @@ function selectMatches<T>(matches: Match<T>[], strategy: MatchStrategy): Match<T
 
 /** An immutable compiled dictionary for exact grapheme-cluster matching. */
 export default class AhoCorasick<T = unknown> {
-  readonly #nodes: Node[] = [createNode()]
+  readonly #nodes: AutomatonNode[]
   readonly #patterns: Pattern<T>[]
   readonly #segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
 
@@ -77,7 +68,7 @@ export default class AhoCorasick<T = unknown> {
       }
       return { pattern, data: typeof input === 'string' ? undefined : input.data }
     })
-    this.#build()
+    this.#nodes = buildAutomaton(this.#patterns, this.#segmenter)
   }
 
   /** All matches, optionally reduced to a non-overlapping selection. */
@@ -124,39 +115,6 @@ export default class AhoCorasick<T = unknown> {
     }
     parts.push(text.slice(cursor))
     return parts.join('')
-  }
-
-  #build(): void {
-    for (const [index, { pattern }] of this.#patterns.entries()) {
-      let state = 0
-      for (const { segment } of this.#segmenter.segment(pattern)) {
-        let next = this.#nodes[state].next.get(segment)
-        if (next === undefined) {
-          next = this.#nodes.length
-          this.#nodes[state].next.set(segment, next)
-          this.#nodes.push(createNode())
-        }
-        state = next
-      }
-      this.#nodes[state].terminals.push(index)
-    }
-
-    const queue = [...this.#nodes[0].next.values()]
-    for (let head = 0; head < queue.length; head++) {
-      const state = queue[head]
-      for (const [segment, child] of this.#nodes[state].next) {
-        queue.push(child)
-        let failure = this.#nodes[state].failure
-        while (failure !== 0 && !this.#nodes[failure].next.has(segment)) {
-          failure = this.#nodes[failure].failure
-        }
-        failure = this.#nodes[failure].next.get(segment) ?? 0
-        this.#nodes[child].failure = failure
-        this.#nodes[child].output = this.#nodes[failure].terminals.length > 0
-          ? failure
-          : this.#nodes[failure].output
-      }
-    }
   }
 
   * #scan(text: string): Generator<Match<T>> {

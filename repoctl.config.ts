@@ -6,11 +6,11 @@ export default defineMonorepoConfig({
     upgrade: { skipOverwrite: true },
   },
   tooling: {
-    eslint: { ignores: ['**/dist/**', '**/coverage/**', '**/.turbo/**'] },
+    eslint: { vue: true, ignores: ['**/dist/**', '**/coverage/**', '**/.turbo/**', '**/.vitepress/cache/**', '**/test-results/**', '**/playwright-report/**'] },
     vitest: {
       includeWorkspaceRootConfig: false,
       coverageExclude: ['**/dist/**', '**/test-d/**'],
-      overrides: { test: { coverage: { include: ['packages/*/src/**/*.ts'] } } },
+      overrides: { test: { coverage: { include: ['packages/*/src/**/*.ts', 'apps/docs/src/{trace,player,storage,integration}.ts'] } } },
     },
     vitestProject: { globals: true, testTimeout: 60_000 },
   },

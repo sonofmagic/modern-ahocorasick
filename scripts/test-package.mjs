@@ -33,6 +33,7 @@ try {
   const manifest = JSON.parse(readFileSync(path.join(installed, 'package.json'), 'utf8'))
   assert.equal(manifest.name, 'modern-ahocorasick')
   assert.notEqual(manifest.private, true)
+  assert.ok(!existsSync(path.join(installed, 'dist/internal.d.ts')), 'private builder has no package entry')
   assert.ok(!existsSync(path.join(installed, 'src')), 'source is not part of the published package')
   const checks = `
 const ac = new AhoCorasick(['he', 'she', 'hers'])

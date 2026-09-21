@@ -212,3 +212,15 @@ Keep the workflow manual-only when upgrading repoctl managed assets.
 The workspace version remains at the published baseline until release preparation.
 Use `pnpm change status` to inspect the combined plan; the v3 major intent schedules
 3.0.0. Never publish the working tree with its unchanged baseline version.
+
+## Documentation and algorithm workbench
+
+The bilingual VitePress site lives in `apps/docs` (English by default, Chinese at `/zh/`). Start it with `pnpm docs:dev`, then open the local URL printed in the terminal. The command builds the workspace library automatically.
+
+- `pnpm docs:build`: build the library and static documentation.
+- `pnpm docs:preview`: serve the built documentation locally.
+- `pnpm test:docs:e2e`: build and run Playwright desktop/mobile checks. Install Chromium once with `pnpm --filter @modern-ahocorasick/docs exec playwright install chromium`.
+
+The visualizer includes pause/resume, stepping, live speed changes, grapheme indices, UTF-16 results, draggable/zoomable goto graphs, failure links and state tables. It uses a shared repository-internal builder without exposing automaton state in the npm API. The private docs workspace is not published. No website deployment is configured.
+
+Original library and visualization credit: [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick), [reference visualization](https://brunorb.github.io/ahocorasick/visualization.html). Modern library maintained by SonOfMagic.

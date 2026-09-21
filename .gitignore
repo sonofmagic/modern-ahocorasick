@@ -110,3 +110,8 @@ stats/*.html
 .turbo/
 .pnpm-store/
 pnpm-publish-summary.json
+
+**/.vitepress/cache/
+playwright-report/
+test-results/
+.playwright-cli/

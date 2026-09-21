@@ -8,3 +8,7 @@
 - Run `pnpm benchmark` for scanner or automaton changes; report speed and retained-heap tradeoffs rather than assuming an improvement.
 - Add pnpm change intents for publishable changes. Do not publish or trigger Release without explicit user authorization.
 - The Release workflow is intentionally manual-only. Preserve this policy during repoctl upgrades.
+
+- `apps/docs` is a private bilingual VitePress app. Keep English and Chinese pages aligned; v3 ranges are UTF-16 while the visualizer's grouped display uses zero-based grapheme end indices.
+- The docs adapter imports `src/internal.ts` from the library source. Do not copy the builder or expose it in npm; declaration packaging removes its private declaration. Verify packed files after changing this integration.
+- Run `pnpm test:docs:e2e` for workbench or documentation changes. Keep one cancellable player timeout, cancel on input/reset/unmount, and preserve blocked-storage behavior.

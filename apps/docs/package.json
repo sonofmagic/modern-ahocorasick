@@ -1,0 +1,29 @@
+{
+  "name": "@modern-ahocorasick/docs",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev . --host 127.0.0.1",
+    "build": "vitepress build .",
+    "preview": "vitepress preview . --host 127.0.0.1",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "^1.1.5",
+    "@fontsource/space-grotesk": "^5.2.0",
+    "d3-selection": "^3.0.0",
+    "d3-zoom": "^3.0.0",
+    "modern-ahocorasick": "workspace:*",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/d3-selection": "^3.0.0",
+    "@types/d3-zoom": "^3.0.0",
+    "@types/dagre": "^0.7.53",
+    "vue-tsc": "^3.0.0"
+  }
+}

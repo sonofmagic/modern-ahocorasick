@@ -21,7 +21,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "eslint .",
+    "lint": "eslint . && pnpm lint:styles",
     "typecheck": "tsc --noEmit && turbo run typecheck",
     "test": "vitest run",
     "test:dev": "vitest",
@@ -37,7 +37,12 @@
     "release": "pnpm change",
     "version-packages": "repo release stable prepare",
     "publish-packages": "repo release stable publish",
-    "benchmark": "pnpm build && node --expose-gc scripts/benchmark.mjs"
+    "benchmark": "pnpm build && node --expose-gc scripts/benchmark.mjs",
+    "docs:dev": "pnpm --filter modern-ahocorasick build && pnpm --filter @modern-ahocorasick/docs dev",
+    "docs:build": "turbo run build --filter=@modern-ahocorasick/docs",
+    "docs:preview": "pnpm --filter @modern-ahocorasick/docs preview",
+    "test:docs:e2e": "pnpm docs:build && pnpm --filter @modern-ahocorasick/docs test:e2e",
+    "lint:styles": "stylelint \"apps/docs/src/*.vue\" \"apps/docs/.vitepress/theme/*.css\""
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
