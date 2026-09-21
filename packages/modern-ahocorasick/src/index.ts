@@ -1,6 +1,6 @@
 import type { AutomatonNode } from './internal.js'
 import type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
-import { advance, buildAutomaton } from './internal.js'
+import { advance, asciiPrefix, buildAutomaton } from './internal.js'
 
 export type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
 
@@ -85,7 +85,23 @@ export default class AhoCorasick<T = unknown> {
     }
     let state = 0
     let count = 0
-    for (const { segment } of this.#segmenter.segment(text)) {
+    const ascii = asciiPrefix(text)
+    if (ascii !== undefined) {
+      for (const { segment } of ascii) {
+        state = advance(this.#nodes, state, segment)
+        count += this.#counts[state]
+        if (!Number.isSafeInteger(count)) {
+          throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
+        }
+      }
+      if (ascii.position === text.length) {
+        return count
+      }
+    }
+    // Keep native iteration at its own call site. Mixing the JS cursor and
+    // native iterator in one hot loop penalizes long Unicode suffixes in V8.
+    const suffix = ascii === undefined ? text : text.slice(ascii.position)
+    for (const { segment } of this.#segmenter.segment(suffix)) {
       state = advance(this.#nodes, state, segment)
       count += this.#counts[state]
       if (!Number.isSafeInteger(count)) {
@@ -102,7 +118,20 @@ export default class AhoCorasick<T = unknown> {
       return false
     }
     let state = 0
-    for (const { segment } of this.#segmenter.segment(text)) {
+    const ascii = asciiPrefix(text)
+    if (ascii !== undefined) {
+      for (const { segment } of ascii) {
+        state = advance(this.#nodes, state, segment)
+        if (this.#counts[state] !== 0) {
+          return true
+        }
+      }
+      if (ascii.position === text.length) {
+        return false
+      }
+    }
+    const suffix = ascii === undefined ? text : text.slice(ascii.position)
+    for (const { segment } of this.#segmenter.segment(suffix)) {
       state = advance(this.#nodes, state, segment)
       if (this.#counts[state] !== 0) {
         return true

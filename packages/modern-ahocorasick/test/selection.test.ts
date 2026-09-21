@@ -37,7 +37,7 @@ describe.each(['leftmost-first', 'leftmost-longest'] as const)('%s iteration', (
   })
 
   it('is lazy with bounded lookahead, including after skipped candidates', () => {
-    const matcher = new AhoCorasick(['aaa', 'a'])
+    const matcher = new AhoCorasick(['猫猫猫', '猫'])
     const original = Intl.Segmenter.prototype.segment
     let visited = 0
     const spy = vi.spyOn(Intl.Segmenter.prototype, 'segment').mockImplementation(function (this: Intl.Segmenter, text) {
@@ -54,7 +54,7 @@ describe.each(['leftmost-first', 'leftmost-longest'] as const)('%s iteration', (
       }
     })
     try {
-      const iterator = matcher.iterate('a'.repeat(100_000), { strategy })
+      const iterator = matcher.iterate('猫'.repeat(100_000), { strategy })
       expect(visited).toBe(0)
       for (let index = 0; index < 100; index++) {
         const match = iterator.next().value!
