@@ -1,5 +1,6 @@
 # repoctl-managed: release/v2
-# Prepare on main pushes; publish only by explicit manual dispatch.
+# Prepare version PRs on regular main pushes and publish them after the release
+# version commit is merged. Manual dispatch remains available for both phases.
 # Preserve this policy during repoctl upgrades.
 name: Release
 
@@ -51,12 +52,16 @@ jobs:
       - run: pnpm exec repo doctor --strict
       - run: pnpm validate
       - name: Prepare version pull request
-        if: github.event_name == 'push' || inputs.mode == 'prepare'
+        if: |
+          (github.event_name == 'push' && !startsWith(github.event.head_commit.message, 'chore(release): version packages')) ||
+          (github.event_name == 'workflow_dispatch' && inputs.mode == 'prepare')
         run: pnpm exec repo release stable prepare
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish prepared versions and create release tags
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'publish'
+        if: |
+          (github.event_name == 'push' && startsWith(github.event.head_commit.message, 'chore(release): version packages')) ||
+          (github.event_name == 'workflow_dispatch' && inputs.mode == 'publish')
         run: pnpm exec repo release stable publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
