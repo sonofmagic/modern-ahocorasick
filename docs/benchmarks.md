@@ -1,10 +1,13 @@
 # Matching performance and memory
 
+The latest ASCII optimization report is [ASCII performance](./benchmarks-ascii.md).
+The measurements below are the preserved pre-ASCII historical report.
+
 Measured on Apple M4 Max, darwin/arm64, Node v24.18.0 (2026-09-21). The current column is this working-tree implementation; pre-optimization v3 is Git commit `4f6dd786602014bd8e6f46c324ece54ba97a1b50`. The historical v2 comparison remains pinned to `a4181b054b2d2c85e83fe4201b1417c879db2f30`.
 
 ## Methodology
 
-Run `pnpm benchmark`. Each scenario compares v2 once and the two v3 variants in 3 independent process pairs, alternating execution order across rounds and scenarios. Each process warms up and calibrates batches, then takes 7 timed samples with explicit GC before each batch. Tables report the median of process medians in milliseconds. The [full results](./benchmarks-v3.json) include UTF-16 units/second, within-process MAD, between-process MAD and every process median.
+Run `pnpm benchmark:history`. Each scenario compares v2 once and the two v3 variants in 3 independent process pairs, alternating execution order across rounds and scenarios. Each process warms up and calibrates batches, then takes 7 timed samples with explicit GC before each batch. Tables report the median of process medians in milliseconds. The [full results](./benchmarks-v3.json) include UTF-16 units/second, within-process MAD, between-process MAD and every process median.
 
 The baseline equivalents for new APIs are `search(text).length` for counting and `search(text, { strategy }).values()` for selected iteration. Existing users could already count `iterate()` results without retaining a result array, but still paid O(z) enumeration; count memory comparisons here specifically use `search(text).length`. All-match iteration uses the existing iterator. Both variants must produce identical occurrence totals, hashes of complete result objects for all three strategies, and replacement strings. Iterator result totals are checked separately; randomized unit tests also compare full iterator output against an independent naive matcher.
 
@@ -89,7 +92,7 @@ Every full-suite build median stayed within the 5% budget; all ten full-search, 
 
 A separate seven-pair run on the identical implementation measured 0.02986 ms before versus 0.02947 ms now (−1.3%). Pooling all ten independent process medians gives 0.03099 ms before versus 0.03135 ms now (+1.2%). The >5% slowdown did not reproduce consistently; do not treat either the initial slowdown or the small recheck speedup as a stable microsecond-level effect. Both the [full suite](./benchmarks-v3.json) and [targeted recheck](./benchmarks-v3-recheck.json) remain available, including noise estimates and matching implementation SHA-256 hashes.
 
-Reproduce the follow-up with `BENCH_ROUNDS=7 BENCH_SCENARIOS=long-text BENCH_OPERATIONS=match BENCH_MEMORY=0 pnpm benchmark`. These measurements apply to this machine/runtime and corpus; they do not guarantee the same results on every JavaScript engine or workload. A reproducible slowdown above 5% should block merging until resolved; a single noisy timing flag is not an automatic CI failure.
+Reproduce the follow-up with `BENCH_ROUNDS=7 BENCH_SCENARIOS=long-text BENCH_OPERATIONS=match BENCH_MEMORY=0 pnpm benchmark:history`. These measurements apply to this machine/runtime and corpus; they do not guarantee the same results on every JavaScript engine or workload. A reproducible slowdown above 5% should block merging until resolved; a single noisy timing flag is not an automatic CI failure.
 
 ### Reading the historical comparison
 

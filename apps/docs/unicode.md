@@ -34,3 +34,23 @@ General Unicode lowercasing can change length and segmentation (for example `İ`
 ## Empty inputs
 
 `new AhoCorasick([])` is valid. All scans produce no results. `new AhoCorasick([''])` throws `RangeError`; an empty pattern is not a wildcard. The visualizer trims comma-separated keyword entries and ignores empty entries, but preserves search-text spaces and newlines exactly. Duplicate entries remain distinct.
+
+## ASCII acceleration and runtime versions
+
+Dictionary construction, `count()` and `match()` scan leading ASCII lazily
+without creating native segment objects. CRLF
+still forms one grapheme. If a non-ASCII character could extend the current
+cluster, the unresolved cluster and remaining suffix are delegated to
+`Intl.Segmenter`. The scanner does not return to ASCII mode within that suffix.
+For example, `e` still cannot match inside `abc e\u0301`, even with an ASCII-only
+dictionary. A bounded probe of at most eight UTF-16 units routes short mixed
+prefixes directly to native segmentation; there is no whole-string ASCII preflight.
+
+`search()`, `iterate()` and `replace()` retain native segmentation because the
+experimental cursor-based result generators exceeded the regression budget.
+This is an implementation optimization, not a new matching mode. Exact matching,
+case sensitivity, no normalization, and original UTF-16 ranges remain unchanged.
+Unicode rules follow the host runtime; newly introduced characters may segment
+differently across ICU/Unicode versions. Node conformance tests use versioned
+Unicode GraphemeBreakTest data. Chromium, Firefox and WebKit run the same library
+contract and differential suite against their own native segmenters.

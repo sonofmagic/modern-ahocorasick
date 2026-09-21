@@ -16,6 +16,7 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop',
+      testIgnore: '**/library.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1440, height: 1000 },
@@ -23,12 +24,18 @@ export default defineConfig({
     },
     {
       name: 'mobile-dark',
+      testIgnore: '**/library.spec.ts',
       use: {
         ...devices['Pixel 7'],
         colorScheme: 'dark',
         reducedMotion: 'reduce',
       },
     },
+    ...(['chromium', 'firefox', 'webkit'] as const).map(browserName => ({
+      name: `library-${browserName}`,
+      testMatch: '**/library.spec.ts',
+      use: { browserName },
+    })),
   ],
   ...(externalURL
     ? {}
