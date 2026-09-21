@@ -236,13 +236,15 @@ a new engine requirement on consumers of the library.
 
 ## Releases
 
-Pushing `main` runs CI and deploys the documentation after all checks pass. npm publication requires an explicit manual run of
-the **Release** GitHub Actions workflow on `main`.
+Pushing `main` runs CI, automatically prepares or updates the version PR, and deploys
+the documentation after all CI checks pass. npm publication requires an explicit
+manual run of the **Release** GitHub Actions workflow on `main` with `mode: publish`.
 
 1. Record a change with `pnpm change modern-ahocorasick --bump patch --summary "Describe the change"`.
 2. Inspect pending versions with `pnpm change status`.
-3. Run **Release** with `mode: prepare`. repoctl validates the workspace and opens
-   a version PR, consuming the intents and updating the version and repository changelog.
+3. Push or merge the changes to `main`. **Release** validates the workspace and opens
+   or updates the version PR, consuming the intents and updating the version and
+   repository changelog. You can also run **Release** manually with `mode: prepare`.
 4. Review and merge that PR, then run **Release** with `mode: publish`.
    repoctl publishes prepared versions and creates the package version tag and GitHub release.
 
@@ -251,7 +253,7 @@ via GitHub OIDC for npm publication. Repository Actions settings must allow GitH
 Actions to create pull requests. If the version
 PR was created with `GITHUB_TOKEN`, manually run CI for its branch before merging,
 because GitHub does not automatically trigger workflows from that token's events.
-Keep the workflow manual-only when upgrading repoctl managed assets.
+Preserve automatic preparation and manual-only publication when upgrading repoctl managed assets.
 The workspace version remains at the published baseline until release preparation.
 Use `pnpm change status` to inspect the combined plan; the v3 major intent schedules
 3.0.0. Never publish the working tree with its unchanged baseline version.

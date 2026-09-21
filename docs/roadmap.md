@@ -27,5 +27,6 @@ explicit resource policy. Normalization and case folding can change lengths and
 need an original-text mapping; simply transforming strings and subtracting a
 pattern length is not sufficient.
 
-Release remains manual. Each publishable step records a pnpm change intent and
+Version PR preparation runs automatically on main pushes; npm publication remains
+manual. Each publishable step records a pnpm change intent and
 must pass repository, packed-consumer, type, browser and relevant benchmark checks.

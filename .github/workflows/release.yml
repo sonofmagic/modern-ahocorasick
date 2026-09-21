@@ -1,8 +1,11 @@
 # repoctl-managed: release/v2
-# Manual-only policy: preserve these triggers during repoctl upgrades.
+# Prepare on main pushes; publish only by explicit manual dispatch.
+# Preserve this policy during repoctl upgrades.
 name: Release
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       mode:
@@ -48,12 +51,12 @@ jobs:
       - run: pnpm exec repo doctor --strict
       - run: pnpm validate
       - name: Prepare version pull request
-        if: inputs.mode == 'prepare'
+        if: github.event_name == 'push' || inputs.mode == 'prepare'
         run: pnpm exec repo release stable prepare
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish prepared versions and create release tags
-        if: inputs.mode == 'publish'
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'publish'
         run: pnpm exec repo release stable publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
