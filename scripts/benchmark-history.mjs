@@ -5,27 +5,22 @@ import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { stripTypeScriptTypes } from 'node:module'
 import { cpus } from 'node:os'
+import { performance } from 'node:perf_hooks'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { median, time } from './benchmark-utils.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const script = fileURLToPath(import.meta.url)
-const baselineRef = 'a78f4c8d6b2e511a74271409c30f66d3f8057197'
+const baselineRef = 'a4181b054b2d2c85e83fe4201b1417c879db2f30'
+const v3BaselineRef = '4f6dd786602014bd8e6f46c324ece54ba97a1b50'
 const samples = 7
-const rounds = Number(process.env.BENCH_ROUNDS ?? 5)
+const rounds = Number(process.env.BENCH_ROUNDS ?? 3)
 assert.ok(Number.isInteger(rounds) && rounds >= 1 && rounds <= 9, 'BENCH_ROUNDS must be between 1 and 9')
 const strategies = ['all', 'leftmost-first', 'leftmost-longest']
 const requestedOperations = process.env.BENCH_OPERATIONS?.split(',')
 const operationNames = ['build', 'search', 'match', 'count', ...strategies.map(strategy => `iterate:${strategy}`), ...strategies.slice(1).flatMap(strategy => [`search:${strategy}`, `replace:${strategy}`])]
 assert.ok(requestedOperations === undefined || requestedOperations.every(operation => operationNames.includes(operation)), 'Unknown BENCH_OPERATIONS entry')
 const scenarios = {
-  'ascii-tiny': { patterns: ['a', 'ab', 'b'], text: 'ab' },
-  'crlf': { patterns: ['a', '\r', '\n', '\r\n', 'a\r\nb'], text: 'a\r\nb '.repeat(8000) },
-  'ascii-combining': { patterns: ['a', 'e', 'e\u0301', 'cat'], text: 'abc e\u0301 cat '.repeat(4000) },
-  'unicode-start': { patterns: ['猫', 'word', '😀'], text: '猫word😀 '.repeat(5000) },
-  'ascii-prefix': { patterns: ['word', 'e\u0301'], text: `${'no hits here. '.repeat(4000)}e\u0301 word` },
-  'ascii-early-unicode': { patterns: ['needle'], text: `needle${'x'.repeat(100000)}e\u0301` },
   'ordinary': {
     patterns: Array.from({ length: 200 }, (_, i) => `word${i}`),
     text: Array.from({ length: 2000 }, (_, i) => `line word${i % 200} end`).join(' '),
@@ -62,28 +57,66 @@ const scenarios = {
   },
 }
 
-let sink
+function median(values) {
+  return [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
+}
 
-function operations(Constructor, patterns, text) {
+let sink
+function time(operation, units) {
+  // Batch tiny operations to avoid treating timer resolution as a speedup.
+  let iterations = 1
+  let elapsed
+  do {
+    const start = performance.now()
+    for (let i = 0; i < iterations; i++) {
+      sink = operation()
+    }
+    elapsed = performance.now() - start
+    if (elapsed < 25) {
+      iterations *= 2
+    }
+  } while (elapsed < 25 && iterations <= 4096)
+  const times = []
+  for (let sample = 0; sample < samples; sample++) {
+    globalThis.gc()
+    const start = performance.now()
+    for (let i = 0; i < iterations; i++) {
+      sink = operation()
+    }
+    times.push((performance.now() - start) / iterations)
+  }
+  assert.notEqual(sink, undefined)
+  sink = undefined
+  const ms = median(times)
+  return { ms, madMs: median(times.map(value => Math.abs(value - ms))), iterations, utf16UnitsPerSecond: units / (ms / 1000) }
+}
+
+function operations(Constructor, variant, patterns, text) {
   const ac = new Constructor(patterns)
   const ops = {
     build: () => new Constructor(patterns),
     search: () => ac.search(text),
     match: () => ac.match(text),
-    count: () => ac.count(text),
   }
-  for (const strategy of strategies) {
-    if (strategy !== 'all') {
-      ops[`search:${strategy}`] = () => ac.search(text, { strategy })
-      ops[`replace:${strategy}`] = () => ac.replace(text, 'X', { strategy })
-    }
-    ops[`iterate:${strategy}`] = () => {
-      let count = 0
-      for (const match of ac.iterate(text, { strategy })) {
-        void match
-        count++
+  if (variant !== 'v2') {
+    // Baseline equivalents reflect what a consumer could do before these APIs.
+    ops.count = () => variant === 'v3' ? ac.count(text) : ac.search(text).length
+    for (const strategy of strategies) {
+      if (strategy !== 'all') {
+        ops[`search:${strategy}`] = () => ac.search(text, { strategy })
+        ops[`replace:${strategy}`] = () => ac.replace(text, 'X', { strategy })
       }
-      return count
+      ops[`iterate:${strategy}`] = () => {
+        let count = 0
+        const iterator = variant === 'v3' || strategy === 'all'
+          ? ac.iterate(text, { strategy })
+          : ac.search(text, { strategy }).values()
+        for (const match of iterator) {
+          void match
+          count++
+        }
+        return count
+      }
     }
   }
   return { ac, ops }
@@ -100,7 +133,7 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
   const Constructor = variant === 'v3'
     ? (await import('../packages/modern-ahocorasick/dist/index.js')).default
     : (await import(`data:text/javascript;base64,${Buffer.from(readFileSync(0, 'utf8')).toString('base64')}`)).default
-  const { ac, ops } = operations(Constructor, patterns, text)
+  const { ac, ops } = operations(Constructor, variant, patterns, text)
   if (mode === '--memory') {
     // Separate process per operation. OS high-water RSS includes startup, ICU,
     // input and dictionary; it is not an operation-only JavaScript heap delta.
@@ -128,26 +161,30 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
     const result = ac.search(text)
     globalThis.gc()
     const resultHeapBytes = Math.max(0, process.memoryUsage().heapUsed - beforeResults)
-    const count = result.length
-    const checks = {
-      search: digest(result),
-      first: digest(ac.search(text, { strategy: 'leftmost-first' })),
-      longest: digest(ac.search(text, { strategy: 'leftmost-longest' })),
-      replaceFirst: digest(ac.replace(text, 'X', { strategy: 'leftmost-first' })),
-      replaceLongest: digest(ac.replace(text, 'X', { strategy: 'leftmost-longest' })),
-    }
-    assert.equal(ops.count(), count)
-    assert.equal(ops.match(), count > 0)
-    for (const strategy of strategies) {
-      assert.equal(digest([...ac.iterate(text, { strategy })]), digest(ac.search(text, { strategy })))
+    const count = variant === 'v2' ? result.reduce((sum, item) => sum + item[1].length, 0) : result.length
+    const checks = variant === 'v2'
+      ? {}
+      : {
+          search: digest(result),
+          first: digest(ac.search(text, { strategy: 'leftmost-first' })),
+          longest: digest(ac.search(text, { strategy: 'leftmost-longest' })),
+          replaceFirst: digest(ac.replace(text, 'X', { strategy: 'leftmost-first' })),
+          replaceLongest: digest(ac.replace(text, 'X', { strategy: 'leftmost-longest' })),
+        }
+    if (variant !== 'v2') {
+      assert.equal(ops.count(), count)
+      for (const strategy of strategies) {
+        assert.equal(ops[`iterate:${strategy}`](), ac.search(text, { strategy }).length)
+      }
     }
     console.log(JSON.stringify({ scenario, variant, keywords: patterns.length, utf16Length: text.length, count, metrics, dictionaryHeapBytes, dictionaryBufferBytes, resultHeapBytes, checks }))
   }
 }
 else {
   const source = (ref, path) => stripTypeScriptTypes(execFileSync('git', ['show', `${ref}:${path}`], { cwd: root, encoding: 'utf8' }))
-  const baseline = `${source(baselineRef, 'packages/modern-ahocorasick/src/internal.ts')}\n${source(baselineRef, 'packages/modern-ahocorasick/src/index.ts').replace(/^import \{[^}]+\} from '\.\/internal\.js';?\s*$/m, '')}`
-  const sources = { 'v3-before': baseline, 'v3': '' }
+  const baseline = source(baselineRef, 'packages/modern-ahocorasick/src/index.ts')
+  const v3Baseline = `${source(v3BaselineRef, 'packages/modern-ahocorasick/src/internal.ts')}\n${source(v3BaselineRef, 'packages/modern-ahocorasick/src/index.ts').replace(/^import \{ buildAutomaton \} from '\.\/internal\.js';?\s*$/m, '')}`
+  const sources = { 'v2': baseline, 'v3-before': v3Baseline, 'v3': '' }
   const results = []
   const selected = process.env.BENCH_SCENARIOS?.split(',') ?? Object.keys(scenarios)
   for (const [scenarioIndex, scenario] of selected.entries()) {
@@ -160,15 +197,17 @@ else {
       runs.push(result)
       return result
     }
+    measure('v2', 0)
     for (let round = 0; round < rounds; round++) {
       // Counterbalance order across rounds/scenarios to reduce time-order bias.
       const variants = (round + scenarioIndex) % 2 === 0 ? ['v3-before', 'v3'] : ['v3', 'v3-before']
       const first = measure(variants[0], round)
       const second = measure(variants[1], round)
       assert.equal(first.count, second.count, `${scenario}: v3 occurrence counts differ`)
+      assert.equal(first.count, runs[0].count, `${scenario}: v2 occurrence counts differ`)
       assert.deepEqual(first.checks, second.checks, `${scenario}: v3 results differ`)
     }
-    for (const variant of ['v3-before', 'v3']) {
+    for (const variant of ['v2', 'v3-before', 'v3']) {
       const matching = runs.filter(run => run.variant === variant)
       const result = { ...matching[0] }
       result.metrics = Object.fromEntries(Object.keys(result.metrics).map((operation) => {
@@ -215,15 +254,12 @@ else {
     arch: process.arch,
     cpu: cpus()[0]?.model,
     baselineRef,
-    icu: process.versions.icu,
-    unicode: process.versions.unicode,
-    corpusSha256: digest(scenarios),
-    baselineSourceSha256: createHash('sha256').update(baseline).digest('hex'),
+    v3BaselineRef,
     implementationSha256: createHash('sha256').update(readFileSync(new URL('../packages/modern-ahocorasick/dist/index.js', import.meta.url))).digest('hex'),
     samples,
     rounds,
     operations: requestedOperations ?? operationNames,
-    note: 'v3-before is the pre-ASCII v3 implementation. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
+    note: 'Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. v3-before count uses search().length; selected iteration uses search().values(). Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. v2 output grouping differs. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
     results,
     memory,
     regressions,

@@ -1,0 +1,18 @@
+{
+  "15.0.0": {
+    "url": "https://www.unicode.org/Public/15.0.0/ucd/auxiliary/GraphemeBreakTest.txt",
+    "sha256": "0d2080d0def294a4b7660801cc03ddfe5866ff300c789c2cc1b50fd7802b2d97"
+  },
+  "15.1.0": {
+    "url": "https://www.unicode.org/Public/15.1.0/ucd/auxiliary/GraphemeBreakTest.txt",
+    "sha256": "ed9c5e92fd0911ccbeeb63c97cb19c519ea272ff1112ce843abd991582dd848f"
+  },
+  "16.0.0": {
+    "url": "https://www.unicode.org/Public/16.0.0/ucd/auxiliary/GraphemeBreakTest.txt",
+    "sha256": "ee2b9354d270ac061b29f09662cafea06341d77e704b8cc6bd72aaeeda363cb5"
+  },
+  "17.0.0": {
+    "url": "https://www.unicode.org/Public/17.0.0/ucd/auxiliary/GraphemeBreakTest.txt",
+    "sha256": "e2d134d2c52919bace503ebb6a551c1855fe1a1faec18478c78fff254a1793ec"
+  }
+}

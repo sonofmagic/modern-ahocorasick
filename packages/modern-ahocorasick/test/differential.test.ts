@@ -1,40 +1,5 @@
-import type { Match, MatchStrategy } from '@/index'
 import AhoCorasick from '@/index'
-
-// Intentionally independent: try every pattern at every grapheme boundary.
-function naive(text: string, patterns: string[], strategy: MatchStrategy): Match<number>[] {
-  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
-  const textSegments = Array.from(segmenter.segment(text))
-  const dictionary = patterns.map(pattern => Array.from(segmenter.segment(pattern), item => item.segment))
-  const matches: Match<number>[] = []
-  let cursor = 0
-  for (let start = 0; start < textSegments.length; start++) {
-    if (textSegments[start].index < cursor) {
-      continue
-    }
-    const candidates: Match<number>[] = []
-    for (let patternIndex = 0; patternIndex < patterns.length; patternIndex++) {
-      const tokens = dictionary[patternIndex]
-      if (tokens.every((token, offset) => textSegments[start + offset]?.segment === token)) {
-        const last = textSegments[start + tokens.length - 1]
-        candidates.push({ pattern: patterns[patternIndex], patternIndex, start: textSegments[start].index, end: last.index + last.segment.length, data: patternIndex })
-      }
-    }
-    if (strategy === 'all') {
-      matches.push(...candidates)
-    }
-    else if (candidates.length) {
-      if (strategy === 'leftmost-longest') {
-        candidates.sort((a, b) => b.end - a.end || a.patternIndex - b.patternIndex)
-      }
-      matches.push(candidates[0])
-      cursor = candidates[0].end
-    }
-  }
-  return strategy === 'all'
-    ? matches.sort((a, b) => a.end - b.end || b.pattern.length - a.pattern.length || a.patternIndex - b.patternIndex)
-    : matches
-}
+import { naive } from './helpers/reference'
 
 it('agrees with a naive grapheme matcher across seeded random dictionaries and texts', () => {
   let seed = 0x5EED1234
