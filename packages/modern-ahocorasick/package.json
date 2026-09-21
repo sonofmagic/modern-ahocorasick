@@ -1,0 +1,64 @@
+{
+  "name": "modern-ahocorasick",
+  "type": "module",
+  "version": "2.0.4",
+  "description": "modern-ahocorasick",
+  "author": "SonOfMagic <qq1324318532@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonofmagic/modern-ahocorasick.git",
+    "directory": "packages/modern-ahocorasick"
+  },
+  "bugs": {
+    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
+  },
+  "keywords": [
+    "ahocorasick",
+    "modern",
+    "cjs",
+    "js"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./*": "./*"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "dev": "tsdown --watch",
+    "build": "tsdown",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:dev": "vitest",
+    "tsd": "tsd --files test-d/**/*.test-d.ts"
+  }
+}

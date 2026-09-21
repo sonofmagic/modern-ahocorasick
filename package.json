@@ -1,8 +1,9 @@
 {
-  "name": "modern-ahocorasick",
+  "name": "modern-ahocorasick-workspace",
   "type": "module",
   "version": "0.0.0",
-  "packageManager": "pnpm@9.15.5",
+  "private": true,
+  "packageManager": "pnpm@12.4.2",
   "description": "modern-ahocorasick",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
@@ -14,72 +15,42 @@
   "bugs": {
     "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
   },
-  "keywords": [
-    "ahocorasick",
-    "modern",
-    "cjs",
-    "js"
-  ],
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./*": "./*"
+  "engines": {
+    "node": ">=22.13.0"
   },
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "dev": "tsup --watch --sourcemap",
-    "build:dev": "tsup --sourcemap",
-    "build": "tsup",
-    "test:dev": "vitest",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit && turbo run typecheck",
     "test": "vitest run",
-    "init:rename": "node scripts/init/rename.js",
-    "init:bin": "node scripts/init/bin.js",
-    "clean": "node scripts/clean.js",
-    "format": "pnpm prettier --check \"src/**/*.{ts,js}\" -w",
-    "ls:pack": "npm pack --dry-run",
-    "semantic-release": "semantic-release",
-    "sync": "cnpm sync modern-ahocorasick"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "test:dev": "vitest",
+    "tsd": "turbo run tsd",
+    "test:package": "node scripts/test-package.mjs",
+    "prepare": "husky",
+    "repo:init": "repo init",
+    "repo:new": "repo new",
+    "repo:check": "repo check",
+    "repo:doctor": "repo doctor",
+    "format": "eslint . --fix",
+    "validate": "pnpm build && pnpm lint && pnpm typecheck && pnpm tsd && pnpm test && pnpm test:package",
+    "release": "pnpm change",
+    "version-packages": "repo release stable prepare",
+    "publish-packages": "repo release stable publish"
   },
   "devDependencies": {
-    "@icebreakers/eslint-config": "^0.7.13",
-    "@tsconfig/recommended": "^1.0.8",
-    "@types/klaw": "^3.0.6",
-    "@types/lodash": "^4.17.15",
-    "@types/lodash-es": "^4.17.12",
+    "@commitlint/cli": "^21.2.2",
     "@types/node": "^22.13.1",
-    "@types/semantic-release": "^20.0.6",
-    "@vitest/coverage-v8": "^3.0.5",
-    "cross-env": "^7.0.3",
-    "defu": "^6.1.4",
-    "del": "^8.0.0",
-    "eslint": "9.20.0",
-    "klaw": "^4.1.0",
-    "lodash": "^4.17.21",
-    "lodash-es": "^4.17.21",
-    "semantic-release": "^24.2.1",
-    "tsup": "^8.3.6",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.5"
+    "@vitest/coverage-v8": "~5.0.1",
+    "eslint": "^10.10.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "repoctl": "5.5.4",
+    "stylelint": "^17.15.0",
+    "tsd": "^0.33.0",
+    "tsdown": "0.23.0",
+    "turbo": "^2.10.13",
+    "typescript": "^6.0.3",
+    "vitest": "~5.0.1"
   }
 }

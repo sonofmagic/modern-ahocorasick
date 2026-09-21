@@ -1,14 +1,5 @@
 import AhoCorasick from '@/index'
 
-const _s = AhoCorasick.prototype.search
-AhoCorasick.prototype.search = function (string) {
-  const results = _s.call(this, string).map((result) => {
-    result[1] = result[1].sort()
-    return result
-  })
-  return results
-}
-
 const testCases = [
   {
     keywords: ['hero', 'heroic'],
@@ -136,7 +127,7 @@ describe('aho corasick search', () => {
     const expected = ts.expected
     it(`should test: ${keys.join(', ')}`, () => {
       const aho = new AhoCorasick(keys)
-      const result = aho.search(text)
+      const result = aho.search(text).map(([index, matches]) => [index, [...matches].sort()])
       assert.deepEqual(expected, result)
     })
     it(`should match: ${keys.join(', ')}`, () => {
@@ -151,7 +142,7 @@ describe('aho corasick search', () => {
   //   const text = ts.text
   //   const expected = ts.expected
   //   const aho = new AhoCorasick(keys)
-  //   const result = aho.search(text)
+  //   const result = aho.search(text).map(([index, matches]) => [index, [...matches].sort()])
   //   assert.deepEqual(expected, result)
   // })
 })

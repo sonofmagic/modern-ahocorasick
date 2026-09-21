@@ -1,0 +1,12 @@
+packages:
+  - packages/*
+  - apps/*
+  - examples/*
+
+allowBuilds:
+  esbuild: true
+  msgpackr-extract: true
+
+versioning:
+  changelog:
+    storage: repository

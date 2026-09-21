@@ -1,5 +1,5 @@
-import AhoCorasick from '@/index' // 根据实际文件路径调整
 import { describe, expect, it } from 'vitest'
+import AhoCorasick from '@/index' // 根据实际文件路径调整
 
 describe('ahoCorasick', () => {
   describe('initialization', () => {

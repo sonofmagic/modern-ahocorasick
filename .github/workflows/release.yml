@@ -1,58 +1,57 @@
+# repoctl-managed: release/v2
+# Manual-only policy: preserve these triggers during repoctl upgrades.
 name: Release
-
-permissions:
-  contents: read
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - next
-      - alpha
-      - beta
+    inputs:
+      mode:
+        description: Prepare a version PR, or publish after merging it
+        required: true
+        default: prepare
+        type: choice
+        options: [prepare, publish]
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+env:
+  HUSKY: 0
+  NPM_CONFIG_PROVENANCE: true
+  npm_config_registry: https://registry.npmjs.org
 
 jobs:
   release:
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      # run before Set node , otherwise show Unable to locate executable file: pnpm error
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-
-      - name: Set node
-        uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install Dependencies
-        run: pnpm i
-
-      - name: Build
-        run: pnpm run build
-      - name: Test
-        run: pnpm run test
-      - uses: codecov/codecov-action@v5
-      - name: Release
-        run: npx semantic-release
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec repo doctor --strict
+      - run: pnpm validate
+      - name: Prepare version pull request
+        if: inputs.mode == 'prepare'
+        run: pnpm exec repo release stable prepare
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish prepared versions and create release tags
+        if: inputs.mode == 'publish'
+        run: pnpm exec repo release stable publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        # https://github.com/semantic-release/semantic-release/issues/2313
-        # continue-on-error: true
-
-      # - name: Publish to NPM
-      #   run: pnpm publish --access public --no-git-checks
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      #     NPM_CONFIG_PROVENANCE: true
