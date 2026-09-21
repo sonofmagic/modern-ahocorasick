@@ -2,10 +2,10 @@
   "name": "modern-ahocorasick",
   "type": "module",
   "version": "3.0.0",
-  "description": "modern-ahocorasick",
+  "description": "Unicode-aware Aho–Corasick multi-pattern matching with UTF-16 ranges, counting, lazy iteration, and replacement.",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/icelib/modern-ahocorasick#readme",
+  "homepage": "https://aho.icebreaker.top/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/icelib/modern-ahocorasick.git",
@@ -16,9 +16,13 @@
   },
   "keywords": [
     "ahocorasick",
-    "modern",
-    "cjs",
-    "js"
+    "aho-corasick",
+    "multi-pattern-matching",
+    "string-matching",
+    "text-search",
+    "unicode",
+    "grapheme",
+    "typescript"
   ],
   "exports": {
     "./package.json": "./package.json",
@@ -47,6 +51,7 @@
   },
   "files": [
     "MIGRATION.md",
+    "README.zh-CN.md",
     "dist"
   ],
   "publishConfig": {

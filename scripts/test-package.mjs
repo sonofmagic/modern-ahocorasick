@@ -27,7 +27,7 @@ try {
   const installed = path.join(temporary, 'node_modules/modern-ahocorasick')
   mkdirSync(installed, { recursive: true })
   run('tar', ['-xzf', path.join(temporary, tarball), '-C', installed, '--strip-components=1'])
-  for (const file of ['README.md', 'MIGRATION.md', 'LICENSE', 'dist/index.js', 'dist/index.cjs', 'dist/index.d.ts', 'dist/index.d.cts']) {
+  for (const file of ['README.md', 'README.zh-CN.md', 'MIGRATION.md', 'LICENSE', 'dist/index.js', 'dist/index.cjs', 'dist/index.d.ts', 'dist/index.d.cts']) {
     assert.ok(existsSync(path.join(installed, file)), `Missing packed file: ${file}`)
   }
   const manifest = JSON.parse(readFileSync(path.join(installed, 'package.json'), 'utf8'))

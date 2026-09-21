@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@12.5.1",
-  "description": "modern-ahocorasick",
+  "description": "Unicode-aware Aho–Corasick multi-pattern matching with UTF-16 ranges, counting, lazy iteration, and replacement.",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/icelib/modern-ahocorasick#readme",
+  "homepage": "https://aho.icebreaker.top/",
   "repository": {
     "type": "git",
     "url": "https://github.com/icelib/modern-ahocorasick.git"
