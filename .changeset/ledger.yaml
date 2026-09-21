@@ -1,0 +1,8 @@
+modern-ahocorasick@3.0.0:
+  dir: packages/modern-ahocorasick
+  intents:
+    - empty-birds-rule
+    - fluffy-rats-dress
+    - icelib-repository-migration
+    - mighty-beans-reply
+    - wild-ants-juggle
