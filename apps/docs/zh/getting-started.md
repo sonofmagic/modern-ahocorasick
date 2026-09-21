@@ -1,6 +1,6 @@
 # 快速开始
 
-本站对应工作区中**尚未发布的 v3**。npm 当前的 v2 使用不同的结果结构，请参阅 [v2 → v3 迁移说明](https://github.com/sonofmagic/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md)。
+本站对应工作区中**尚未发布的 v3**。npm 当前的 v2 使用不同的结果结构，请参阅 [v2 → v3 迁移说明](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md)。
 
 ## 安装
 

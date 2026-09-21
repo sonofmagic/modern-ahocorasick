@@ -26,6 +26,6 @@ Aho–Corasick 将多个关键词编译成 Trie，并借助 failure 链接扫描
 
 构建使用节点数组、Map 转移边以及带队列游标的广度优先 failure 构建。扫描沿 failure 与 output 链接前进；大量命中的输出必然消耗相应时间。工作台会保存完整轨迹并布局整个词典，适合小规模教学示例，不用于大型语料性能测试。
 
-参阅[实测 v2/v3 性能取舍](https://github.com/sonofmagic/modern-ahocorasick/blob/main/docs/benchmarks.md)，不承诺全面加速。
+参阅[实测 v2/v3 性能取舍](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks.md)，不承诺全面加速。
 
 参考文献：Aho 与 Corasick，_Efficient string matching: an aid to bibliographic search_（1975）。本库源自 [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick)，工作台重写了[原可视化页面](https://brunorb.github.io/ahocorasick/visualization.html)的能力。

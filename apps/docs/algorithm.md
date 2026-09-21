@@ -26,6 +26,6 @@ Each match event appends exactly one structured result. A reset cancels playback
 
 Building uses a node array, Map edges and breadth-first failure construction with a queue cursor. Scanning follows failure/output links; emitting many matches necessarily costs time proportional to the output. The workbench materializes the entire trace and lays out the whole dictionary, so it is intended for learning with small examples, not benchmarking large corpora.
 
-Read the [measured v2/v3 tradeoffs](https://github.com/sonofmagic/modern-ahocorasick/blob/main/docs/benchmarks.md). No blanket speedup is promised.
+Read the [measured v2/v3 tradeoffs](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks.md). No blanket speedup is promised.
 
 Reference: Aho and Corasick, _Efficient string matching: an aid to bibliographic search_ (1975). This library is derived from [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick); the workbench reimplements the capabilities of [the original visualization](https://brunorb.github.io/ahocorasick/visualization.html).

@@ -41,6 +41,9 @@ jobs:
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11.16.0 --registry=https://registry.npmjs.org
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec repo doctor --strict
       - run: pnpm validate
@@ -54,4 +57,3 @@ jobs:
         run: pnpm exec repo release stable publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -71,7 +71,7 @@ export default defineConfig({
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/sonofmagic/modern-ahocorasick',
+        link: 'https://github.com/icelib/modern-ahocorasick',
       },
     ],
     search: {

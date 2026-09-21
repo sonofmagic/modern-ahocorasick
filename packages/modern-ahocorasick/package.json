@@ -5,14 +5,14 @@
   "description": "modern-ahocorasick",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
+  "homepage": "https://github.com/icelib/modern-ahocorasick#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sonofmagic/modern-ahocorasick.git",
+    "url": "git+https://github.com/icelib/modern-ahocorasick.git",
     "directory": "packages/modern-ahocorasick"
   },
   "bugs": {
-    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
+    "url": "https://github.com/icelib/modern-ahocorasick/issues"
   },
   "keywords": [
     "ahocorasick",

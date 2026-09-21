@@ -1,6 +1,6 @@
 # Getting started
 
-These pages target the **unreleased v3** workspace. The current published v2 package has a different result format; see the [migration guide](https://github.com/sonofmagic/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md).
+These pages target the **unreleased v3** workspace. The current published v2 package has a different result format; see the [migration guide](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md).
 
 ## Install
 
