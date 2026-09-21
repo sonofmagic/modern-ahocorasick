@@ -6,6 +6,97 @@ export interface AutomatonNode {
   terminals: number[]
 }
 
+/** Retained scan tables: interned graphemes and contiguous sparse transitions. */
+export interface CompactAutomaton {
+  symbols: Map<string, number>
+  roots: Uint32Array
+  edges: Uint32Array
+  labels: Uint32Array
+  targets: Uint32Array
+  failures: Uint32Array
+  outputs: Int32Array
+  terminals: Uint32Array
+  patterns: Uint32Array
+}
+
+export function compactAutomaton(nodes: AutomatonNode[], patternCount: number): CompactAutomaton {
+  const symbols = new Map<string, number>()
+  const edges = new Uint32Array(nodes.length + 1)
+  const labels = new Uint32Array(nodes.length - 1)
+  const targets = new Uint32Array(nodes.length - 1)
+  const failures = new Uint32Array(nodes.length)
+  const outputs = new Int32Array(nodes.length)
+  const terminals = new Uint32Array(nodes.length + 1)
+  const patterns = new Uint32Array(patternCount)
+  let edge = 0
+  let terminal = 0
+  const intern = (segment: string): number => {
+    let symbol = symbols.get(segment)
+    if (symbol === undefined) {
+      symbol = symbols.size
+      symbols.set(segment, symbol)
+    }
+    return symbol
+  }
+  for (let state = 0; state < nodes.length; state++) {
+    const node = nodes[state]
+    edges[state] = edge
+    if (node.next.size <= 1) {
+      for (const [segment, target] of node.next) {
+        labels[edge] = intern(segment)
+        targets[edge++] = target
+      }
+    }
+    else {
+      const children = Array.from(node.next, ([segment, target]) => ({ symbol: intern(segment), target }))
+        .sort((a, b) => a.symbol - b.symbol)
+      for (const { symbol, target } of children) {
+        labels[edge] = symbol
+        targets[edge++] = target
+      }
+    }
+    failures[state] = node.failure
+    outputs[state] = node.output
+    terminals[state] = terminal
+    for (const patternIndex of node.terminals) {
+      patterns[terminal++] = patternIndex
+    }
+  }
+  edges[nodes.length] = edge
+  terminals[nodes.length] = terminal
+  const roots = new Uint32Array(symbols.size)
+  for (let index = edges[0]; index < edges[1]; index++) {
+    roots[labels[index]] = targets[index]
+  }
+  return { symbols, roots, edges, labels, targets, failures, outputs, terminals, patterns }
+}
+
+export function advanceCompact(table: CompactAutomaton, state: number, segment: string): number {
+  const symbol = table.symbols.get(segment)
+  if (symbol === undefined) {
+    return 0
+  }
+  while (state !== 0) {
+    let low = table.edges[state]
+    let high = table.edges[state + 1] - 1
+    while (low <= high) {
+      const middle = (low + high) >>> 1
+      const label = table.labels[middle]
+      if (label === symbol) {
+        return table.targets[middle]
+      }
+      if (label < symbol) {
+        low = middle + 1
+      }
+      else {
+        high = middle - 1
+      }
+    }
+    state = table.failures[state]
+  }
+  return table.roots[symbol]
+}
+
 function createNode(): AutomatonNode {
   return { next: new Map(), failure: 0, output: -1, terminals: [] }
 }
@@ -91,6 +182,7 @@ export function buildAutomaton(patterns: readonly { pattern: string }[], segment
   nodes: AutomatonNode[]
   lengths: Uint32Array
   counts: Uint32Array
+  order: Uint32Array
   maxLength: number
 } {
   const nodes: AutomatonNode[] = [createNode()]
@@ -131,5 +223,5 @@ export function buildAutomaton(patterns: readonly { pattern: string }[], segment
         : nodes[failure].output
     }
   }
-  return { nodes, lengths, counts, maxLength }
+  return { nodes, lengths, counts, order: Uint32Array.from(queue), maxLength }
 }

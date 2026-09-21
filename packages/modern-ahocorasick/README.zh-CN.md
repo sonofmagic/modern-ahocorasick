@@ -37,15 +37,18 @@ matches.map(({ start, end }) => text.slice(start, end))
 
 ## 选择合适的方法
 
-| 需求               | 方法                                   | 返回结果                       |
-| ------------------ | -------------------------------------- | ------------------------------ |
-| 判断是否存在关键词 | `match(text)`                          | 布尔值；首次命中后停止         |
-| 统计所有出现次数   | `count(text)`                          | 数值；包含重叠匹配和重复字典项 |
-| 收集匹配范围       | `search(text, options?)`               | 独立匹配对象组成的数组         |
-| 按需读取匹配       | `iterate(text, options?)`              | 惰性匹配迭代器                 |
-| 替换不重叠的匹配   | `replace(text, replacement, options?)` | 新字符串                       |
+| 需求               | 方法                                        | 返回结果                               |
+| ------------------ | ------------------------------------------- | -------------------------------------- |
+| 判断是否存在关键词 | `match(text)`                               | 布尔值；首次命中后停止                 |
+| 统计所有出现次数   | `count(text)`                               | 数值；包含重叠匹配和重复字典项         |
+| 分别统计每个词条   | `countByPattern(text)`                      | 按输入顺序返回次数，保留零次及重复词条 |
+| 匹配分块输入       | `createStream(options?)`                    | 连续写入、结束刷新和取消               |
+| 保存或加载词库     | `serialize()` / `AhoCorasick.deserialize()` | 带版本和校验的编译数据                 |
+| 收集匹配范围       | `search(text, options?)`                    | 独立匹配对象组成的数组                 |
+| 按需读取匹配       | `iterate(text, options?)`                   | 惰性匹配迭代器                         |
+| 替换不重叠的匹配   | `replace(text, replacement, options?)`      | 新字符串                               |
 
-`count()` 不创建匹配对象。`iterate()` 不收集结果数组，停止迭代后也会停止扫描。它接收完整字符串，不支持分块输入；迭代器会持有原文和字典。
+`count()` 不创建匹配对象。`iterate()` 不收集结果数组，停止迭代后也会停止扫描。它接收完整字符串；分块输入使用 `createStream()`。迭代器会持有原文和字典。
 
 ```js
 import AhoCorasick from 'modern-ahocorasick'
@@ -54,6 +57,7 @@ const matcher = new AhoCorasick(['he', 'she', 'hers'])
 
 matcher.match('ushers') // true
 matcher.count('ushers') // 3：'she'、'he' 和 'hers' 存在重叠
+matcher.countByPattern('ushers') // [1, 1, 1]
 
 for (const hit of matcher.iterate('ushers')) {
   console.log(hit.pattern) // 'she'
@@ -64,6 +68,27 @@ for (const hit of matcher.iterate('ushers')) {
 ```
 
 完整签名和参数校验规则见 [API 参考](https://aho.icebreaker.top/zh/api)。
+
+## 更多匹配工具
+
+`countByPattern()`、完整词选项、流式扫描、编译词库保存及可选文本适配器需要
+v3.1.0 或更高版本。
+
+```ts
+matcher.countByPattern('ushers') // [1, 1, 1]
+new AhoCorasick(['cat']).match('concatenate', { wholeWord: true, locale: 'en' }) // false
+const restored = AhoCorasick.deserialize(matcher.serialize())
+const stream = restored.createStream()
+const hits = [...stream.write('ush'), ...stream.write('ers'), ...stream.finish()]
+```
+
+需要归一化或完整 Unicode 大小写折叠时，从 `modern-ahocorasick/text` 导入独立的
+`TextMatcher` 构造器。它会把结果映射回原文 UTF-16 范围，包括 `ß` → `ss` 这类展开。
+默认入口保持精确匹配，不加载折叠表。
+
+词边界规则、元数据编解码、流式缓冲和取消、转换开销详见
+[API 指南](https://aho.icebreaker.top/zh/api#完整词匹配)。流的待定尾部有明确上限，
+不会静默截断。
 
 ## 选择重叠处理策略
 
@@ -145,7 +170,7 @@ v3 已在 npm 发布。`search()` 现在返回带 UTF-16 范围的独立匹配�
 
 ## 性能
 
-Aho–Corasick 会编译可复用的字典。设输入有 `g` 个字素、产生 `z` 次匹配，不计运行环境的分段成本，全匹配搜索耗时为 O(g + z)。`count()` 使用聚合计数，扫描耗时为 O(g)；`match()` 可以提前结束。搜索会保留结果数组，不重叠选择使用由最长关键词长度限制的候选窗口。替换仍需分配输出文本。
+Aho–Corasick 会编译可复用的字典。设输入有 `g` 个字素、产生 `z` 次匹配，设最大转移分支数为 d，不计运行环境的分段成本，全匹配搜索耗时为 O(g log(d + 1) + z)。`count()` 使用聚合计数，扫描耗时为 O(g log(d + 1))；`match()` 可以提前结束。搜索会保留结果数组，不重叠选择使用由最长关键词长度限制的候选窗口。替换仍需分配输出文本。
 
 性能取决于字典、输入、结果密度和运行环境。[可复现的基准报告](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-ascii.md)包含具体工作负载的结果、内存测量和比较限制。
 
@@ -156,3 +181,6 @@ Aho–Corasick 会编译可复用的字典。设输入有 `g` 个字素、产生
 ## 许可证与致谢
 
 采用 [MIT 许可证](https://github.com/icelib/modern-ahocorasick/blob/main/LICENSE)。最初 fork 自 [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick)，基于 Aho 与 Corasick 的论文 “Efficient string matching: an aid to bibliographic search”。现代版本由 [SonOfMagic](https://github.com/sonofmagic) 维护。
+
+可选文本适配器包含 Unicode 17 大小写折叠数据，采用
+[Unicode License V3](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/UNICODE-LICENSE.txt)。

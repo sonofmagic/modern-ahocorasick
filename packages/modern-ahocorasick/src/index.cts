@@ -7,10 +7,16 @@ import type * as Types from './types.js' with { 'resolution-mode': 'import' }
 declare const AhoCorasick: typeof Matcher
 type AhoCorasick<T = unknown> = Matcher<T>
 declare namespace AhoCorasick {
+  type StreamOptions = Types.StreamOptions
+  type MatchStream<T = unknown> = Types.MatchStream<T>
+  type JsonValue = Types.JsonValue
+  type SerializeOptions<T> = Types.SerializeOptions<T>
+  type DeserializeOptions<T> = Types.DeserializeOptions<T>
   type PatternInput<T = unknown> = Types.PatternInput<T>
   type Match<T = unknown> = Types.Match<T>
   type MatchStrategy = Types.MatchStrategy
   type SearchOptions = Types.SearchOptions
+  type BoundaryOptions = Types.BoundaryOptions
   type ReplaceOptions = Types.ReplaceOptions
   type Replacement<T = unknown> = Types.Replacement<T>
 }

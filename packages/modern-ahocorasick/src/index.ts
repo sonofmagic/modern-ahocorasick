@@ -1,39 +1,27 @@
-import type { AutomatonNode } from './internal.js'
-import type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
-import { advance, asciiPrefix, buildAutomaton } from './internal.js'
+import type { CompactAutomaton } from './internal.js'
+import type { Boundary } from './options.js'
+import type { BoundaryOptions, DeserializeOptions, Match, MatchStrategy, MatchStream, PatternInput, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions } from './types.js'
+import { advanceCompact, asciiPrefix, buildAutomaton, compactAutomaton, graphemeRuns } from './internal.js'
+import { assertText, resolveBoundary, resolveStrategy } from './options.js'
+import { deserialize, serialize } from './persistence.js'
+import { createStream } from './stream.js'
 
-export type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
+export type { BoundaryOptions, DeserializeOptions, JsonValue, Match, MatchStrategy, MatchStream, PatternInput, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions } from './types.js'
 
 interface Pattern<T> {
   pattern: string
   data: T | undefined
 }
 
-function assertText(text: string): void {
-  if (typeof text !== 'string') {
-    throw new TypeError('text must be a string')
-  }
-}
-
-function resolveStrategy(options: SearchOptions | undefined, fallback: MatchStrategy): MatchStrategy {
-  if (options !== undefined && (options === null || typeof options !== 'object' || Array.isArray(options))) {
-    throw new TypeError('options must be an object')
-  }
-  const strategy = options?.strategy === undefined ? fallback : options.strategy
-  if (strategy !== 'all' && strategy !== 'leftmost-first' && strategy !== 'leftmost-longest') {
-    throw new TypeError(`Unknown match strategy: ${String(strategy)}`)
-  }
-  return strategy
-}
-
 /** An immutable compiled dictionary for exact grapheme-cluster matching. */
 export default class AhoCorasick<T = unknown> {
-  readonly #nodes: AutomatonNode[]
-  readonly #patterns: Pattern<T>[]
-  readonly #maxLength: number
+  #nodes: CompactAutomaton
+  #patterns: Pattern<T>[]
+  #maxLength: number
   /** Pattern lengths in graphemes; string.length and public ranges use UTF-16. */
-  readonly #lengths: Uint32Array
-  readonly #counts: Uint32Array
+  #lengths: Uint32Array
+  #counts: Uint32Array
+  #order: Uint32Array
   readonly #segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
 
   constructor(patterns: readonly PatternInput<T>[]) {
@@ -54,11 +42,42 @@ export default class AhoCorasick<T = unknown> {
       }
       return { pattern, data: typeof input === 'string' ? undefined : input.data }
     })
-    const { nodes, lengths, counts, maxLength } = buildAutomaton(this.#patterns, this.#segmenter)
-    this.#nodes = nodes
+    const { nodes, lengths, counts, order, maxLength } = buildAutomaton(this.#patterns, this.#segmenter)
+    this.#nodes = compactAutomaton(nodes, this.#patterns.length)
     this.#lengths = lengths
     this.#counts = counts
+    this.#order = order
     this.#maxLength = maxLength
+  }
+
+  /** Incremental matching with absolute original-text UTF-16 ranges. */
+  createStream(options?: StreamOptions): MatchStream<T> {
+    const strategy = resolveStrategy(options, 'all')
+    resolveBoundary('', options)
+    const maxBufferedUnits = options?.maxBufferedUnits === undefined ? 1_048_576 : options.maxBufferedUnits
+    if (!Number.isSafeInteger(maxBufferedUnits) || maxBufferedUnits < 1) {
+      throw new RangeError('maxBufferedUnits must be a positive safe integer')
+    }
+    const wordSegmenter = options?.wholeWord ? new Intl.Segmenter(options.locale, { granularity: 'word' }) : undefined
+    return createStream(this.#nodes, this.#patterns, this.#lengths, this.#maxLength, strategy, maxBufferedUnits, wordSegmenter)
+  }
+
+  /** Persist a versioned compiled dictionary; metadata must be JSON-compatible. */
+  serialize(options?: SerializeOptions<T>): string {
+    return serialize(this.#nodes, this.#patterns, options)
+  }
+
+  /** Load and validate scan tables without rebuilding a trie. */
+  static deserialize<T = unknown>(serialized: string, options?: DeserializeOptions<T>): AhoCorasick<T> {
+    const matcher = new AhoCorasick<T>([])
+    const restored = deserialize(serialized, matcher.#segmenter, options)
+    matcher.#nodes = restored.table
+    matcher.#patterns = restored.patterns
+    matcher.#lengths = restored.lengths
+    matcher.#counts = restored.counts
+    matcher.#order = restored.order
+    matcher.#maxLength = restored.maxLength
+    return matcher
   }
 
   /** All matches, optionally reduced to a non-overlapping selection. */
@@ -74,12 +93,23 @@ export default class AhoCorasick<T = unknown> {
   iterate(text: string, options?: SearchOptions): IterableIterator<Match<T>> {
     assertText(text)
     const strategy = resolveStrategy(options, 'all')
-    return strategy === 'all' ? this.#scan(text) : this.#select(text, strategy)
+    const boundary = resolveBoundary(text, options)
+    return strategy === 'all' ? this.#scan(text, boundary) : this.#select(text, strategy, boundary)
   }
 
   /** Count all occurrences, including overlaps and duplicate dictionary entries. */
-  count(text: string): number {
+  count(text: string, options?: BoundaryOptions): number {
     assertText(text)
+    const boundary = resolveBoundary(text, options)
+    if (boundary) {
+      let count = 0
+      for (const _match of this.#scan(text, boundary)) {
+        if (!Number.isSafeInteger(++count)) {
+          throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
+        }
+      }
+      return count
+    }
     if (this.#patterns.length === 0) {
       return 0
     }
@@ -88,7 +118,7 @@ export default class AhoCorasick<T = unknown> {
     const ascii = asciiPrefix(text)
     if (ascii !== undefined) {
       for (const { segment } of ascii) {
-        state = advance(this.#nodes, state, segment)
+        state = advanceCompact(this.#nodes, state, segment)
         count += this.#counts[state]
         if (!Number.isSafeInteger(count)) {
           throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
@@ -102,7 +132,7 @@ export default class AhoCorasick<T = unknown> {
     // native iterator in one hot loop penalizes long Unicode suffixes in V8.
     const suffix = ascii === undefined ? text : text.slice(ascii.position)
     for (const { segment } of this.#segmenter.segment(suffix)) {
-      state = advance(this.#nodes, state, segment)
+      state = advanceCompact(this.#nodes, state, segment)
       count += this.#counts[state]
       if (!Number.isSafeInteger(count)) {
         throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
@@ -111,9 +141,47 @@ export default class AhoCorasick<T = unknown> {
     return count
   }
 
-  /** Stop scanning as soon as a match is found. */
-  match(text: string): boolean {
+  /** Count occurrences per input pattern without enumerating individual hits. */
+  countByPattern(text: string, options?: BoundaryOptions): number[] {
     assertText(text)
+    const boundary = resolveBoundary(text, options)
+    const result = Array.from<number>({ length: this.#patterns.length }).fill(0)
+    if (text.length === 0 || result.length === 0) {
+      return result
+    }
+    if (boundary) {
+      for (const match of this.#scan(text, boundary)) {
+        result[match.patternIndex]++
+      }
+      return result
+    }
+    const visits = new Float64Array(this.#nodes.failures.length)
+    let state = 0
+    for (const segments of graphemeRuns(text, this.#segmenter)) {
+      for (const { segment } of segments) {
+        state = advanceCompact(this.#nodes, state, segment)
+        visits[state]++
+      }
+    }
+    // Children precede their failure ancestors in reverse breadth-first order.
+    // Each pattern occurs at most text.length times, so its count stays exact.
+    for (let index = this.#order.length - 1; index >= 0; index--) {
+      const current = this.#order[index]
+      for (let index = this.#nodes.terminals[current]; index < this.#nodes.terminals[current + 1]; index++) {
+        result[this.#nodes.patterns[index]] = visits[current]
+      }
+      visits[this.#nodes.failures[current]] += visits[current]
+    }
+    return result
+  }
+
+  /** Stop scanning as soon as a match is found. */
+  match(text: string, options?: BoundaryOptions): boolean {
+    assertText(text)
+    const boundary = resolveBoundary(text, options)
+    if (boundary) {
+      return !this.#scan(text, boundary).next().done
+    }
     if (this.#patterns.length === 0) {
       return false
     }
@@ -121,7 +189,7 @@ export default class AhoCorasick<T = unknown> {
     const ascii = asciiPrefix(text)
     if (ascii !== undefined) {
       for (const { segment } of ascii) {
-        state = advance(this.#nodes, state, segment)
+        state = advanceCompact(this.#nodes, state, segment)
         if (this.#counts[state] !== 0) {
           return true
         }
@@ -132,7 +200,7 @@ export default class AhoCorasick<T = unknown> {
     }
     const suffix = ascii === undefined ? text : text.slice(ascii.position)
     for (const { segment } of this.#segmenter.segment(suffix)) {
-      state = advance(this.#nodes, state, segment)
+      state = advanceCompact(this.#nodes, state, segment)
       if (this.#counts[state] !== 0) {
         return true
       }
@@ -150,7 +218,7 @@ export default class AhoCorasick<T = unknown> {
     if (strategy === 'all') {
       throw new TypeError('replace requires a non-overlapping strategy')
     }
-    const selected = this.#select(text, strategy)
+    const selected = this.#select(text, strategy, resolveBoundary(text, options))
     const parts: string[] = []
     let cursor = 0
     for (const match of selected) {
@@ -167,28 +235,32 @@ export default class AhoCorasick<T = unknown> {
     return parts.join('')
   }
 
-  * #scan(text: string): Generator<Match<T>> {
+  * #scan(text: string, boundary?: Boundary): Generator<Match<T>> {
     if (this.#patterns.length === 0) {
       return
     }
     let state = 0
     for (const { segment, index } of this.#segmenter.segment(text)) {
-      state = advance(this.#nodes, state, segment)
+      state = advanceCompact(this.#nodes, state, segment)
       if (this.#counts[state] === 0) {
         continue
       }
       const end = index + segment.length
       // Own terminals are longest, followed by progressively shorter suffixes.
-      for (let output = state; output !== -1; output = this.#nodes[output].output) {
-        for (const patternIndex of this.#nodes[output].terminals) {
+      for (let output = state; output !== -1; output = this.#nodes.outputs[output]) {
+        for (let terminal = this.#nodes.terminals[output]; terminal < this.#nodes.terminals[output + 1]; terminal++) {
+          const patternIndex = this.#nodes.patterns[terminal]
           const { pattern, data } = this.#patterns[patternIndex]
-          yield { pattern, patternIndex, start: end - pattern.length, end, data }
+          const start = end - pattern.length
+          if (!boundary || boundary(start, end)) {
+            yield { pattern, patternIndex, start, end, data }
+          }
         }
       }
     }
   }
 
-  * #select(text: string, strategy: Exclude<MatchStrategy, 'all'>): Generator<Match<T>> {
+  * #select(text: string, strategy: Exclude<MatchStrategy, 'all'>, boundary?: Boundary): Generator<Match<T>> {
     const capacity = this.#maxLength
     if (capacity === 0) {
       return
@@ -202,8 +274,10 @@ export default class AhoCorasick<T = unknown> {
     let position = 0
     let cursor = 0
     let lastCandidateStart = -1
+    let earliest = -1
+    let earliestEnd = -1
     for (const { segment, index } of this.#segmenter.segment(text)) {
-      state = advance(this.#nodes, state, segment)
+      state = advanceCompact(this.#nodes, state, segment)
       position++
       if (this.#counts[state] === 0 && cursor > lastCandidateStart) {
         continue
@@ -213,36 +287,72 @@ export default class AhoCorasick<T = unknown> {
         cursor = Math.max(cursor, position - capacity)
       }
       const end = index + segment.length
-      for (let output = this.#counts[state] === 0 ? -1 : state; output !== -1; output = this.#nodes[output].output) {
-        for (const patternIndex of this.#nodes[output].terminals) {
-          const pattern = this.#patterns[patternIndex]
-          const length = this.#lengths[patternIndex]
-          const start = position - length
-          if (start < cursor) {
-            continue
-          }
-          lastCandidateStart = Math.max(lastCandidateStart, start)
-          const slot = start % capacity
-          const previous = candidates[slot]
-          if (stamps[slot] !== start
-            || (strategy === 'leftmost-first'
-              ? patternIndex < previous
-              : length > this.#lengths[previous]
-                || (length === this.#lengths[previous] && patternIndex < previous))) {
-            stamps[slot] = start
-            candidates[slot] = patternIndex
-            starts[slot] = end - pattern.pattern.length
-          }
+      for (let output = this.#counts[state] === 0 ? -1 : state; output !== -1; output = this.#nodes.outputs[output]) {
+        const terminal = this.#nodes.terminals[output]
+        if (terminal === this.#nodes.terminals[output + 1]) {
+          continue
+        }
+        // Identical patterns share a terminal; input order wins every tie.
+        const patternIndex = this.#nodes.patterns[terminal]
+        const pattern = this.#patterns[patternIndex]
+        if (boundary && !boundary(end - pattern.pattern.length, end)) {
+          continue
+        }
+        const length = this.#lengths[patternIndex]
+        const start = position - length
+        if (start < cursor || (start > earliest && start < earliestEnd)) {
+          continue
+        }
+        lastCandidateStart = Math.max(lastCandidateStart, start)
+        const slot = start % capacity
+        const previous = candidates[slot]
+        if (stamps[slot] !== start
+          || (strategy === 'leftmost-first'
+            ? patternIndex < previous
+            : length > this.#lengths[previous]
+              || (length === this.#lengths[previous] && patternIndex < previous))) {
+          stamps[slot] = start
+          candidates[slot] = patternIndex
+          starts[slot] = end - pattern.pattern.length
+        }
+        if (earliest === -1 || start < earliest) {
+          earliest = start
+        }
+        if (start === earliest) {
+          earliestEnd = start + this.#lengths[candidates[slot]]
+        }
+        // Later outputs begin inside this earliest candidate. Any future
+        // candidate that displaces it ends at least as late, so these suffixes
+        // can never be selected. Do not enumerate them or their duplicates.
+        if (earliestEnd === position) {
+          break
         }
       }
       // No future match can start here once the longest pattern would have ended.
-      while (cursor <= position - capacity) {
+      while (cursor <= position) {
+        if (cursor > position - capacity
+          && !(strategy === 'leftmost-first' && earliest === cursor && candidates[cursor % capacity] === 0)) {
+          break
+        }
         const slot = cursor % capacity
         if (stamps[slot] === cursor) {
           const patternIndex = candidates[slot]
           const { pattern, data } = this.#patterns[patternIndex]
           const start = starts[slot]
           cursor += this.#lengths[patternIndex]
+          earliest = -1
+          earliestEnd = -1
+          for (let next = cursor; next <= lastCandidateStart; next++) {
+            if (stamps[next % capacity] === next) {
+              earliest = next
+              earliestEnd = next + this.#lengths[candidates[next % capacity]]
+              break
+            }
+          }
+          if (cursor === position) {
+            // No future selected match may begin inside an emitted range.
+            state = 0
+          }
           yield { pattern, patternIndex, start, end: start + pattern.length, data }
         }
         else {

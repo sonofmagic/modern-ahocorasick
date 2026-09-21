@@ -36,7 +36,17 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./*": "./*"
+    "./*": "./*",
+    "./text": {
+      "import": {
+        "types": "./dist/text.d.ts",
+        "default": "./dist/text.js"
+      },
+      "require": {
+        "types": "./dist/text.d.cts",
+        "default": "./dist/text.cjs"
+      }
+    }
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -52,6 +62,7 @@
   "files": [
     "MIGRATION.md",
     "README.zh-CN.md",
+    "UNICODE-LICENSE.txt",
     "dist"
   ],
   "publishConfig": {
