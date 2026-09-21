@@ -1,7 +1,7 @@
 {
   "name": "modern-ahocorasick",
   "type": "module",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "modern-ahocorasick",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
