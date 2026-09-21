@@ -1,7 +1,7 @@
 {
   "name": "modern-ahocorasick",
   "type": "module",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Unicode-aware Aho–Corasick multi-pattern matching with UTF-16 ranges, counting, lazy iteration, and replacement.",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
