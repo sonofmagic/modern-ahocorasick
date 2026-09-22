@@ -1,0 +1,100 @@
+[
+  {
+    "variant": "first",
+    "runtimeAdopted": false,
+    "reason": "repeated regressions exceed 5% gate",
+    "repeatableRegressions": [
+      {
+        "scenario": "tiny",
+        "operation": "match",
+        "roundRatios": [
+          4.582508660009078,
+          1.2582497687324383,
+          1.3148330275227815
+        ]
+      },
+      {
+        "scenario": "sparse",
+        "operation": "match",
+        "roundRatios": [
+          1.1215571343059267,
+          1.059872493997085,
+          1.4026834802038135
+        ]
+      },
+      {
+        "scenario": "dense",
+        "operation": "match",
+        "roundRatios": [
+          1.3769338608014994,
+          1.2007753303961206,
+          1.1891993957708034
+        ]
+      }
+    ],
+    "repeatableGains": []
+  },
+  {
+    "variant": "pair",
+    "runtimeAdopted": false,
+    "reason": "repeated regressions exceed 5% gate",
+    "repeatableRegressions": [
+      {
+        "scenario": "tiny",
+        "operation": "match",
+        "roundRatios": [
+          4.3332920057407405,
+          4.465309898241825,
+          4.361622018347983
+        ]
+      },
+      {
+        "scenario": "dense",
+        "operation": "match",
+        "roundRatios": [
+          1.4195938401829369,
+          1.1407032438917621,
+          1.0994471299090098
+        ]
+      }
+    ],
+    "repeatableGains": [
+      {
+        "scenario": "sparse",
+        "operation": "search",
+        "roundRatios": [
+          0.0033980124944613076,
+          0.0032046661098912932,
+          0.0036873181191442806
+        ]
+      },
+      {
+        "scenario": "sparse",
+        "operation": "count",
+        "roundRatios": [
+          0.014593776049795283,
+          0.01447268624533164,
+          0.01567848431169796
+        ]
+      },
+      {
+        "scenario": "sparse",
+        "operation": "match",
+        "roundRatios": [
+          0.014747289840887462,
+          0.014486364199216067,
+          0.013572280347416333
+        ]
+      },
+      {
+        "scenario": "sparse",
+        "operation": "first",
+        "roundRatios": [
+          0.003351770067894757,
+          0.003369767918558595,
+          0.0035736724734271963
+        ]
+      }
+    ]
+  }
+]

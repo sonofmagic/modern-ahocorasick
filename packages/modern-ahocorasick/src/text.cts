@@ -11,6 +11,7 @@ declare namespace TextMatcher {
   type Token<T = unknown> = Types.Token<T>
   type Match<T = unknown> = Types.Match<T>
   type BoundaryOptions = Types.BoundaryOptions
+  type QueryOptions = Types.QueryOptions
   type SearchOptions = Types.SearchOptions
   type ReplaceOptions = Types.ReplaceOptions
   type Replacement<T = unknown> = Types.Replacement<T>

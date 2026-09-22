@@ -6,7 +6,7 @@
 
 本次固定 27 个仓库提交，额外检查 3 份 npm 发布包。GitHub 两组名称/描述查询各取前 50 项，Ruby 10 项、Swift 4 项只做发现；npm 40 项、crates.io 25 项、Maven 7 项，并核查 PyPI、NuGet 和 Go proxy。搜索排序、别名和未索引项目都会造成遗漏，因此不宣称穷尽全网。Ruby/Swift 未深入源码；.NET/PHP/Haskell/Lua 本轮没有运行实测。提交日期只反映活动时间，不代表质量保证，归档状态单独记录。
 
-发布仓库观察版本：Rust aho-corasick 1.1.5、daachorse 5.0.0；Python pyahocorasick 2.3.1、ahocorapy 1.8.0、ahocorasick-rs 1.0.3；Java org.ahocorasick 0.6.3；NuGet AhoCorasick 2.0.279。源码 HEAD 与发布版本分别记录，不混为同一产物。原 npm 对照仍固定 @monyone/aho-corasick 1.5.10、@tanishiking/aho-corasick 0.0.1。
+发布仓库观察版本：Rust aho-corasick 1.1.5、daachorse 5.0.0；Python pyahocorasick 2.3.1、ahocorapy 1.8.0、ahocorasick-rs 1.0.3；Java org.ahocorasick 0.6.3；NuGet AhoCorasick 2.0.279。源码 HEAD 与发布版本分别记录，不混为同一产物。DAT 论文摘要结论笔记及书目信息保存在 [dat-paper.json](dat-paper.json)；论文中布局优劣依赖数据集的结论，也是本轮坚持实测、不自动切换后端的原因。原 npm 对照仍固定 @monyone/aho-corasick 1.5.10、@tanishiking/aho-corasick 0.0.1。
 
 ## 实现家族和源码结论
 
@@ -14,7 +14,7 @@ ahocorasick_rs 包装 BurntSushi；BlackGlory npm 原生扩展包装 daachorse�
 
 Rust 的 Input、预过滤器和内存诊断，pyahocorasick 的 Automaton/迭代器/统计/持久化，Java 的 DAT 与 PayloadTrie/区间去重，Go 的扫描器及池化结果，是本次重点。PHP 检查构建、失败转移与结果输出；Haskell 检查 UTF-8 Text 和替换优先级；Mensa 检查符号分类器、原始/有效输入映射；C 检查交错表及二进制布局。
 
-额外 npm：`@blackglory/aho-corasick@0.1.27` 是 MIT 的 Neon/daachorse 包装，不计独立 JS 后端；`lazy-aho-corasick@1.2.2` 提供 startOnly、重复项及结果选择，但发布代码和源代码的字符串遍历方式不同，last 会反转内部词典，不吸收这些行为；`aho-corasick2@2.0.1` 记录 ws-trie 来源与发布完整性，尚未完成扫描器深读，不据此作运行时结论。
+额外 npm：`@blackglory/aho-corasick@0.1.27` 是 MIT 的 Neon/daachorse 包装，不计独立 JS 后端；`lazy-aho-corasick@1.2.2` 提供 startOnly、重复项及结果选择，但发布代码和源代码的字符串遍历方式不同，last 会反转内部词典，不吸收这些行为；`aho-corasick2@2.0.1` 属于 ws-trie 家族，MIT 归属 Thomas Booth/Dejian Xu；检查发布的 `dist/index.esm.mjs` 后确认其使用可变对象 Trie、递归后缀探测构建、UTF-16 charAt 扫描，提供按词计数/坐标/数据及 DOT 导出。这些查询与可视化需求已覆盖，不吸收回调暴露活 Trie 节点的契约；本轮未运行实测。
 
 ## 能力吸收矩阵
 

@@ -22,6 +22,8 @@ declare namespace AhoCorasick {
   type MatchStrategy = Types.MatchStrategy
   type SearchOptions = Types.SearchOptions
   type BoundaryOptions = Types.BoundaryOptions
+  type QueryOptions = Types.QueryOptions
+  type CompileStats = Types.CompileStats
   type ReplaceOptions = Types.ReplaceOptions
   type Replacement<T = unknown> = Types.Replacement<T>
 }

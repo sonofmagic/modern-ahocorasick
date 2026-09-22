@@ -60,6 +60,10 @@ assert.deepEqual(ac.search('ushers'), [
 ])
 assert.deepEqual([...ac.iterate('ushers')], ac.search('ushers'))
 assert.equal(ac.count('ushers'), 3)
+assert.equal(ac.count('ushers', { start: 2, end: 4, anchored: true }), 1)
+assert.equal(ac.replace('ushers', 'X', { start: 2, end: 4 }), 'usXrs')
+assert.equal(Object.isFrozen(ac.getStats()), true)
+assert.deepEqual(AhoCorasick.deserialize(ac.serialize()).getStats(), ac.getStats())
 assert.deepEqual(ac.countByPattern('ushers'), [1, 1, 1])
 assert.equal(ac.count('ushers', { wholeWord: true, locale: 'en' }), 0)
 assert.deepEqual(AhoCorasick.deserialize(ac.serialize()).search('ushers'), ac.search('ushers'))
@@ -94,6 +98,13 @@ assert.equal(folded.replace('Straße', 'X'), 'X')
 assert.deepEqual(folded.search('ß').map(m => m.pattern), ['ss'])
 assert.deepEqual(new Fast(['cat']).search('cat'), new AhoCorasick(['cat']).search('cat'))
 assert.equal(new UnicodeFast(['SS']).match('ß'), true)
+for (const Constructor of [Unicode, UnicodeFast, Fast]) {
+  const matcher = new Constructor(['SS'])
+  assert.equal(Object.isFrozen(matcher.getStats()), true)
+  assert.equal(matcher.getStats().patternCount, 1)
+  assert.equal(matcher.count('xSS', { start: 1, anchored: true }), 1)
+}
+assert.throws(() => stream.createMatchStream(folded, { start: 0 }), TypeError)
 const dictionary = new Dynamic(['cat'])
 const snapshot = dictionary.compile()
 dictionary.add('dog')
@@ -120,6 +131,10 @@ void mapped
 const restored = AhoCorasick.deserialize('serialized', { decodeData: value => Number(value) })
 const stream: MatchStream<number> = restored.createStream()
 void stream
+const stats: CompileStats = restored.getStats()
+const range: QueryOptions = { start: 0, end: 2, anchored: true }
+restored.count('he', range)
+void stats
 const boundaries: BoundaryOptions = { wholeWord: true, locale: 'en' }
 void boundaries
 const ac = new AhoCorasick([{ pattern: 'he', data: { id: 1 } }])
@@ -141,11 +156,11 @@ void found
 `
   writeFileSync(path.join(temporary, 'consumer.mts'), `import AhoCorasick from 'modern-ahocorasick'
 import TextMatcher from 'modern-ahocorasick/text'
-import type { BoundaryOptions, Match, MatchStream } from 'modern-ahocorasick'
+import type { BoundaryOptions, CompileStats, QueryOptions, Match, MatchStream } from 'modern-ahocorasick'
 ${types}`)
   writeFileSync(path.join(temporary, 'consumer.cts'), `import AhoCorasick = require('modern-ahocorasick')
 import TextMatcher = require('modern-ahocorasick/text')
-import type { BoundaryOptions, Match, MatchStream } from 'modern-ahocorasick'
+import type { BoundaryOptions, CompileStats, QueryOptions, Match, MatchStream } from 'modern-ahocorasick'
 ${types}`)
   const extensionTypes = `
 const matcher: Matcher = new Unicode(['SS'])

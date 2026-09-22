@@ -19,11 +19,38 @@ export interface BoundaryOptions {
   locale?: string
 }
 
-export interface SearchOptions extends BoundaryOptions {
+export interface QueryOptions extends BoundaryOptions {
+  /** Original UTF-16 half-open range, at grapheme boundaries. */
+  start?: number
+  end?: number
+  /** Only accept matches beginning at start (default 0). */
+  anchored?: boolean
+}
+
+/** Cached scalar diagnostics; typedArrayBytes is not total retained heap. */
+export interface CompileStats {
+  readonly backend: 'compact' | 'double-array'
+  readonly patternCount: number
+  readonly stateCount: number
+  readonly transitionCount: number
+  readonly alphabetSize: number
+  readonly maxPatternUnits: number
+  readonly unit: 'grapheme' | 'folded-codepoint'
+  readonly typedArrayBytes: number
+}
+
+/** Offline ranges are intentionally unavailable on a stream. */
+export interface StreamingBoundaryOptions extends BoundaryOptions {
+  start?: never
+  end?: never
+  anchored?: never
+}
+
+export interface SearchOptions extends QueryOptions {
   strategy?: MatchStrategy
 }
 
-export interface ReplaceOptions extends BoundaryOptions {
+export interface ReplaceOptions extends QueryOptions {
   strategy?: Exclude<MatchStrategy, 'all'>
 }
 
@@ -39,7 +66,7 @@ export interface DeserializeOptions<T> {
   decodeData?: (data: JsonValue) => T
 }
 
-export interface StreamOptions extends SearchOptions {
+export interface StreamOptions extends StreamingBoundaryOptions {
   strategy?: Exclude<MatchStrategy, 'longest-first'>
   /** Maximum unsettled UTF-16 tail; defaults to 1,048,576. */
   maxBufferedUnits?: number
@@ -80,9 +107,9 @@ export type Token<T = unknown> = {
 export interface Matcher<T = unknown> {
   search: (text: string, options?: SearchOptions) => Match<T>[]
   iterate: (text: string, options?: SearchOptions) => IterableIterator<Match<T>>
-  match: (text: string, options?: BoundaryOptions) => boolean
-  count: (text: string, options?: BoundaryOptions) => number
-  countByPattern: (text: string, options?: BoundaryOptions) => number[]
+  match: (text: string, options?: QueryOptions) => boolean
+  count: (text: string, options?: QueryOptions) => number
+  countByPattern: (text: string, options?: QueryOptions) => number[]
   replace: (text: string, replacement: Replacement<T>, options?: ReplaceOptions) => string
   tokenize: (text: string, options?: ReplaceOptions) => Token<T>[]
 }

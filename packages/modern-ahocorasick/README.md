@@ -225,3 +225,23 @@ Modern library maintained by [SonOfMagic](https://github.com/sonofmagic).
 
 The optional text adapter includes Unicode 17 case-folding data under the
 [Unicode License V3](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/UNICODE-LICENSE.txt).
+
+## Ranges, anchoring and compile statistics
+
+Every whole-text query accepts `start`, `end` and `anchored`. Offsets are original UTF-16 positions in a half-open range; defaults are `0`, `text.length` and `false`. Coordinates must be safe integers within the input, ordered and at original grapheme boundaries, otherwise a `RangeError` is thrown. A non-boolean `anchored` throws `TypeError`. An empty range has no matches. Anchoring accepts only hits beginning exactly at `start`.
+
+```ts
+import AhoCorasick from 'modern-ahocorasick'
+
+const matcher = new AhoCorasick(['abc', 'bc'])
+matcher.search('!abc!', { start: 2, end: 4, anchored: true })
+// [{ pattern: 'bc', patternIndex: 1, start: 2, end: 4, data: undefined }]
+matcher.replace('!abc!', 'X', { start: 2, end: 4 }) // '!aX!'
+matcher.getStats() // frozen, cached scalar diagnostics
+```
+
+`search`, `iterate`, `match`, `count`, `countByPattern`, `replace` and `tokenize` share the contract, including `/unicode`, `/fast`, `/unicode-fast` and `/text`. Range filtering happens before overlap selection; whole-word and constructor boundary rules still inspect the complete input. Replacement and tokens retain text outside the range. Folding/normalization never changes the coordinate system. This is a semantic range filter; it does not promise work proportional only to the selected span. Streams reject these offline options (even `anchored: false`).
+
+`getStats()` on the default and derived compiled constructors returns `backend` (`compact` or `double-array`), `patternCount` (duplicates included), `stateCount` (root included, unused DAT slots excluded), `transitionCount` (trie edges), `alphabetSize`, `maxPatternUnits`, `unit` (`grapheme` or `folded-codepoint`) and `typedArrayBytes`. Folded units are codepoints after Unicode folding, so `ß` has two units there. Byte counts include retained typed scan/auxiliary arrays, including unused allocated slots; they exclude strings, Maps, JS objects, temporary build allocations, and native ICU. They are **not total heap usage**. Values are compiled once; reads do not traverse tables. Compact deserialization recreates identical statistics; serializing `/fast` uses the existing portable compact format, so restored backend/storage statistics describe compact storage. `/text` is a mapping adapter, not a compiled-constructor subclass, and does not expose `getStats()`.
+
+The cross-language source assessment and measurements live in the repository's `docs/research/` directory. This batch borrows range/diagnostic and contiguous-output design ideas; the default backend remains compact and no native runtime dependency is added.

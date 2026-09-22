@@ -1,15 +1,15 @@
 import type { CompactAutomaton } from './internal.js'
 import type { Boundary as WordBoundary } from './options.js'
 import type { Backend, Profile } from './runtime.js'
-import type { Boundary, BoundaryOptions, DeserializeOptions, Match, MatcherOptions, MatchStrategy, MatchStream, PatternInput, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
+import type { Boundary, CompileStats, DeserializeOptions, Match, MatcherOptions, MatchStrategy, MatchStream, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
 import { advanceCompact, asciiPrefix, buildAutomaton, compactAutomaton, graphemeRuns } from './internal.js'
 import { createStream } from './legacy-stream.js'
-import { assertText, resolveBoundary, resolveStrategy } from './options.js'
+import { assertStreamRange, assertText, resolveBoundary, resolveQuery, resolveStrategy } from './options.js'
 import { deserialize, serialize } from './persistence.js'
 import { compactBackend, createScanner, getProfile, operationReplacement, registerScanner, resolveCharacterBoundary, scanText, selectLongest } from './runtime.js'
 import { createMatchStream } from './stream.js'
 
-export type { Boundary, BoundaryContext, BoundaryOptions, DeserializeOptions, JsonValue, Match, Matcher, MatcherOptions, MatchStrategy, MatchStream, PatternInput, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
+export type { Boundary, BoundaryContext, BoundaryOptions, CompileStats, DeserializeOptions, JsonValue, Match, Matcher, MatcherOptions, MatchStrategy, MatchStream, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
 
 interface Pattern<T> {
   pattern: string
@@ -20,6 +20,8 @@ interface Pattern<T> {
 export default class AhoCorasick<T = unknown> {
   readonly #boundary: Boundary
   readonly #profile: Profile
+  readonly #generalScan: boolean
+  #stats: CompileStats
   #backend: Backend
   #nodes: CompactAutomaton
   #patterns: Pattern<T>[]
@@ -33,6 +35,7 @@ export default class AhoCorasick<T = unknown> {
   constructor(patterns: readonly PatternInput<T>[], options?: MatcherOptions) {
     this.#boundary = resolveCharacterBoundary(options)
     this.#profile = getProfile(new.target)
+    this.#generalScan = this.#boundary !== 'none' || !!this.#profile.units || !!this.#profile.backend
     if (!Array.isArray(patterns)) {
       throw new TypeError('patterns must be an array')
     }
@@ -57,7 +60,26 @@ export default class AhoCorasick<T = unknown> {
     this.#counts = counts
     this.#order = order
     this.#maxLength = maxLength
+    this.#stats = this.#compileStats()
     registerScanner(this, (strategy, range) => createScanner(this.#backend, this.#patterns, this.#lengths, this.#maxLength, this.#boundary, this.#profile.units, strategy, range))
+  }
+
+  #compileStats(): CompileStats {
+    const layout = this.#backend.stats
+    // The compact placeholder remains allocated for DAT matchers as well.
+    const placeholderBytes = this.#profile.backend ? compactBackend(this.#nodes).stats.typedArrayBytes : 0
+    return Object.freeze({
+      ...layout,
+      patternCount: this.#patterns.length,
+      maxPatternUnits: this.#maxLength,
+      unit: this.#profile.units ? 'folded-codepoint' : 'grapheme',
+      typedArrayBytes: layout.typedArrayBytes + placeholderBytes + this.#lengths.byteLength + this.#counts.byteLength + this.#order.byteLength,
+    })
+  }
+
+  /** Constant-time immutable diagnostics; byte count excludes JS heap objects. */
+  getStats(): CompileStats {
+    return this.#stats
   }
 
   /** Incremental matching with absolute original-text UTF-16 ranges. */
@@ -67,11 +89,12 @@ export default class AhoCorasick<T = unknown> {
       throw new TypeError('longest-first requires complete input')
     }
     resolveBoundary('', options)
+    assertStreamRange(options)
     const maxBufferedUnits = options?.maxBufferedUnits === undefined ? 1_048_576 : options.maxBufferedUnits
     if (!Number.isSafeInteger(maxBufferedUnits) || maxBufferedUnits < 1) {
       throw new RangeError('maxBufferedUnits must be a positive safe integer')
     }
-    if (this.#boundary !== 'none' || this.#profile.units || this.#profile.backend) {
+    if (this.#generalScan) {
       const handle = createMatchStream(this, { ...options, strategy, maxBufferLength: maxBufferedUnits })
       let closed = false
       const assertOpen = () => {
@@ -122,6 +145,7 @@ export default class AhoCorasick<T = unknown> {
     matcher.#counts = restored.counts
     matcher.#order = restored.order
     matcher.#maxLength = restored.maxLength
+    matcher.#stats = matcher.#compileStats()
     return matcher
   }
 
@@ -138,28 +162,27 @@ export default class AhoCorasick<T = unknown> {
   iterate(text: string, options?: SearchOptions): IterableIterator<Match<T>> {
     assertText(text)
     const strategy = resolveStrategy(options, 'all')
-    const boundary = resolveBoundary(text, options)
+    const boundary = options === undefined ? undefined : resolveQuery(text, options, this.#segmenter)
+    return this.#iterate(text, strategy, boundary)
+  }
+
+  /** Reuse validated original-context filters; counting must not rebuild them. */
+  #iterate(text: string, strategy: MatchStrategy, boundary: WordBoundary): IterableIterator<Match<T>> {
     if (strategy === 'longest-first') {
-      return selectLongest(this.iterate(text, { ...options, strategy: 'all' }), text, this.#segmenter)
+      return selectLongest(this.#iterate(text, 'all', boundary), text, this.#segmenter)
     }
-    if (this.#boundary !== 'none' || this.#profile.units || this.#profile.backend) {
+    if (this.#generalScan) {
       return scanText(text, this.#segmenter, createScanner(this.#backend, this.#patterns, this.#lengths, this.#maxLength, this.#boundary, this.#profile.units, strategy, boundary))
     }
     return strategy === 'all' ? this.#scan(text, boundary) : this.#select(text, strategy, boundary)
   }
 
   /** Count all occurrences, including overlaps and duplicate dictionary entries. */
-  count(text: string, options?: BoundaryOptions): number {
+  count(text: string, options?: QueryOptions): number {
     assertText(text)
-    const boundary = resolveBoundary(text, options)
-    if (boundary || this.#boundary !== 'none' || this.#profile.units || this.#profile.backend) {
-      let count = 0
-      for (const _match of this.iterate(text, { ...options, strategy: 'all' })) {
-        if (!Number.isSafeInteger(++count)) {
-          throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
-        }
-      }
-      return count
+    const boundary = options === undefined ? undefined : resolveQuery(text, options, this.#segmenter)
+    if (boundary || this.#generalScan) {
+      return this.#countMatches(this.#iterate(text, 'all', boundary))
     }
     if (this.#patterns.length === 0) {
       return 0
@@ -192,16 +215,26 @@ export default class AhoCorasick<T = unknown> {
     return count
   }
 
+  #countMatches(matches: Iterable<Match<T>>): number {
+    let count = 0
+    for (const _match of matches) {
+      if (!Number.isSafeInteger(++count)) {
+        throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
+      }
+    }
+    return count
+  }
+
   /** Count occurrences per input pattern without enumerating individual hits. */
-  countByPattern(text: string, options?: BoundaryOptions): number[] {
+  countByPattern(text: string, options?: QueryOptions): number[] {
     assertText(text)
-    const boundary = resolveBoundary(text, options)
+    const boundary = options === undefined ? undefined : resolveQuery(text, options, this.#segmenter)
     const result = Array.from<number>({ length: this.#patterns.length }).fill(0)
     if (text.length === 0 || result.length === 0) {
       return result
     }
-    if (boundary || this.#boundary !== 'none' || this.#profile.units || this.#profile.backend) {
-      for (const match of this.iterate(text, { ...options, strategy: 'all' })) {
+    if (boundary || this.#generalScan) {
+      for (const match of this.#iterate(text, 'all', boundary)) {
         result[match.patternIndex]++
       }
       return result
@@ -227,11 +260,11 @@ export default class AhoCorasick<T = unknown> {
   }
 
   /** Stop scanning as soon as a match is found. */
-  match(text: string, options?: BoundaryOptions): boolean {
+  match(text: string, options?: QueryOptions): boolean {
     assertText(text)
-    const boundary = resolveBoundary(text, options)
-    if (boundary || this.#boundary !== 'none' || this.#profile.units || this.#profile.backend) {
-      const iterator = this.iterate(text, { ...options, strategy: 'all' })
+    const boundary = options === undefined ? undefined : resolveQuery(text, options, this.#segmenter)
+    if (boundary || this.#generalScan) {
+      const iterator = this.#iterate(text, 'all', boundary)
       const found = !iterator.next().done
       iterator.return?.()
       return found

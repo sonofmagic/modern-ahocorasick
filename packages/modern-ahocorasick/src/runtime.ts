@@ -1,6 +1,6 @@
 import type { AutomatonNode, CompactAutomaton } from './internal.js'
-import type { Boundary, BoundaryContext, Match, Matcher, MatcherOptions, MatchStrategy } from './types.js'
-import { advance, advanceCompact } from './internal.js'
+import type { Boundary, BoundaryContext, CompileStats, Match, Matcher, MatcherOptions, MatchStrategy } from './types.js'
+import { advanceCompact } from './internal.js'
 // Private interoperability across independently bundled optional entries. Neither
 // hook returns tables or permits a consumer to change a compiled dictionary.
 const profileKey = Symbol.for('modern-ahocorasick.profile.v1')
@@ -16,6 +16,7 @@ export function replacementFactory<T extends object>(factory: () => T): T {
   return replacement
 }
 export interface Backend {
+  stats: Pick<CompileStats, 'backend' | 'stateCount' | 'transitionCount' | 'alphabetSize' | 'typedArrayBytes'>
   advance: (state: number, unit: string) => number
   outputs: (state: number) => Iterable<number>
 }
@@ -75,18 +76,17 @@ export function accepts(boundary: Boundary, context: BoundaryContext): boolean {
     default: return true
   }
 }
-export function mapBackend(nodes: AutomatonNode[]): Backend {
-  return {
-    advance: (state, unit) => advance(nodes, state, unit),
-    * outputs(state) {
-      for (let output = state; output !== -1; output = nodes[output].output) {
-        yield* nodes[output].terminals
-      }
-    },
-  }
-}
 export function compactBackend(table: CompactAutomaton): Backend {
   return {
+    stats: {
+      backend: 'compact',
+      stateCount: table.failures.length,
+      transitionCount: table.targets.length,
+      alphabetSize: table.symbols.size,
+      typedArrayBytes: table.roots.byteLength + table.edges.byteLength + table.labels.byteLength
+        + table.targets.byteLength + table.failures.byteLength + table.outputs.byteLength
+        + table.terminals.byteLength + table.patterns.byteLength,
+    },
     advance: (state, unit) => advanceCompact(table, state, unit),
     * outputs(state) {
       for (let output = state; output !== -1; output = table.outputs[output]) {

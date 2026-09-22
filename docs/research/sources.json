@@ -160,8 +160,7 @@
       "testLocations": [
         "tests/test_ac_bytes.py",
         "tests/test_ac.py",
-        "tests/__init__.py",
-        "benchmarks/test_comparison.py"
+        "tests/__init__.py"
       ],
       "evaluation": "source review; runtime results reported separately"
     },
@@ -248,13 +247,7 @@
           "url": "https://github.com/QSFT/Mensa/blob/ce668d44ec9a7de21c7200d242b6af3095a8b120/mensa/src/main/java/com/dell/mensa/ISymbolClassifier.java"
         }
       ],
-      "testLocations": [
-        "mensa/src/main/java/com/dell/mensa/testutils/MatchFiles.java",
-        "mensa/src/main/java/com/dell/mensa/testutils/Benchmark.java",
-        "mensa/src/main/java/com/dell/mensa/testutils/HeapUtils.java",
-        "mensa/src/main/java/com/dell/mensa/testutils/GenerateFiles.java",
-        "mensa/src/main/java/com/dell/mensa/testutils/package-info.java"
-      ],
+      "testLocations": [],
       "evaluation": "source review; runtime results reported separately"
     },
     {
@@ -316,7 +309,7 @@
       "fork": false,
       "description": "Aho-Corasick string-searching algorithm in Go",
       "license": "MIT",
-      "findings": "Flattened byte states, failure/dictionary links, Walk callbacks, MatchFirst, pooled Match results",
+      "findings": "Dense 256-column byte transition rows with failure transitions precomputed; dictionary/output links, Walk callbacks, MatchFirst, pooled Match results; duplicate patterns overwrite terminal ID",
       "decision": "flat outputs adopted; result pooling rejected",
       "sourceEvidence": [
         {
@@ -591,11 +584,27 @@
       "decision": "already covered by public native APIs",
       "sourceEvidence": [
         {
-          "path": "src",
-          "url": "https://github.com/monyone/aho-corasick/blob/56e380ec7de80c787a11b34f0abdba5b2979a001/src"
+          "path": "src/index.mts",
+          "url": "https://github.com/monyone/aho-corasick/blob/56e380ec7de80c787a11b34f0abdba5b2979a001/src/index.mts"
+        },
+        {
+          "path": "src/fast.mts",
+          "url": "https://github.com/monyone/aho-corasick/blob/56e380ec7de80c787a11b34f0abdba5b2979a001/src/fast.mts"
+        },
+        {
+          "path": "src/stream/base.mts",
+          "url": "https://github.com/monyone/aho-corasick/blob/56e380ec7de80c787a11b34f0abdba5b2979a001/src/stream/base.mts"
+        },
+        {
+          "path": "src/stream/imperative/optimistic.mts",
+          "url": "https://github.com/monyone/aho-corasick/blob/56e380ec7de80c787a11b34f0abdba5b2979a001/src/stream/imperative/optimistic.mts"
         }
       ],
-      "testLocations": [],
+      "testLocations": [
+        "test/unit/match.test.mts",
+        "test/unit/stream.test.mts",
+        "test/unit/dynamic.test.mts"
+      ],
       "evaluation": "source review; runtime results reported separately"
     },
     {
@@ -613,8 +622,12 @@
       "decision": "covered; no compatibility defects copied",
       "sourceEvidence": [
         {
-          "path": "src",
-          "url": "https://github.com/tanishiking/aho-corasick-js/blob/9c863bff25017987532fa6be9e912e0642bdbfe4/src"
+          "path": "src/trie.ts",
+          "url": "https://github.com/tanishiking/aho-corasick-js/blob/9c863bff25017987532fa6be9e912e0642bdbfe4/src/trie.ts"
+        },
+        {
+          "path": "src/interval/interval-tree.ts",
+          "url": "https://github.com/tanishiking/aho-corasick-js/blob/9c863bff25017987532fa6be9e912e0642bdbfe4/src/interval/interval-tree.ts"
         }
       ],
       "testLocations": [
@@ -641,8 +654,8 @@
       "decision": "baseline occurrence search covered",
       "sourceEvidence": [
         {
-          "path": "src",
-          "url": "https://github.com/BrunoRB/ahocorasick/blob/374247f612a189ddb0f1cd7543495540753702fb/src"
+          "path": "src/main.js",
+          "url": "https://github.com/BrunoRB/ahocorasick/blob/374247f612a189ddb0f1cd7543495540753702fb/src/main.js"
         }
       ],
       "testLocations": [

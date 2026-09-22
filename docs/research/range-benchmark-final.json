@@ -1,0 +1,2955 @@
+{
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "baselineRef": "d50fcbfad26cc2a9b74c7d9f4379404a02b9df72",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "corpusSha256": "5359a336ba03cd231b9fd7fd17e4b06e4945478fdc3682fb28c7e1322610f043",
+  "baselineSourceSha256": "f05a1f010b7e89343d21edbd33b6128028aa55cbf7d8ea7dcf476c06fe06341e",
+  "implementationSha256": "c1378629b35e7b9373c025a67bf15d0419e9e011ddd4d5da722895cba7df757f",
+  "samples": 7,
+  "rounds": 3,
+  "operations": [
+    "build",
+    "search",
+    "match",
+    "count",
+    "countByPattern",
+    "iterate:leftmost-longest"
+  ],
+  "note": "v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "ascii-tiny",
+      "variant": "v3-before",
+      "keywords": 3,
+      "utf16Length": 2,
+      "count": 3,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.0003939158935546876,
+          "madMs": 3.3574462890624025e-05,
+          "betweenRoundsMadMs": 2.0242919921880168e-06,
+          "roundMediansMs": [
+            0.0003959401855468756,
+            0.0003939158935546876,
+            0.00038056945800781297
+          ],
+          "utf16UnitsPerSecond": 5077225.957937487
+        },
+        "build": {
+          "ms": 0.006444854736328123,
+          "madMs": 9.461450195312471e-05,
+          "betweenRoundsMadMs": 2.760815429687924e-05,
+          "roundMediansMs": [
+            0.006444854736328123,
+            0.006031906127929691,
+            0.006472462890625003
+          ],
+          "utf16UnitsPerSecond": 620650.1408717476
+        },
+        "search": {
+          "ms": 0.001118337036132816,
+          "madMs": 2.8198120117180203e-05,
+          "betweenRoundsMadMs": 1.7140625000001963e-05,
+          "roundMediansMs": [
+            0.001118337036132816,
+            0.001076120971679695,
+            0.001135477661132818
+          ],
+          "utf16UnitsPerSecond": 1788369.6375789845
+        },
+        "match": {
+          "ms": 0.00015562438964843855,
+          "madMs": 1.92108154297016e-05,
+          "betweenRoundsMadMs": 4.226684570306227e-06,
+          "roundMediansMs": [
+            0.00014925634765624446,
+            0.00015985107421874478,
+            0.00015562438964843855
+          ],
+          "utf16UnitsPerSecond": 12851456.025100414
+        },
+        "count": {
+          "ms": 0.00020956420898437383,
+          "madMs": 5.691528320313222e-06,
+          "betweenRoundsMadMs": 8.041381835945105e-06,
+          "roundMediansMs": [
+            5.397033691405956e-05,
+            0.00021760559082031894,
+            0.00020956420898437383
+          ],
+          "utf16UnitsPerSecond": 9543614.387651138
+        },
+        "iterate:leftmost-longest": {
+          "ms": 0.001145584106445316,
+          "madMs": 1.932775878906584e-05,
+          "betweenRoundsMadMs": 1.651513671875604e-05,
+          "roundMediansMs": [
+            0.0012121480712890612,
+            0.001145584106445316,
+            0.00112906896972656
+          ],
+          "utf16UnitsPerSecond": 1745834.2768091373
+        }
+      },
+      "dictionaryHeapBytes": 3638.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 392,
+      "checks": {
+        "search": "2e4fd53a7378495e1d5ab9134bbb9aa762d53b18529d4cb02e6bbffdc099d2a8",
+        "frequencies": "9e07ab64261fb6803c6572f7b5c3098ea68fb45873128af820d42a2262eb900b",
+        "first": "4f8d791b24bd15ae72b0df156b0425f5aaf07418843a59e806b9dfe928cf5838",
+        "longest": "8f2bd3c41773b3e02f9eca783af9e1f7be7de38daf524a6f2657028aa0b262c3",
+        "replaceFirst": "40752678f959ca492cfbb685f0130362d79848d4d8318811285077d53a921ae6",
+        "replaceLongest": "de9e4020d0fe7c98642db490864cd47513a4ed41689f505166c541ec5bba3a9f"
+      }
+    },
+    {
+      "scenario": "ascii-tiny",
+      "variant": "v3",
+      "keywords": 3,
+      "utf16Length": 2,
+      "count": 3,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.0005158334960937505,
+          "madMs": 0.00018123876953125059,
+          "betweenRoundsMadMs": 1.3504028320312361e-05,
+          "roundMediansMs": [
+            0.0005158334960937505,
+            0.0005023294677734382,
+            0.0007250111083984372
+          ],
+          "utf16UnitsPerSecond": 3877220.101341594
+        },
+        "build": {
+          "ms": 0.006373067138671876,
+          "madMs": 3.443408203124276e-05,
+          "betweenRoundsMadMs": 3.266406250000686e-05,
+          "roundMediansMs": [
+            0.006373067138671876,
+            0.0064057312011718825,
+            0.006271779296875002
+          ],
+          "utf16UnitsPerSecond": 627641.2774200878
+        },
+        "search": {
+          "ms": 0.0011078186035156298,
+          "madMs": 2.2181152343744848e-05,
+          "betweenRoundsMadMs": 3.789306640626655e-06,
+          "roundMediansMs": [
+            0.0011078186035156298,
+            0.0011040292968750032,
+            0.0011463317871093642
+          ],
+          "utf16UnitsPerSecond": 1805349.7148838795
+        },
+        "match": {
+          "ms": 0.00015117895507812257,
+          "madMs": 1.3824462890624223e-05,
+          "betweenRoundsMadMs": 7.68066406253709e-07,
+          "roundMediansMs": [
+            0.00015117895507812257,
+            0.00015194702148437628,
+            0.00014554333496093197
+          ],
+          "utf16UnitsPerSecond": 13229354.568342458
+        },
+        "count": {
+          "ms": 0.00020003259277343727,
+          "madMs": 9.03820800781524e-06,
+          "betweenRoundsMadMs": 9.561767578131208e-07,
+          "roundMediansMs": [
+            0.00020003259277343727,
+            0.0002009887695312504,
+            0.00019179797363280682
+          ],
+          "utf16UnitsPerSecond": 9998370.626857085
+        },
+        "iterate:leftmost-longest": {
+          "ms": 0.0011907501220703096,
+          "madMs": 3.0695556640626676e-05,
+          "betweenRoundsMadMs": 1.139318847655918e-05,
+          "roundMediansMs": [
+            0.0011907501220703096,
+            0.0011793569335937504,
+            0.0012482095947265598
+          ],
+          "utf16UnitsPerSecond": 1679613.516665176
+        }
+      },
+      "dictionaryHeapBytes": 3830.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 392,
+      "checks": {
+        "search": "2e4fd53a7378495e1d5ab9134bbb9aa762d53b18529d4cb02e6bbffdc099d2a8",
+        "frequencies": "9e07ab64261fb6803c6572f7b5c3098ea68fb45873128af820d42a2262eb900b",
+        "first": "4f8d791b24bd15ae72b0df156b0425f5aaf07418843a59e806b9dfe928cf5838",
+        "longest": "8f2bd3c41773b3e02f9eca783af9e1f7be7de38daf524a6f2657028aa0b262c3",
+        "replaceFirst": "40752678f959ca492cfbb685f0130362d79848d4d8318811285077d53a921ae6",
+        "replaceLongest": "de9e4020d0fe7c98642db490864cd47513a4ed41689f505166c541ec5bba3a9f"
+      }
+    },
+    {
+      "scenario": "crlf",
+      "variant": "v3-before",
+      "keywords": 5,
+      "utf16Length": 40000,
+      "count": 24000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.7008333437499994,
+          "madMs": 0.058068359374999545,
+          "betweenRoundsMadMs": 0.08418814062500068,
+          "roundMediansMs": [
+            0.7850214843750001,
+            0.7008333437499994,
+            0.5813463437499999
+          ],
+          "utf16UnitsPerSecond": 57074909.97213278
+        },
+        "build": {
+          "ms": 0.007695241210937509,
+          "madMs": 0.00019027709960939276,
+          "betweenRoundsMadMs": 0.00031965136718750675,
+          "roundMediansMs": [
+            0.007695241210937509,
+            0.00823355102539064,
+            0.007375589843750002
+          ],
+          "utf16UnitsPerSecond": 1169553.9819087144
+        },
+        "search": {
+          "ms": 2.6488646250000016,
+          "madMs": 0.035932249999987675,
+          "betweenRoundsMadMs": 0.01570837500000266,
+          "roundMediansMs": [
+            2.8047734375000033,
+            2.633156249999999,
+            2.6488646250000016
+          ],
+          "utf16UnitsPerSecond": 15100809.464734338
+        },
+        "match": {
+          "ms": 0.0001192525634765712,
+          "madMs": 6.481933593750766e-05,
+          "betweenRoundsMadMs": 1.8298339843347833e-07,
+          "roundMediansMs": [
+            0.00011198937988282642,
+            0.0001192525634765712,
+            0.00011943554687500468
+          ],
+          "utf16UnitsPerSecond": 335422558927.7043
+        },
+        "count": {
+          "ms": 0.6130403593749989,
+          "madMs": 0.007846999999998161,
+          "betweenRoundsMadMs": 0.04399284375000079,
+          "roundMediansMs": [
+            0.7452076718750007,
+            0.5690475156249981,
+            0.6130403593749989
+          ],
+          "utf16UnitsPerSecond": 65248558.90529039
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.5523384999999905,
+          "madMs": 0.0058281249999936335,
+          "betweenRoundsMadMs": 0.12170312499999625,
+          "roundMediansMs": [
+            3.3081980000000044,
+            2.4306353749999943,
+            2.5523384999999905
+          ],
+          "utf16UnitsPerSecond": 15671902.453377618
+        }
+      },
+      "dictionaryHeapBytes": 4124,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1802360,
+      "checks": {
+        "search": "34cbe6f3f74c70af6a80bf41ef0e2dd789f7d157df3fe540327f58b8dba149d5",
+        "frequencies": "7cb5a132eec75c864033e776fb9637c5eaa90af7d69b19448af0380933b95620",
+        "first": "e09964c19500d4d08ee6ba1ef449bf63a39fd16728bd7dc9f8cc6fd4effbcbe6",
+        "longest": "bda4f20dad17ead60054be0aa68edf433c5cff48dfac0813593bb0c6d700b85e",
+        "replaceFirst": "ece311afca2134495daedb507f5d00541c32ecd9c51cc8eb712235203df50f6c",
+        "replaceLongest": "dbab9b2382d4c162f151c032ec941788b9c7696926dfca20f2a02852ded0527c"
+      }
+    },
+    {
+      "scenario": "crlf",
+      "variant": "v3",
+      "keywords": 5,
+      "utf16Length": 40000,
+      "count": 24000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.5615716093750001,
+          "madMs": 0.005638031249999731,
+          "betweenRoundsMadMs": 0.0020208281250000404,
+          "roundMediansMs": [
+            0.55955078125,
+            0.5734941406249998,
+            0.5615716093750001
+          ],
+          "utf16UnitsPerSecond": 71228672.05576491
+        },
+        "build": {
+          "ms": 0.008077646972656255,
+          "madMs": 0.00017069482421874782,
+          "betweenRoundsMadMs": 0.00020629882812500666,
+          "roundMediansMs": [
+            0.008283945800781262,
+            0.008077646972656255,
+            0.007765502929687487
+          ],
+          "utf16UnitsPerSecond": 1114185.855171192
+        },
+        "search": {
+          "ms": 2.638408874999996,
+          "madMs": 0.027874999999980332,
+          "betweenRoundsMadMs": 0.046273374999998396,
+          "roundMediansMs": [
+            2.6994062500000098,
+            2.5921354999999977,
+            2.638408874999996
+          ],
+          "utf16UnitsPerSecond": 15160652.459524514
+        },
+        "match": {
+          "ms": 0.00010301721191406654,
+          "madMs": 5.4687499999997446e-05,
+          "betweenRoundsMadMs": 5.355834960936445e-05,
+          "roundMediansMs": [
+            0.00010301721191406654,
+            0.000156575561523431,
+            4.5603393554694005e-05
+          ],
+          "utf16UnitsPerSecond": 388284629886.5731
+        },
+        "count": {
+          "ms": 0.5739778750000006,
+          "madMs": 0.01247589062500154,
+          "betweenRoundsMadMs": 0.007834640624999167,
+          "roundMediansMs": [
+            0.6252988281250005,
+            0.5739778750000006,
+            0.5661432343750015
+          ],
+          "utf16UnitsPerSecond": 69689097.33672218
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.4176926875000078,
+          "madMs": 0.012356812500001979,
+          "betweenRoundsMadMs": 0.03529168750000622,
+          "roundMediansMs": [
+            3.112343750000008,
+            2.4176926875000078,
+            2.3824010000000015
+          ],
+          "utf16UnitsPerSecond": 16544699.914430242
+        }
+      },
+      "dictionaryHeapBytes": 4284.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1799688,
+      "checks": {
+        "search": "34cbe6f3f74c70af6a80bf41ef0e2dd789f7d157df3fe540327f58b8dba149d5",
+        "frequencies": "7cb5a132eec75c864033e776fb9637c5eaa90af7d69b19448af0380933b95620",
+        "first": "e09964c19500d4d08ee6ba1ef449bf63a39fd16728bd7dc9f8cc6fd4effbcbe6",
+        "longest": "bda4f20dad17ead60054be0aa68edf433c5cff48dfac0813593bb0c6d700b85e",
+        "replaceFirst": "ece311afca2134495daedb507f5d00541c32ecd9c51cc8eb712235203df50f6c",
+        "replaceLongest": "dbab9b2382d4c162f151c032ec941788b9c7696926dfca20f2a02852ded0527c"
+      }
+    },
+    {
+      "scenario": "ascii-combining",
+      "variant": "v3-before",
+      "keywords": 4,
+      "utf16Length": 44000,
+      "count": 16000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 2.013684875000001,
+          "madMs": 0.011065125000001785,
+          "betweenRoundsMadMs": 0.011156250000000867,
+          "roundMediansMs": [
+            2.0366718749999997,
+            2.013684875000001,
+            2.002528625
+          ],
+          "utf16UnitsPerSecond": 21850489.39199088
+        },
+        "build": {
+          "ms": 0.008064493896484393,
+          "madMs": 5.20937500000096e-05,
+          "betweenRoundsMadMs": 5.269531250018389e-06,
+          "roundMediansMs": [
+            0.008170379638671899,
+            0.008064493896484393,
+            0.008059224365234374
+          ],
+          "utf16UnitsPerSecond": 868002.3929401889
+        },
+        "search": {
+          "ms": 2.7535988750000087,
+          "madMs": 0.03357287500000439,
+          "betweenRoundsMadMs": 0.02292962500001039,
+          "roundMediansMs": [
+            2.7306692499999983,
+            2.783736937499995,
+            2.7535988750000087
+          ],
+          "utf16UnitsPerSecond": 15979088.457464548
+        },
+        "match": {
+          "ms": 0.004691040039062511,
+          "madMs": 0.0009474082031249997,
+          "betweenRoundsMadMs": 7.936621093751484e-05,
+          "roundMediansMs": [
+            0.004691040039062511,
+            0.004611673828124996,
+            0.005621052734374965
+          ],
+          "utf16UnitsPerSecond": 9379583127.325697
+        },
+        "count": {
+          "ms": 2.0646093750000034,
+          "madMs": 0.021411437499992303,
+          "betweenRoundsMadMs": 0.002450562499987541,
+          "roundMediansMs": [
+            2.0364115,
+            2.067059937499991,
+            2.0646093750000034
+          ],
+          "utf16UnitsPerSecond": 21311537.44276683
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.9778411249999976,
+          "madMs": 0.012833312499992644,
+          "betweenRoundsMadMs": 0.02298956250000117,
+          "roundMediansMs": [
+            2.9548515624999965,
+            3.0144010000000208,
+            2.9778411249999976
+          ],
+          "utf16UnitsPerSecond": 14775805.07254229
+        }
+      },
+      "dictionaryHeapBytes": 3940,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1203128,
+      "checks": {
+        "search": "d392b07d218c89ce3de9e1f5c16195a125083673293921b8935fb6b3f0f09fa8",
+        "frequencies": "50d35577fabbc4e51407b150644d8d33207d1e51ce1b597374a2325acf086264",
+        "first": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "longest": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "replaceFirst": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c",
+        "replaceLongest": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c"
+      }
+    },
+    {
+      "scenario": "ascii-combining",
+      "variant": "v3",
+      "keywords": 4,
+      "utf16Length": 44000,
+      "count": 16000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 2.0360573124999997,
+          "madMs": 0.024023437500003908,
+          "betweenRoundsMadMs": 0.002041687499999334,
+          "roundMediansMs": [
+            2.0360573124999997,
+            2.0340156250000003,
+            2.046330750000001
+          ],
+          "utf16UnitsPerSecond": 21610393.64160826
+        },
+        "build": {
+          "ms": 0.008268819091796872,
+          "madMs": 0.00011601782226561275,
+          "betweenRoundsMadMs": 0.00011130786132811099,
+          "roundMediansMs": [
+            0.008560739990234378,
+            0.008157511230468761,
+            0.008268819091796872
+          ],
+          "utf16UnitsPerSecond": 846553.7729498023
+        },
+        "search": {
+          "ms": 2.8129401249999972,
+          "madMs": 0.029937437500002773,
+          "betweenRoundsMadMs": 0.0717604374999965,
+          "roundMediansMs": [
+            2.7411796875000007,
+            2.8129401249999972,
+            2.90703637499999
+          ],
+          "utf16UnitsPerSecond": 15641996.64576936
+        },
+        "match": {
+          "ms": 0.004297363281249966,
+          "madMs": 0.0005282182617186715,
+          "betweenRoundsMadMs": 4.612207031240434e-05,
+          "roundMediansMs": [
+            0.004297363281249966,
+            0.004251241210937562,
+            0.004932434082031256
+          ],
+          "utf16UnitsPerSecond": 10238836495.852825
+        },
+        "count": {
+          "ms": 2.044559937499997,
+          "madMs": 0.016898437499989427,
+          "betweenRoundsMadMs": 0.02153125000000955,
+          "roundMediansMs": [
+            2.044559937499997,
+            2.0230286874999877,
+            2.0706796875000038
+          ],
+          "utf16UnitsPerSecond": 21520523.410921063
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.9607291250000003,
+          "madMs": 0.012984250000016573,
+          "betweenRoundsMadMs": 0.03838800000001186,
+          "roundMediansMs": [
+            2.9607291250000003,
+            2.9223411249999884,
+            3.0659999999999883
+          ],
+          "utf16UnitsPerSecond": 14861204.16368721
+        }
+      },
+      "dictionaryHeapBytes": 4132,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1202936,
+      "checks": {
+        "search": "d392b07d218c89ce3de9e1f5c16195a125083673293921b8935fb6b3f0f09fa8",
+        "frequencies": "50d35577fabbc4e51407b150644d8d33207d1e51ce1b597374a2325acf086264",
+        "first": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "longest": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "replaceFirst": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c",
+        "replaceLongest": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c"
+      }
+    },
+    {
+      "scenario": "unicode-start",
+      "variant": "v3-before",
+      "keywords": 3,
+      "utf16Length": 40000,
+      "count": 15000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.9370286874999998,
+          "madMs": 0.01654943750000193,
+          "betweenRoundsMadMs": 0.005083312500001824,
+          "roundMediansMs": [
+            1.9370286874999998,
+            1.7040416250000003,
+            1.9421120000000016
+          ],
+          "utf16UnitsPerSecond": 20650184.61426375
+        },
+        "build": {
+          "ms": 0.009937937500000008,
+          "madMs": 0.0004304606933593774,
+          "betweenRoundsMadMs": 0.0007868552246094035,
+          "roundMediansMs": [
+            0.009937937500000008,
+            0.009151082275390604,
+            0.018625163085937507
+          ],
+          "utf16UnitsPerSecond": 704371.5056569831
+        },
+        "search": {
+          "ms": 2.4716353750000053,
+          "madMs": 0.07353137499998752,
+          "betweenRoundsMadMs": 0.033541749999997705,
+          "roundMediansMs": [
+            2.505177125000003,
+            2.361388062499998,
+            2.4716353750000053
+          ],
+          "utf16UnitsPerSecond": 16183616.88968783
+        },
+        "match": {
+          "ms": 0.004617726806640632,
+          "madMs": 0.0007936201171874213,
+          "betweenRoundsMadMs": 0.0002166442871094354,
+          "roundMediansMs": [
+            0.004617726806640632,
+            0.0044010825195311964,
+            0.005214375732421894
+          ],
+          "utf16UnitsPerSecond": 8662270782.77499
+        },
+        "count": {
+          "ms": 1.8118490000000094,
+          "madMs": 0.02990618750000351,
+          "betweenRoundsMadMs": 0.019796812499990324,
+          "roundMediansMs": [
+            1.8316458124999997,
+            1.7115573125000054,
+            1.8118490000000094
+          ],
+          "utf16UnitsPerSecond": 22076894.92888193
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.771315125000001,
+          "madMs": 0.011406312500000126,
+          "betweenRoundsMadMs": 0.07956506249999507,
+          "roundMediansMs": [
+            2.771315125000001,
+            2.6732187500000038,
+            2.850880187499996
+          ],
+          "utf16UnitsPerSecond": 14433580.518924199
+        }
+      },
+      "dictionaryHeapBytes": 3847.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1080416,
+      "checks": {
+        "search": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "frequencies": "d1fbcacc087815e5abdbb9119dbce31d766d7fd656d0cf22f664895773545492",
+        "first": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "longest": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "replaceFirst": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861",
+        "replaceLongest": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861"
+      }
+    },
+    {
+      "scenario": "unicode-start",
+      "variant": "v3",
+      "keywords": 3,
+      "utf16Length": 40000,
+      "count": 15000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.7919869999999989,
+          "madMs": 0.016432312499997437,
+          "betweenRoundsMadMs": 0.055489624999999876,
+          "roundMediansMs": [
+            1.736497374999999,
+            1.7919869999999989,
+            2.0207604375
+          ],
+          "utf16UnitsPerSecond": 22321590.50260969
+        },
+        "build": {
+          "ms": 0.009474080566406251,
+          "madMs": 9.782934570312651e-05,
+          "betweenRoundsMadMs": 0.0002556154785156306,
+          "roundMediansMs": [
+            0.009474080566406251,
+            0.00921846508789062,
+            0.00988006591796875
+          ],
+          "utf16UnitsPerSecond": 738857.9768701787
+        },
+        "search": {
+          "ms": 2.442372375000005,
+          "madMs": 0.0579244999999986,
+          "betweenRoundsMadMs": 0.009406312499990577,
+          "roundMediansMs": [
+            2.3473906250000027,
+            2.4517786874999956,
+            2.442372375000005
+          ],
+          "utf16UnitsPerSecond": 16377519.009565411
+        },
+        "match": {
+          "ms": 0.004171417236328134,
+          "madMs": 0.0005202434082031138,
+          "betweenRoundsMadMs": 9.001635742195147e-05,
+          "roundMediansMs": [
+            0.005425435302734372,
+            0.004171417236328134,
+            0.004081400878906183
+          ],
+          "utf16UnitsPerSecond": 9589067152.44092
+        },
+        "count": {
+          "ms": 1.802744812499995,
+          "madMs": 0.025421875000006366,
+          "betweenRoundsMadMs": 0.04409893750001004,
+          "roundMediansMs": [
+            1.7383411250000051,
+            1.802744812499995,
+            1.846843750000005
+          ],
+          "utf16UnitsPerSecond": 22188387.242967095
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.729825500000004,
+          "madMs": 0.017380250000002206,
+          "betweenRoundsMadMs": 0.014739562499997305,
+          "roundMediansMs": [
+            2.729825500000004,
+            3.1437865000000045,
+            2.7150859375000067
+          ],
+          "utf16UnitsPerSecond": 14652951.260071363
+        }
+      },
+      "dictionaryHeapBytes": 4070.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1083840,
+      "checks": {
+        "search": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "frequencies": "d1fbcacc087815e5abdbb9119dbce31d766d7fd656d0cf22f664895773545492",
+        "first": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "longest": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "replaceFirst": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861",
+        "replaceLongest": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861"
+      }
+    },
+    {
+      "scenario": "ascii-prefix",
+      "variant": "v3-before",
+      "keywords": 2,
+      "utf16Length": 56007,
+      "count": 2,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.78806184375,
+          "madMs": 0.007275390624998934,
+          "betweenRoundsMadMs": 0.007860015625000383,
+          "roundMediansMs": [
+            0.78806184375,
+            0.8901998749999995,
+            0.7802018281249996
+          ],
+          "utf16UnitsPerSecond": 71069295.44195433
+        },
+        "build": {
+          "ms": 0.008212402343750008,
+          "madMs": 0.0005937092285156209,
+          "betweenRoundsMadMs": 2.8991699218772204e-05,
+          "roundMediansMs": [
+            0.008212402343750008,
+            0.008883778808593756,
+            0.008183410644531236
+          ],
+          "utf16UnitsPerSecond": 730602.2950234846
+        },
+        "search": {
+          "ms": 2.8372552500000054,
+          "madMs": 0.010122374999994577,
+          "betweenRoundsMadMs": 0.08436712499999288,
+          "roundMediansMs": [
+            2.747599000000008,
+            2.9216223749999983,
+            2.8372552500000054
+          ],
+          "utf16UnitsPerSecond": 19739852.450709146
+        },
+        "match": {
+          "ms": 0.7001243593749997,
+          "madMs": 0.005634109375002083,
+          "betweenRoundsMadMs": 0.02227215624999701,
+          "roundMediansMs": [
+            0.7001243593749997,
+            0.7608125000000001,
+            0.6778522031250027
+          ],
+          "utf16UnitsPerSecond": 79995788.24824406
+        },
+        "count": {
+          "ms": 0.7051425781249989,
+          "madMs": 0.0059667968750005684,
+          "betweenRoundsMadMs": 0.00546743749999834,
+          "roundMediansMs": [
+            0.7051425781249989,
+            0.8015149687500056,
+            0.6996751406250006
+          ],
+          "utf16UnitsPerSecond": 79426490.09924313
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.9782734375000075,
+          "madMs": 0.01909112499998855,
+          "betweenRoundsMadMs": 0.057843750000017735,
+          "roundMediansMs": [
+            2.9204296874999898,
+            3.141276000000005,
+            2.9782734375000075
+          ],
+          "utf16UnitsPerSecond": 18805190.717146788
+        }
+      },
+      "dictionaryHeapBytes": 3767.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 328,
+      "checks": {
+        "search": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "frequencies": "e61b9f584dbe27741cef6e9ee440831d7d94470c0871b0871541f0308916efea",
+        "first": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "longest": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "replaceFirst": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3",
+        "replaceLongest": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3"
+      }
+    },
+    {
+      "scenario": "ascii-prefix",
+      "variant": "v3",
+      "keywords": 2,
+      "utf16Length": 56007,
+      "count": 2,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.8666295625,
+          "madMs": 0.022132156249999646,
+          "betweenRoundsMadMs": 0.005286468749999607,
+          "roundMediansMs": [
+            0.9951119687499999,
+            0.8666295625,
+            0.8613430937500004
+          ],
+          "utf16UnitsPerSecond": 64626228.34886272
+        },
+        "build": {
+          "ms": 0.008690409179687497,
+          "madMs": 0.0007877705078124797,
+          "betweenRoundsMadMs": 0.00038062524414061993,
+          "roundMediansMs": [
+            0.018673004150390624,
+            0.008690409179687497,
+            0.008309783935546877
+          ],
+          "utf16UnitsPerSecond": 690416.2825870251
+        },
+        "search": {
+          "ms": 3.0340886250000096,
+          "madMs": 0.07078649999999698,
+          "betweenRoundsMadMs": 0.12984643750000657,
+          "roundMediansMs": [
+            4.543411500000019,
+            2.904242187500003,
+            3.0340886250000096
+          ],
+          "utf16UnitsPerSecond": 18459249.851345334
+        },
+        "match": {
+          "ms": 0.7679121093750005,
+          "madMs": 0.047562500000001506,
+          "betweenRoundsMadMs": 0.04987954687500107,
+          "roundMediansMs": [
+            0.9474726562499995,
+            0.7180325624999995,
+            0.7679121093750005
+          ],
+          "utf16UnitsPerSecond": 72934127.8985479
+        },
+        "count": {
+          "ms": 0.8576119843749979,
+          "madMs": 0.04521615624999953,
+          "betweenRoundsMadMs": 0.12716928124999782,
+          "roundMediansMs": [
+            1.0802929687500011,
+            0.730442703125,
+            0.8576119843749979
+          ],
+          "utf16UnitsPerSecond": 65305757.1727105
+        },
+        "iterate:leftmost-longest": {
+          "ms": 3.3116822500000467,
+          "madMs": 0.27703100000002223,
+          "betweenRoundsMadMs": 0.11192174999996496,
+          "roundMediansMs": [
+            3.4236040000000116,
+            2.9492603749999944,
+            3.3116822500000467
+          ],
+          "utf16UnitsPerSecond": 16911948.602556664
+        }
+      },
+      "dictionaryHeapBytes": 3959.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 328,
+      "checks": {
+        "search": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "frequencies": "e61b9f584dbe27741cef6e9ee440831d7d94470c0871b0871541f0308916efea",
+        "first": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "longest": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "replaceFirst": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3",
+        "replaceLongest": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3"
+      }
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.8836328125000001,
+          "madMs": 0.027016937499999116,
+          "betweenRoundsMadMs": 0.17900262500000075,
+          "roundMediansMs": [
+            1.8836328125000001,
+            2.062635437500001,
+            1.3438450624999998
+          ],
+          "utf16UnitsPerSecond": 53093150.287219256
+        },
+        "build": {
+          "ms": 0.006522476196289068,
+          "madMs": 6.43413085937572e-05,
+          "betweenRoundsMadMs": 3.25723876953149e-05,
+          "roundMediansMs": [
+            0.007168161865234363,
+            0.006489903808593753,
+            0.006522476196289068
+          ],
+          "utf16UnitsPerSecond": 919896.0363264602
+        },
+        "search": {
+          "ms": 5.1262031250000035,
+          "madMs": 0.030015750000004005,
+          "betweenRoundsMadMs": 0.12234899999999982,
+          "roundMediansMs": [
+            5.1262031250000035,
+            5.248552125000003,
+            4.574921875000001
+          ],
+          "utf16UnitsPerSecond": 19509176.19948974
+        },
+        "match": {
+          "ms": 0.00013734948730467766,
+          "madMs": 9.251831054712945e-06,
+          "betweenRoundsMadMs": 7.0495605468678946e-06,
+          "roundMediansMs": [
+            0.00013029992675780977,
+            0.00013734948730467766,
+            0.00014635217285155488
+          ],
+          "utf16UnitsPerSecond": 728127945451.7051
+        },
+        "count": {
+          "ms": 1.5056914062500013,
+          "madMs": 0.012585968750002507,
+          "betweenRoundsMadMs": 0.24186846875000612,
+          "roundMediansMs": [
+            1.5056914062500013,
+            1.7475598750000074,
+            1.246701843749996
+          ],
+          "utf16UnitsPerSecond": 66419984.58972072
+        },
+        "iterate:leftmost-longest": {
+          "ms": 5.340562500000004,
+          "madMs": 0.028234375000010914,
+          "betweenRoundsMadMs": 0.10973962500000312,
+          "roundMediansMs": [
+            5.340562500000004,
+            5.450302125000007,
+            4.929046875000012
+          ],
+          "utf16UnitsPerSecond": 18726117.333146073
+        }
+      },
+      "dictionaryHeapBytes": 3607.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.8455520625000013,
+          "madMs": 0.04177343749999807,
+          "betweenRoundsMadMs": 0.22001824999999897,
+          "roundMediansMs": [
+            1.8455520625000013,
+            1.507669281250001,
+            2.0655703125000002
+          ],
+          "utf16UnitsPerSecond": 54188663.66984428
+        },
+        "build": {
+          "ms": 0.006506607055664054,
+          "madMs": 4.094445800782026e-05,
+          "betweenRoundsMadMs": 3.613793945311805e-05,
+          "roundMediansMs": [
+            0.007142954589843764,
+            0.006506607055664054,
+            0.006470469116210936
+          ],
+          "utf16UnitsPerSecond": 922139.5957478256
+        },
+        "search": {
+          "ms": 5.374775999999997,
+          "madMs": 0.4473697499999787,
+          "betweenRoundsMadMs": 0.06447400000001835,
+          "roundMediansMs": [
+            6.901072999999997,
+            5.310301999999979,
+            5.374775999999997
+          ],
+          "utf16UnitsPerSecond": 18606914.967247017
+        },
+        "match": {
+          "ms": 0.00015976965332030468,
+          "madMs": 3.860986328124705e-05,
+          "betweenRoundsMadMs": 4.292846679701534e-06,
+          "roundMediansMs": [
+            0.00015976965332030468,
+            0.00016406250000000622,
+            0.00014567065429688109
+          ],
+          "utf16UnitsPerSecond": 625951161072.5281
+        },
+        "count": {
+          "ms": 1.7995208125000062,
+          "madMs": 0.007988281250000284,
+          "betweenRoundsMadMs": 0.44437368750000417,
+          "roundMediansMs": [
+            2.8847187500000047,
+            1.355147125000002,
+            1.7995208125000062
+          ],
+          "utf16UnitsPerSecond": 55574794.85945076
+        },
+        "iterate:leftmost-longest": {
+          "ms": 5.474479124999988,
+          "madMs": 0.038067624999968075,
+          "betweenRoundsMadMs": 0.4640051249999715,
+          "roundMediansMs": [
+            8.077145499999915,
+            5.010474000000016,
+            5.474479124999988
+          ],
+          "utf16UnitsPerSecond": 18268039.336071122
+        }
+      },
+      "dictionaryHeapBytes": 3799.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 32899,
+      "count": 4900,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.5499492187500001,
+          "madMs": 0.010647124999999313,
+          "betweenRoundsMadMs": 0.0004993593750004521,
+          "roundMediansMs": [
+            0.5494498593749997,
+            0.5499492187500001,
+            0.5632506406250002
+          ],
+          "utf16UnitsPerSecond": 59821886.96399525
+        },
+        "build": {
+          "ms": 0.07539721679687494,
+          "madMs": 0.0006066074218750162,
+          "betweenRoundsMadMs": 0.0002770996093751643,
+          "roundMediansMs": [
+            0.07567431640625011,
+            0.07481632421875006,
+            0.07539721679687494
+          ],
+          "utf16UnitsPerSecond": 17109384.865960564
+        },
+        "search": {
+          "ms": 2.0118671874999947,
+          "madMs": 0.01703650000000323,
+          "betweenRoundsMadMs": 0.00433075000000116,
+          "roundMediansMs": [
+            2.016197937499996,
+            1.9885989375000008,
+            2.0118671874999947
+          ],
+          "utf16UnitsPerSecond": 16352471.079803864
+        },
+        "match": {
+          "ms": 0.0002973581542968784,
+          "madMs": 0.00010060620117188779,
+          "betweenRoundsMadMs": 1.3091918945301595e-05,
+          "roundMediansMs": [
+            0.0002973581542968784,
+            0.0002842662353515768,
+            0.0003332366943359366
+          ],
+          "utf16UnitsPerSecond": 110637625115.04587
+        },
+        "count": {
+          "ms": 0.5094238281249979,
+          "madMs": 0.005593109374999017,
+          "betweenRoundsMadMs": 0.013694656249999326,
+          "roundMediansMs": [
+            0.5094238281249979,
+            0.49572917187499854,
+            0.5261725156249994
+          ],
+          "utf16UnitsPerSecond": 64580803.22055045
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.018440125000012,
+          "madMs": 0.010835937499990678,
+          "betweenRoundsMadMs": 0.003963499999983355,
+          "roundMediansMs": [
+            2.00357812499999,
+            2.018440125000012,
+            2.0224036249999955
+          ],
+          "utf16UnitsPerSecond": 16299220.171319077
+        }
+      },
+      "dictionaryHeapBytes": 14196.8,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 367000,
+      "checks": {
+        "search": "93064955d980a1edbc548be7a7068d159c341c4ab5d3e808fca69da6d631adca",
+        "frequencies": "584420f693440e23d163f4e074345a00a6b710c0dcda57f41e5d9fd2d069a3b2",
+        "first": "0f58040334188573e31242045bfb7750c08b608506db249f90d907112949d27f",
+        "longest": "7fcd5c49561e60549f1dab41f9090c6b8bbb63639fa1b5c645fa94291d597d83",
+        "replaceFirst": "d30418c5b9cbd55553b8a545481d43661a590893ce38fcaf80bb25df8299c5c1",
+        "replaceLongest": "6608677c8b31b1bcc132f4b06709d229eb70b0a289b8dc350134a03c0697867e"
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 32899,
+      "count": 4900,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.5660468750000005,
+          "madMs": 0.007016281249999423,
+          "betweenRoundsMadMs": 0.001630859375000071,
+          "roundMediansMs": [
+            0.5644160156250004,
+            0.5803691406249998,
+            0.5660468750000005
+          ],
+          "utf16UnitsPerSecond": 58120628.26068949
+        },
+        "build": {
+          "ms": 0.07719645117187501,
+          "madMs": 0.0007115058593751833,
+          "betweenRoundsMadMs": 0.000411050781250033,
+          "roundMediansMs": [
+            0.07678540039062498,
+            0.0787173671875,
+            0.07719645117187501
+          ],
+          "utf16UnitsPerSecond": 16710612.734358257
+        },
+        "search": {
+          "ms": 2.013416624999998,
+          "madMs": 0.019994749999995065,
+          "betweenRoundsMadMs": 0.004091187500002036,
+          "roundMediansMs": [
+            2.0175078125,
+            1.9986379999999997,
+            2.013416624999998
+          ],
+          "utf16UnitsPerSecond": 16339886.932243858
+        },
+        "match": {
+          "ms": 0.00030397033691403896,
+          "madMs": 0.0001415151367187839,
+          "betweenRoundsMadMs": 5.671142578100863e-06,
+          "roundMediansMs": [
+            0.0002982991943359381,
+            0.00045144140625000273,
+            0.00030397033691403896
+          ],
+          "utf16UnitsPerSecond": 108230955474.13116
+        },
+        "count": {
+          "ms": 0.5184414062499982,
+          "madMs": 0.003480468749998522,
+          "betweenRoundsMadMs": 0.00137824999999836,
+          "roundMediansMs": [
+            0.5170631562499999,
+            0.5298671875000025,
+            0.5184414062499982
+          ],
+          "utf16UnitsPerSecond": 63457508.60828375
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.0574426875,
+          "madMs": 0.01374475000001496,
+          "betweenRoundsMadMs": 0.010979125000005752,
+          "roundMediansMs": [
+            2.0854374999999976,
+            2.0464635624999943,
+            2.0574426875
+          ],
+          "utf16UnitsPerSecond": 15990238.853251167
+        }
+      },
+      "dictionaryHeapBytes": 14388.8,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 367000,
+      "checks": {
+        "search": "93064955d980a1edbc548be7a7068d159c341c4ab5d3e808fca69da6d631adca",
+        "frequencies": "584420f693440e23d163f4e074345a00a6b710c0dcda57f41e5d9fd2d069a3b2",
+        "first": "0f58040334188573e31242045bfb7750c08b608506db249f90d907112949d27f",
+        "longest": "7fcd5c49561e60549f1dab41f9090c6b8bbb63639fa1b5c645fa94291d597d83",
+        "replaceFirst": "d30418c5b9cbd55553b8a545481d43661a590893ce38fcaf80bb25df8299c5c1",
+        "replaceLongest": "6608677c8b31b1bcc132f4b06709d229eb70b0a289b8dc350134a03c0697867e"
+      }
+    },
+    {
+      "scenario": "sparse",
+      "variant": "v3-before",
+      "keywords": 500,
+      "utf16Length": 46800,
+      "count": 0,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.720123046875,
+          "madMs": 0.021139328124999857,
+          "betweenRoundsMadMs": 0.043816406250000384,
+          "roundMediansMs": [
+            0.7764440156250001,
+            0.720123046875,
+            0.6763066406249996
+          ],
+          "utf16UnitsPerSecond": 64988893.49964607
+        },
+        "build": {
+          "ms": 0.22539127343750032,
+          "madMs": 0.0022037734375004447,
+          "betweenRoundsMadMs": 0.007216476562499352,
+          "roundMediansMs": [
+            0.2057833632812498,
+            0.23260774999999967,
+            0.22539127343750032
+          ],
+          "utf16UnitsPerSecond": 23913969.32896169
+        },
+        "search": {
+          "ms": 2.397406250000003,
+          "madMs": 0.011992187500005969,
+          "betweenRoundsMadMs": 0.02699737499999344,
+          "roundMediansMs": [
+            2.397406250000003,
+            2.4244036249999965,
+            2.3578385624999996
+          ],
+          "utf16UnitsPerSecond": 19521097.01891364
+        },
+        "match": {
+          "ms": 0.6225527343750024,
+          "madMs": 0.005066406250001876,
+          "betweenRoundsMadMs": 0.032060546875001705,
+          "roundMediansMs": [
+            0.8283105468749987,
+            0.6225527343750024,
+            0.5904921875000007
+          ],
+          "utf16UnitsPerSecond": 75174354.58216049
+        },
+        "count": {
+          "ms": 0.6483613281249987,
+          "madMs": 0.017121093750002814,
+          "betweenRoundsMadMs": 0.048253265624996544,
+          "roundMediansMs": [
+            0.8927903437499936,
+            0.6483613281249987,
+            0.6001080625000021
+          ],
+          "utf16UnitsPerSecond": 72181973.18359701
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.4217916875000185,
+          "madMs": 0.009302062500012198,
+          "betweenRoundsMadMs": 0.009247374999972635,
+          "roundMediansMs": [
+            2.4217916875000185,
+            2.431039062499991,
+            2.3759375000000205
+          ],
+          "utf16UnitsPerSecond": 19324535.73177096
+        }
+      },
+      "dictionaryHeapBytes": 33083.2,
+      "dictionaryBufferBytes": 20356,
+      "resultHeapBytes": 48,
+      "checks": {
+        "search": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "frequencies": "542d11a225c70e17d74216db497ee5de94ab37263fe8e8649ddfa991f70f06c9",
+        "first": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "longest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "replaceFirst": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f",
+        "replaceLongest": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f"
+      }
+    },
+    {
+      "scenario": "sparse",
+      "variant": "v3",
+      "keywords": 500,
+      "utf16Length": 46800,
+      "count": 0,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.6987272187500002,
+          "madMs": 0.013238296874999556,
+          "betweenRoundsMadMs": 3.250000000676323e-06,
+          "roundMediansMs": [
+            0.6987239687499995,
+            0.7599153593750001,
+            0.6987272187500002
+          ],
+          "utf16UnitsPerSecond": 66978927.89080644
+        },
+        "build": {
+          "ms": 0.20801220703125,
+          "madMs": 0.002370605468749787,
+          "betweenRoundsMadMs": 0.00047167968750017053,
+          "roundMediansMs": [
+            0.3064098320312496,
+            0.20801220703125,
+            0.20754052734374984
+          ],
+          "utf16UnitsPerSecond": 25911940.827541202
+        },
+        "search": {
+          "ms": 2.472416687500001,
+          "madMs": 0.008752624999999625,
+          "betweenRoundsMadMs": 0.060718750000006594,
+          "roundMediansMs": [
+            2.730093750000009,
+            2.4116979374999943,
+            2.472416687500001
+          ],
+          "utf16UnitsPerSecond": 18928848.133330673
+        },
+        "match": {
+          "ms": 0.6305690156249995,
+          "madMs": 0.007869140625000881,
+          "betweenRoundsMadMs": 0.024474609375001677,
+          "roundMediansMs": [
+            0.6305690156249995,
+            0.6744023437499997,
+            0.6060944062499978
+          ],
+          "utf16UnitsPerSecond": 74218680.01809978
+        },
+        "count": {
+          "ms": 0.6860026093749951,
+          "madMs": 0.005276046875000162,
+          "betweenRoundsMadMs": 0.007213546875004084,
+          "roundMediansMs": [
+            0.6860026093749951,
+            0.6932161562499992,
+            0.6559348906250015
+          ],
+          "utf16UnitsPerSecond": 68221314.84694883
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.544562500000012,
+          "madMs": 0.018815125000003263,
+          "betweenRoundsMadMs": 0.010739562499992417,
+          "roundMediansMs": [
+            2.5553020625000045,
+            2.429374999999993,
+            2.544562500000012
+          ],
+          "utf16UnitsPerSecond": 18392159.752413146
+        }
+      },
+      "dictionaryHeapBytes": 33671.2,
+      "dictionaryBufferBytes": 20356,
+      "resultHeapBytes": 0,
+      "checks": {
+        "search": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "frequencies": "542d11a225c70e17d74216db497ee5de94ab37263fe8e8649ddfa991f70f06c9",
+        "first": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "longest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "replaceFirst": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f",
+        "replaceLongest": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.7650357968750008,
+          "madMs": 0.003929687500000334,
+          "betweenRoundsMadMs": 0.0009524531250004742,
+          "roundMediansMs": [
+            0.7756171875,
+            0.7640833437500003,
+            0.7650357968750008
+          ],
+          "utf16UnitsPerSecond": 44179632.03560057
+        },
+        "build": {
+          "ms": 0.16673779296875013,
+          "madMs": 0.0047467499999998,
+          "betweenRoundsMadMs": 0.005335449218749844,
+          "roundMediansMs": [
+            0.1614023437500003,
+            0.16673779296875013,
+            0.18123112500000005
+          ],
+          "utf16UnitsPerSecond": 2938745.8672422003
+        },
+        "search": {
+          "ms": 0.8739765625000011,
+          "madMs": 0.01962890625000213,
+          "betweenRoundsMadMs": 0.003562500000001023,
+          "roundMediansMs": [
+            0.8739765625000011,
+            0.8704140625000001,
+            0.9237447812500008
+          ],
+          "utf16UnitsPerSecond": 38672661.77403923
+        },
+        "match": {
+          "ms": 0.0037085368652343687,
+          "madMs": 0.0001883745117187141,
+          "betweenRoundsMadMs": 0.0001296389160156397,
+          "roundMediansMs": [
+            0.005074503662109375,
+            0.0037085368652343687,
+            0.003578897949218729
+          ],
+          "utf16UnitsPerSecond": 9113836865.651329
+        },
+        "count": {
+          "ms": 0.7441106562500011,
+          "madMs": 0.005906281250005918,
+          "betweenRoundsMadMs": 0.0029674062500006926,
+          "roundMediansMs": [
+            0.764792968750001,
+            0.7411432500000004,
+            0.7441106562500011
+          ],
+          "utf16UnitsPerSecond": 45422007.75665878
+        },
+        "iterate:leftmost-longest": {
+          "ms": 0.9166731875000025,
+          "madMs": 0.002990875000001836,
+          "betweenRoundsMadMs": 0.0025807499999999095,
+          "roundMediansMs": [
+            0.9291262812499994,
+            0.9166731875000025,
+            0.9140924375000026
+          ],
+          "utf16UnitsPerSecond": 36871374.07408887
+        }
+      },
+      "dictionaryHeapBytes": 12455.2,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 151616,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.8273320312500001,
+          "madMs": 0.015817687499998456,
+          "betweenRoundsMadMs": 0.0349101562499996,
+          "roundMediansMs": [
+            0.8273320312500001,
+            0.7909661562500006,
+            0.8622421874999997
+          ],
+          "utf16UnitsPerSecond": 40853005.47222104
+        },
+        "build": {
+          "ms": 0.16569384765624995,
+          "madMs": 0.0029956054687501066,
+          "betweenRoundsMadMs": 0.0005701484375000287,
+          "roundMediansMs": [
+            0.16569384765624995,
+            0.16512369921874992,
+            0.19191015624999963
+          ],
+          "utf16UnitsPerSecond": 2957261.2799514364
+        },
+        "search": {
+          "ms": 0.8887630000000009,
+          "madMs": 0.007179687499998977,
+          "betweenRoundsMadMs": 0.00019918750000158525,
+          "roundMediansMs": [
+            0.8885638124999993,
+            0.8887630000000009,
+            0.9064427187500002
+          ],
+          "utf16UnitsPerSecond": 38029260.89407409
+        },
+        "match": {
+          "ms": 0.004102579833984377,
+          "madMs": 0.0005252077636718755,
+          "betweenRoundsMadMs": 0.0001950070800780801,
+          "roundMediansMs": [
+            0.003799021484374998,
+            0.004297586914062457,
+            0.004102579833984377
+          ],
+          "utf16UnitsPerSecond": 8238474659.29135
+        },
+        "count": {
+          "ms": 0.7653229375000024,
+          "madMs": 0.004929718750005918,
+          "betweenRoundsMadMs": 0.005371062499996526,
+          "roundMediansMs": [
+            0.7579231718749995,
+            0.7706939999999989,
+            0.7653229375000024
+          ],
+          "utf16UnitsPerSecond": 44163056.33071385
+        },
+        "iterate:leftmost-longest": {
+          "ms": 0.9393359374999974,
+          "madMs": 0.007425781249999375,
+          "betweenRoundsMadMs": 0.002996093749999318,
+          "roundMediansMs": [
+            0.9186106874999993,
+            0.9423320312499968,
+            0.9393359374999974
+          ],
+          "utf16UnitsPerSecond": 35981802.30382178
+        }
+      },
+      "dictionaryHeapBytes": 8991.2,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 151616,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3-before",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.42450195312500005,
+          "madMs": 0.005344726562499513,
+          "betweenRoundsMadMs": 0.001110351562500167,
+          "roundMediansMs": [
+            0.4256123046875002,
+            0.4209104843749998,
+            0.42450195312500005
+          ],
+          "utf16UnitsPerSecond": 58631061.21603901
+        },
+        "build": {
+          "ms": 1.3173046875000054,
+          "madMs": 0.07520443750000183,
+          "betweenRoundsMadMs": 0.04576431250000468,
+          "roundMediansMs": [
+            1.2715403750000007,
+            1.3173046875000054,
+            1.456286468750001
+          ],
+          "utf16UnitsPerSecond": 18135515.820063386
+        },
+        "search": {
+          "ms": 1.4502786562499992,
+          "madMs": 0.010088562500001785,
+          "betweenRoundsMadMs": 0.0025520937499976526,
+          "roundMediansMs": [
+            1.3707734374999916,
+            1.4528307499999968,
+            1.4502786562499992
+          ],
+          "utf16UnitsPerSecond": 17161529.539678775
+        },
+        "match": {
+          "ms": 0.0003564300537109433,
+          "madMs": 2.6545166015606858e-05,
+          "betweenRoundsMadMs": 3.626586914065588e-06,
+          "roundMediansMs": [
+            0.00036151123046873623,
+            0.0003528034667968777,
+            0.0003564300537109433
+          ],
+          "utf16UnitsPerSecond": 69828567318.80533
+        },
+        "count": {
+          "ms": 0.34690853124999954,
+          "madMs": 0.0027037812500019243,
+          "betweenRoundsMadMs": 0.007088539062499066,
+          "roundMediansMs": [
+            0.35631607812499944,
+            0.3398199921875005,
+            0.34690853124999954
+          ],
+          "utf16UnitsPerSecond": 71745136.70885697
+        },
+        "iterate:leftmost-longest": {
+          "ms": 1.4474231875,
+          "madMs": 0.005480468749993861,
+          "betweenRoundsMadMs": 0.01892190625000012,
+          "roundMediansMs": [
+            1.42850128125,
+            1.4474231875,
+            1.5061979374999908
+          ],
+          "utf16UnitsPerSecond": 17195385.713689208
+        }
+      },
+      "dictionaryHeapBytes": 59692.8,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 74376,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.48131965625000017,
+          "madMs": 0.004167312500000131,
+          "betweenRoundsMadMs": 0.019483734374999617,
+          "roundMediansMs": [
+            0.5008033906249998,
+            0.48131965625000017,
+            0.430298828125
+          ],
+          "utf16UnitsPerSecond": 51709918.090427026
+        },
+        "build": {
+          "ms": 1.2383893125000007,
+          "madMs": 0.029660156249999403,
+          "betweenRoundsMadMs": 0.006467437499999562,
+          "roundMediansMs": [
+            1.2750208437499992,
+            1.2383893125000007,
+            1.2319218750000012
+          ],
+          "utf16UnitsPerSecond": 19291187.156462144
+        },
+        "search": {
+          "ms": 1.3899609374999997,
+          "madMs": 0.015638031250002626,
+          "betweenRoundsMadMs": 0.024621093749999545,
+          "roundMediansMs": [
+            1.3899609374999997,
+            1.4194179687500004,
+            1.3653398437500002
+          ],
+          "utf16UnitsPerSecond": 17906258.606638007
+        },
+        "match": {
+          "ms": 0.0005782827148437253,
+          "madMs": 6.7596435547045974e-06,
+          "betweenRoundsMadMs": 6.271484374986702e-06,
+          "roundMediansMs": [
+            0.0006043903808593543,
+            0.0005782827148437253,
+            0.0005720112304687386
+          ],
+          "utf16UnitsPerSecond": 43039501892.6443
+        },
+        "count": {
+          "ms": 0.3534707031250015,
+          "madMs": 0.0029843671874978384,
+          "betweenRoundsMadMs": 0.004475914062497921,
+          "roundMediansMs": [
+            0.3579466171874994,
+            0.3534707031250015,
+            0.34160090624999917
+          ],
+          "utf16UnitsPerSecond": 70413190.6264329
+        },
+        "iterate:leftmost-longest": {
+          "ms": 1.4613046874999895,
+          "madMs": 0.005575500000006173,
+          "betweenRoundsMadMs": 0.01586199999999849,
+          "roundMediansMs": [
+            1.4613046874999895,
+            1.5297968750000024,
+            1.445442687499991
+          ],
+          "utf16UnitsPerSecond": 17032040.07548917
+        }
+      },
+      "dictionaryHeapBytes": 59637.6,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 74376,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "dense-suffix",
+      "variant": "v3-before",
+      "keywords": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.015882527832031257,
+          "madMs": 0.00011881494140624643,
+          "betweenRoundsMadMs": 6.561279296876665e-05,
+          "roundMediansMs": [
+            0.01581691503906249,
+            0.015882527832031257,
+            0.0160876669921875
+          ],
+          "utf16UnitsPerSecond": 62962269.64471231
+        },
+        "build": {
+          "ms": 0.07563997265625011,
+          "madMs": 0.0007040195312498776,
+          "betweenRoundsMadMs": 1.9939453124950823e-05,
+          "roundMediansMs": [
+            0.07565991210937506,
+            0.07563997265625011,
+            0.07500366210937515
+          ],
+          "utf16UnitsPerSecond": 61554755.197485864
+        },
+        "search": {
+          "ms": 2.375533875000002,
+          "madMs": 0.04253381249999677,
+          "betweenRoundsMadMs": 0.021372437500005503,
+          "roundMediansMs": [
+            2.3541614374999966,
+            2.54729425,
+            2.375533875000002
+          ],
+          "utf16UnitsPerSecond": 420958.00465063844
+        },
+        "match": {
+          "ms": 0.0001025238037109244,
+          "madMs": 5.9102416992196094e-05,
+          "betweenRoundsMadMs": 2.539062501916156e-08,
+          "roundMediansMs": [
+            9.987390136717567e-05,
+            0.0001025238037109244,
+            0.00010254919433594356
+          ],
+          "utf16UnitsPerSecond": 9753832415.539272
+        },
+        "count": {
+          "ms": 0.011255035400390634,
+          "madMs": 3.8594482421883125e-05,
+          "betweenRoundsMadMs": 5.198242187476332e-06,
+          "roundMediansMs": [
+            0.011255035400390634,
+            0.011249837158203158,
+            0.01128295898437498
+          ],
+          "utf16UnitsPerSecond": 88849120.8090996
+        },
+        "iterate:leftmost-longest": {
+          "ms": 0.06162158203125001,
+          "madMs": 0.0002429199218751954,
+          "betweenRoundsMadMs": 8.789062500014211e-05,
+          "roundMediansMs": [
+            0.0622585449218751,
+            0.06162158203125001,
+            0.06153369140624987
+          ],
+          "utf16UnitsPerSecond": 16228080.601580014
+        }
+      },
+      "dictionaryHeapBytes": 8980.8,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6782792,
+      "checks": {
+        "search": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+        "frequencies": "5aa956efc4b9519a4c8d311a686757f433b11436266510328032f93b1d529b59",
+        "first": "60871d4ca1167dc3fa76a1e8cc5e16f7f9693ec7f9c4577d7c02b6dbae9461cd",
+        "longest": "e217d123343140c3386b4181d50945a0d5249f73be9a2ad9a95857e3cde2607e",
+        "replaceFirst": "3685cba09912705fc3989b10ad31b8b1c4efe2f0a8a0e6bb1472cab9c5d601d1",
+        "replaceLongest": "0be67507e8a5618ea566654b99a00b9a174421c4f313fdb9690187c70f65dc3b"
+      }
+    },
+    {
+      "scenario": "dense-suffix",
+      "variant": "v3",
+      "keywords": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.016552774902343748,
+          "madMs": 0.00014206982421874348,
+          "betweenRoundsMadMs": 1.900244140624896e-05,
+          "roundMediansMs": [
+            0.016445597656249977,
+            0.016571777343749997,
+            0.016552774902343748
+          ],
+          "utf16UnitsPerSecond": 60412831.43761035
+        },
+        "build": {
+          "ms": 0.07585237499999997,
+          "madMs": 0.0005371894531250865,
+          "betweenRoundsMadMs": 3.9226562500105366e-05,
+          "roundMediansMs": [
+            0.07589160156250008,
+            0.07387809374999987,
+            0.07585237499999997
+          ],
+          "utf16UnitsPerSecond": 61382389.1473405
+        },
+        "search": {
+          "ms": 2.371122375000006,
+          "madMs": 0.025882812500000796,
+          "betweenRoundsMadMs": 0.045286437500003274,
+          "roundMediansMs": [
+            2.371122375000006,
+            2.3258359375000026,
+            2.4297630000000012
+          ],
+          "utf16UnitsPerSecond": 421741.201780021
+        },
+        "match": {
+          "ms": 9.138488769530606e-05,
+          "madMs": 5.5140136718756505e-05,
+          "betweenRoundsMadMs": 1.322509765616653e-06,
+          "roundMediansMs": [
+            9.138488769530606e-05,
+            9.420776367188854e-05,
+            9.006237792968941e-05
+          ],
+          "utf16UnitsPerSecond": 10942728335.28212
+        },
+        "count": {
+          "ms": 0.011299997802734385,
+          "madMs": 3.574609375001092e-05,
+          "betweenRoundsMadMs": 5.369067382815507e-05,
+          "roundMediansMs": [
+            0.011226735595703086,
+            0.01135368847656254,
+            0.011299997802734385
+          ],
+          "utf16UnitsPerSecond": 88495592.42905508
+        },
+        "iterate:leftmost-longest": {
+          "ms": 0.06299698828125022,
+          "madMs": 0.0001778144531252579,
+          "betweenRoundsMadMs": 0.0004961757812500522,
+          "roundMediansMs": [
+            0.06413883593749992,
+            0.06250081250000017,
+            0.06299698828125022
+          ],
+          "utf16UnitsPerSecond": 15873774.719761165
+        }
+      },
+      "dictionaryHeapBytes": 9005.6,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6783384,
+      "checks": {
+        "search": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+        "frequencies": "5aa956efc4b9519a4c8d311a686757f433b11436266510328032f93b1d529b59",
+        "first": "60871d4ca1167dc3fa76a1e8cc5e16f7f9693ec7f9c4577d7c02b6dbae9461cd",
+        "longest": "e217d123343140c3386b4181d50945a0d5249f73be9a2ad9a95857e3cde2607e",
+        "replaceFirst": "3685cba09912705fc3989b10ad31b8b1c4efe2f0a8a0e6bb1472cab9c5d601d1",
+        "replaceLongest": "0be67507e8a5618ea566654b99a00b9a174421c4f313fdb9690187c70f65dc3b"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.3108450468749999,
+          "madMs": 0.0021139296875001268,
+          "betweenRoundsMadMs": 0.0038050078125000386,
+          "roundMediansMs": [
+            0.33729264843749984,
+            0.3108450468749999,
+            0.3070400390624999
+          ],
+          "utf16UnitsPerSecond": 57906665.0119033
+        },
+        "build": {
+          "ms": 0.03650895214843752,
+          "madMs": 0.00035477734375000125,
+          "betweenRoundsMadMs": 1.8555664062613886e-05,
+          "roundMediansMs": [
+            0.03650895214843752,
+            0.03687182617187501,
+            0.03649039648437491
+          ],
+          "utf16UnitsPerSecond": 27390542.35066007
+        },
+        "search": {
+          "ms": 2.3571848750000015,
+          "madMs": 0.03227087500000181,
+          "betweenRoundsMadMs": 0.007921874999993861,
+          "roundMediansMs": [
+            2.3492630000000077,
+            2.3675078125000013,
+            2.3571848750000015
+          ],
+          "utf16UnitsPerSecond": 7636227.514823158
+        },
+        "match": {
+          "ms": 0.00029137670898438106,
+          "madMs": 3.257751464844083e-05,
+          "betweenRoundsMadMs": 1.624548339843046e-05,
+          "roundMediansMs": [
+            0.00029137670898438106,
+            0.0003076221923828115,
+            0.00027231347656248017
+          ],
+          "utf16UnitsPerSecond": 61775699446.742226
+        },
+        "count": {
+          "ms": 0.29345865624999945,
+          "madMs": 0.003278648437499143,
+          "betweenRoundsMadMs": 0.0025494765624998195,
+          "roundMediansMs": [
+            0.31943880468749875,
+            0.29345865624999945,
+            0.29090917968749963
+          ],
+          "utf16UnitsPerSecond": 61337430.73050016
+        },
+        "iterate:leftmost-longest": {
+          "ms": 1.1365507812500013,
+          "madMs": 0.007115906250000137,
+          "betweenRoundsMadMs": 0.007548187499999415,
+          "roundMediansMs": [
+            1.1365507812500013,
+            1.1222356874999946,
+            1.1440989687500007
+          ],
+          "utf16UnitsPerSecond": 15837391.779541288
+        }
+      },
+      "dictionaryHeapBytes": 15224.8,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4460944,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 0.31428710937499993,
+          "madMs": 0.00409667968750016,
+          "betweenRoundsMadMs": 0.008193031249999816,
+          "roundMediansMs": [
+            0.31428710937499993,
+            0.36481510937499984,
+            0.3060940781250001
+          ],
+          "utf16UnitsPerSecond": 57272473.0447752
+        },
+        "build": {
+          "ms": 0.03679134179687499,
+          "madMs": 0.0002832841796874819,
+          "betweenRoundsMadMs": 0.0003063955078124736,
+          "roundMediansMs": [
+            0.036203491210937466,
+            0.03679134179687499,
+            0.03709773730468746
+          ],
+          "utf16UnitsPerSecond": 27180307.95182737
+        },
+        "search": {
+          "ms": 2.3134504999999876,
+          "madMs": 0.029187437499992086,
+          "betweenRoundsMadMs": 0.00867706249999145,
+          "roundMediansMs": [
+            2.3134504999999876,
+            2.304773437499996,
+            2.4300365
+          ],
+          "utf16UnitsPerSecond": 7780585.7527533425
+        },
+        "match": {
+          "ms": 0.0002750753173828141,
+          "madMs": 3.0309082031249046e-05,
+          "betweenRoundsMadMs": 1.1143920898445958e-05,
+          "roundMediansMs": [
+            0.00028621923828126006,
+            0.0002750753173828141,
+            0.0002600452880859305
+          ],
+          "utf16UnitsPerSecond": 65436623580.98795
+        },
+        "count": {
+          "ms": 0.28980827343749915,
+          "madMs": 0.0037763593750010926,
+          "betweenRoundsMadMs": 0.0020497968750010642,
+          "roundMediansMs": [
+            0.28980827343749915,
+            0.2918580703125002,
+            0.2870455781249994
+          ],
+          "utf16UnitsPerSecond": 62110028.076482534
+        },
+        "iterate:leftmost-longest": {
+          "ms": 1.1301796875000036,
+          "madMs": 0.004990874999997175,
+          "betweenRoundsMadMs": 0.011927062499999863,
+          "roundMediansMs": [
+            1.142286468750001,
+            1.1182526250000038,
+            1.1301796875000036
+          ],
+          "utf16UnitsPerSecond": 15926670.952489529
+        }
+      },
+      "dictionaryHeapBytes": 15314.4,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4461464,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "early-hit",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 2.0032369375000005,
+          "madMs": 0.010023499999997298,
+          "betweenRoundsMadMs": 0.12130981249999984,
+          "roundMediansMs": [
+            2.1256353750000017,
+            1.8819271250000007,
+            2.0032369375000005
+          ],
+          "utf16UnitsPerSecond": 69889885.40453166
+        },
+        "build": {
+          "ms": 0.006401830078125004,
+          "madMs": 0.00010330200195311778,
+          "betweenRoundsMadMs": 3.962280273439589e-06,
+          "roundMediansMs": [
+            0.006397867797851564,
+            0.006401830078125004,
+            0.006814463134765608
+          ],
+          "utf16UnitsPerSecond": 937231.9987845267
+        },
+        "search": {
+          "ms": 6.937624999999997,
+          "madMs": 0.03514599999999746,
+          "betweenRoundsMadMs": 0.19227075000000582,
+          "roundMediansMs": [
+            6.937624999999997,
+            6.745354249999991,
+            7.278302249999996
+          ],
+          "utf16UnitsPerSecond": 20180681.42916345
+        },
+        "match": {
+          "ms": 0.00011666357421877271,
+          "madMs": 4.486083984373002e-06,
+          "betweenRoundsMadMs": 2.5686035156069487e-06,
+          "roundMediansMs": [
+            0.00011666357421877271,
+            9.983825683593239e-05,
+            0.00011923217773437966
+          ],
+          "utf16UnitsPerSecond": 1200083238813.2952
+        },
+        "count": {
+          "ms": 1.7519062499999976,
+          "madMs": 0.032924468750003655,
+          "betweenRoundsMadMs": 0.09755731250000821,
+          "roundMediansMs": [
+            1.8494635625000058,
+            1.5954440000000005,
+            1.7519062499999976
+          ],
+          "utf16UnitsPerSecond": 79916376.80383879
+        },
+        "iterate:leftmost-longest": {
+          "ms": 7.3508645,
+          "madMs": 0.03832275000007712,
+          "betweenRoundsMadMs": 0.10016650000000027,
+          "roundMediansMs": [
+            7.3508645,
+            7.250698,
+            7.671229000000039
+          ],
+          "utf16UnitsPerSecond": 19046195.17881196
+        }
+      },
+      "dictionaryHeapBytes": 3607.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a",
+        "replaceLongest": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a"
+      }
+    },
+    {
+      "scenario": "early-hit",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 2.057624999999998,
+          "madMs": 0.01832812500000003,
+          "betweenRoundsMadMs": 0.00762237499999685,
+          "roundMediansMs": [
+            2.18226825,
+            2.050002625000001,
+            2.057624999999998
+          ],
+          "utf16UnitsPerSecond": 68042524.75548273
+        },
+        "build": {
+          "ms": 0.0067903442382812595,
+          "madMs": 0.0002656555175781089,
+          "betweenRoundsMadMs": 0.00013514208984374831,
+          "roundMediansMs": [
+            0.006925486328125008,
+            0.0067903442382812595,
+            0.0065148977050781265
+          ],
+          "utf16UnitsPerSecond": 883607.6330525905
+        },
+        "search": {
+          "ms": 7.245875000000012,
+          "madMs": 0.04974999999998886,
+          "betweenRoundsMadMs": 0.13710424999999304,
+          "roundMediansMs": [
+            7.036218749999989,
+            7.382979250000005,
+            7.245875000000012
+          ],
+          "utf16UnitsPerSecond": 19322166.059999622
+        },
+        "match": {
+          "ms": 0.00011707556152343312,
+          "madMs": 5.650756835950954e-06,
+          "betweenRoundsMadMs": 1.0168457030557132e-07,
+          "roundMediansMs": [
+            0.00011707556152343312,
+            0.00011697387695312755,
+            0.00011996972656250215
+          ],
+          "utf16UnitsPerSecond": 1195860162259.2026
+        },
+        "count": {
+          "ms": 1.7972265625000006,
+          "madMs": 0.019533812500014847,
+          "betweenRoundsMadMs": 0.07021874999999511,
+          "roundMediansMs": [
+            1.9309869374999948,
+            1.7972265625000006,
+            1.7270078125000055
+          ],
+          "utf16UnitsPerSecond": 77901141.0810928
+        },
+        "iterate:leftmost-longest": {
+          "ms": 7.437823000000037,
+          "madMs": 0.030510499999934382,
+          "betweenRoundsMadMs": 0.1661980000000085,
+          "roundMediansMs": [
+            7.271625000000029,
+            7.70772925,
+            7.437823000000037
+          ],
+          "utf16UnitsPerSecond": 18823518.6559292
+        }
+      },
+      "dictionaryHeapBytes": 3799.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a",
+        "replaceLongest": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a"
+      }
+    },
+    {
+      "scenario": "late-hit",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 2.001474,
+          "madMs": 0.0306406250000002,
+          "betweenRoundsMadMs": 0.08497918749999922,
+          "roundMediansMs": [
+            1.9164948125000008,
+            2.001474,
+            2.109666625000001
+          ],
+          "utf16UnitsPerSecond": 69951445.78445685
+        },
+        "build": {
+          "ms": 0.00638906359863281,
+          "madMs": 4.274987792968199e-05,
+          "betweenRoundsMadMs": 6.449902343749758e-05,
+          "roundMediansMs": [
+            0.006324564575195313,
+            0.006460042236328123,
+            0.00638906359863281
+          ],
+          "utf16UnitsPerSecond": 939104.7541433042
+        },
+        "search": {
+          "ms": 7.115385250000003,
+          "madMs": 0.04656249999999318,
+          "betweenRoundsMadMs": 0.20765599999998585,
+          "roundMediansMs": [
+            6.907729250000017,
+            7.443250000000006,
+            7.115385250000003
+          ],
+          "utf16UnitsPerSecond": 19676517.1639863
+        },
+        "match": {
+          "ms": 1.727216187499991,
+          "madMs": 0.013033843750001495,
+          "betweenRoundsMadMs": 0.11209378124998892,
+          "roundMediansMs": [
+            1.615122406250002,
+            1.727216187499991,
+            1.9066666874999925
+          ],
+          "utf16UnitsPerSecond": 81058758.60429934
+        },
+        "count": {
+          "ms": 1.7345859375000003,
+          "madMs": 0.017131500000004962,
+          "betweenRoundsMadMs": 0.0902460937499967,
+          "roundMediansMs": [
+            1.6443398437500036,
+            1.7345859375000003,
+            1.945182250000002
+          ],
+          "utf16UnitsPerSecond": 80714363.56839482
+        },
+        "iterate:leftmost-longest": {
+          "ms": 7.336520749999977,
+          "madMs": 0.0620729999999412,
+          "betweenRoundsMadMs": 0.04935424999996485,
+          "roundMediansMs": [
+            7.287166500000012,
+            7.492385249999984,
+            7.336520749999977
+          ],
+          "utf16UnitsPerSecond": 19083432.702074815
+        }
+      },
+      "dictionaryHeapBytes": 3607.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "checks": {
+        "search": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "longest": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "replaceFirst": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75",
+        "replaceLongest": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75"
+      }
+    },
+    {
+      "scenario": "late-hit",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 2.914127624999999,
+          "madMs": 0.11630212499999715,
+          "betweenRoundsMadMs": 0.03152081250000194,
+          "roundMediansMs": [
+            2.1196927500000005,
+            2.945648437500001,
+            2.914127624999999
+          ],
+          "utf16UnitsPerSecond": 48043880.71370074
+        },
+        "build": {
+          "ms": 0.006931081054687482,
+          "madMs": 0.0004531555175781299,
+          "betweenRoundsMadMs": 0.0003130493164062442,
+          "roundMediansMs": [
+            0.006618031738281238,
+            0.008128417968749996,
+            0.006931081054687482
+          ],
+          "utf16UnitsPerSecond": 865665.8250940822
+        },
+        "search": {
+          "ms": 7.363427250000001,
+          "madMs": 0.05964574999995875,
+          "betweenRoundsMadMs": 0.07165624999996112,
+          "roundMediansMs": [
+            7.363427250000001,
+            7.560562499999975,
+            7.29177100000004
+          ],
+          "utf16UnitsPerSecond": 19013700.447709315
+        },
+        "match": {
+          "ms": 1.8073073124999937,
+          "madMs": 0.02115099999998904,
+          "betweenRoundsMadMs": 0.024572937499989678,
+          "roundMediansMs": [
+            1.8073073124999937,
+            1.782734375000004,
+            1.9789010625000003
+          ],
+          "utf16UnitsPerSecond": 77466626.19670029
+        },
+        "count": {
+          "ms": 1.8435442499999937,
+          "madMs": 0.017257875000012746,
+          "betweenRoundsMadMs": 0.04455987499999026,
+          "roundMediansMs": [
+            1.7989843750000034,
+            1.8435442499999937,
+            1.9385495000000077
+          ],
+          "utf16UnitsPerSecond": 75943932.45510678
+        },
+        "iterate:leftmost-longest": {
+          "ms": 7.596822750000001,
+          "madMs": 0.07158300000003237,
+          "betweenRoundsMadMs": 0.28981249999998226,
+          "roundMediansMs": [
+            7.596822750000001,
+            11.262124999999969,
+            7.307010250000019
+          ],
+          "utf16UnitsPerSecond": 18429546.747026574
+        }
+      },
+      "dictionaryHeapBytes": 3799.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "checks": {
+        "search": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "longest": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "replaceFirst": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75",
+        "replaceLongest": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75"
+      }
+    },
+    {
+      "scenario": "large-dictionary",
+      "variant": "v3-before",
+      "keywords": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.091134125,
+          "madMs": 0.014304718749999168,
+          "betweenRoundsMadMs": 0.009424468749999804,
+          "roundMediansMs": [
+            1.0817096562500002,
+            1.091134125,
+            1.1039726562499999
+          ],
+          "utf16UnitsPerSecond": 30867882.534605905
+        },
+        "build": {
+          "ms": 15.980353999999977,
+          "madMs": 0.7382084999999847,
+          "betweenRoundsMadMs": 0.4888539999999466,
+          "roundMediansMs": [
+            15.49150000000003,
+            17.2639585,
+            15.980353999999977
+          ],
+          "utf16UnitsPerSecond": 9942833.556753512
+        },
+        "search": {
+          "ms": 1.8750260624999981,
+          "madMs": 0.022781249999994202,
+          "betweenRoundsMadMs": 0.010624999999997442,
+          "roundMediansMs": [
+            1.8644010625000007,
+            1.8750260624999981,
+            2.025809875
+          ],
+          "utf16UnitsPerSecond": 17962950.31499064
+        },
+        "match": {
+          "ms": 0.0002257537841796886,
+          "madMs": 5.926000976562429e-05,
+          "betweenRoundsMadMs": 5.447387695312056e-06,
+          "roundMediansMs": [
+            0.00022030639648437655,
+            0.00023769641113280393,
+            0.0002257537841796886
+          ],
+          "utf16UnitsPerSecond": 149193512402.83807
+        },
+        "count": {
+          "ms": 0.5112532499999993,
+          "madMs": 0.004631515625000304,
+          "betweenRoundsMadMs": 0.0013548124999971378,
+          "roundMediansMs": [
+            0.5112532499999993,
+            0.5098984375000022,
+            0.5356393125000025
+          ],
+          "utf16UnitsPerSecond": 65879287.80892844
+        },
+        "iterate:leftmost-longest": {
+          "ms": 1.9321927499999987,
+          "madMs": 0.01980987499999287,
+          "betweenRoundsMadMs": 0.019528687499999364,
+          "roundMediansMs": [
+            1.9126640624999993,
+            1.9321927499999987,
+            2.074005187499992
+          ],
+          "utf16UnitsPerSecond": 17431490.724721964
+        }
+      },
+      "dictionaryHeapBytes": 497188,
+      "dictionaryBufferBytes": 1680360,
+      "resultHeapBytes": 151616,
+      "checks": {
+        "search": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "frequencies": "9969647aad3672ba90f3a4255ce8c3252d24f891f67de877cf2b6bed6a2833fb",
+        "first": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "longest": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "replaceFirst": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58",
+        "replaceLongest": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58"
+      }
+    },
+    {
+      "scenario": "large-dictionary",
+      "variant": "v3",
+      "keywords": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.1241796874999999,
+          "madMs": 0.01347656249999929,
+          "betweenRoundsMadMs": 0.012459624999999974,
+          "roundMediansMs": [
+            1.1438567812499993,
+            1.1241796874999999,
+            1.1117200624999999
+          ],
+          "utf16UnitsPerSecond": 29960512.873970605
+        },
+        "build": {
+          "ms": 15.339270999999997,
+          "madMs": 0.32477099999996994,
+          "betweenRoundsMadMs": 0.023791499999958887,
+          "roundMediansMs": [
+            15.363062499999955,
+            14.251083499999993,
+            15.339270999999997
+          ],
+          "utf16UnitsPerSecond": 10358380.134231936
+        },
+        "search": {
+          "ms": 2.0161796874999993,
+          "madMs": 0.023898375000001693,
+          "betweenRoundsMadMs": 0.029580750000000933,
+          "roundMediansMs": [
+            2.0161796874999993,
+            2.0457604375000003,
+            1.9603229374999955
+          ],
+          "utf16UnitsPerSecond": 16705356.27792352
+        },
+        "match": {
+          "ms": 0.000482625366210937,
+          "madMs": 0.00015919995117187613,
+          "betweenRoundsMadMs": 6.276489257814322e-06,
+          "roundMediansMs": [
+            0.0004929199218750013,
+            0.000482625366210937,
+            0.00047634887695312267
+          ],
+          "utf16UnitsPerSecond": 69787048833.39955
+        },
+        "count": {
+          "ms": 0.525578781250001,
+          "madMs": 0.005751296874997536,
+          "betweenRoundsMadMs": 0.0014381562500034306,
+          "roundMediansMs": [
+            0.5444642031249991,
+            0.5241406249999976,
+            0.525578781250001
+          ],
+          "utf16UnitsPerSecond": 64083637.318644
+        },
+        "iterate:leftmost-longest": {
+          "ms": 2.113166687500012,
+          "madMs": 0.02050781250001421,
+          "betweenRoundsMadMs": 0.027265562499991347,
+          "roundMediansMs": [
+            2.113166687500012,
+            2.1404322500000035,
+            2.066744749999998
+          ],
+          "utf16UnitsPerSecond": 15938638.536767017
+        }
+      },
+      "dictionaryHeapBytes": 497397.6,
+      "dictionaryBufferBytes": 1680360,
+      "resultHeapBytes": 151616,
+      "checks": {
+        "search": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "frequencies": "9969647aad3672ba90f3a4255ce8c3252d24f891f67de877cf2b6bed6a2833fb",
+        "first": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "longest": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "replaceFirst": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58",
+        "replaceLongest": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58"
+      }
+    },
+    {
+      "scenario": "long-text",
+      "variant": "v3-before",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 15.619396000000009,
+          "madMs": 0.2183755000000076,
+          "betweenRoundsMadMs": 0.2956875000000281,
+          "roundMediansMs": [
+            15.32370849999998,
+            15.619396000000009,
+            16.3376875
+          ],
+          "utf16UnitsPerSecond": 33291940.354159642
+        },
+        "build": {
+          "ms": 0.011461344482421879,
+          "madMs": 0.00011956787109376754,
+          "betweenRoundsMadMs": 0.00021889233398438013,
+          "roundMediansMs": [
+            0.011461344482421879,
+            0.011242452148437498,
+            0.012002502441406243
+          ],
+          "utf16UnitsPerSecond": 1919495.5734679403
+        },
+        "search": {
+          "ms": 20.738958000000025,
+          "madMs": 0.40200000000004366,
+          "betweenRoundsMadMs": 0.1426249999999527,
+          "roundMediansMs": [
+            20.738958000000025,
+            20.596333000000072,
+            20.911082999999962
+          ],
+          "utf16UnitsPerSecond": 25073583.73549912
+        },
+        "match": {
+          "ms": 0.029351722656250523,
+          "madMs": 0.001545738281250486,
+          "betweenRoundsMadMs": 0.0006092070312506692,
+          "roundMediansMs": [
+            0.032177898437500296,
+            0.029351722656250523,
+            0.028742515624999854
+          ],
+          "utf16UnitsPerSecond": 17716166307.849216
+        },
+        "count": {
+          "ms": 15.112312499999916,
+          "madMs": 0.06066699999996672,
+          "betweenRoundsMadMs": 0.11450000000002092,
+          "roundMediansMs": [
+            14.840312499999982,
+            15.226812499999937,
+            15.112312499999916
+          ],
+          "utf16UnitsPerSecond": 34409029.061568365
+        },
+        "iterate:leftmost-longest": {
+          "ms": 21.785916499999985,
+          "madMs": 0.0897504999999228,
+          "betweenRoundsMadMs": 0.013500000000021828,
+          "roundMediansMs": [
+            21.799416500000007,
+            21.743354499999896,
+            21.785916499999985
+          ],
+          "utf16UnitsPerSecond": 23868630.91116687
+        }
+      },
+      "dictionaryHeapBytes": 4612,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 9082064,
+      "checks": {
+        "search": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "frequencies": "a2f7bb6705f6060d24f38fd3a078f21481103e5c2832e501588146877d57f5ec",
+        "first": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "longest": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "replaceFirst": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7",
+        "replaceLongest": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7"
+      }
+    },
+    {
+      "scenario": "long-text",
+      "variant": "v3",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {
+        "countByPattern": {
+          "ms": 15.536520499999995,
+          "madMs": 0.13172899999999998,
+          "betweenRoundsMadMs": 0.009228499999991868,
+          "roundMediansMs": [
+            15.536520499999995,
+            15.527292000000003,
+            15.772187500000001
+          ],
+          "utf16UnitsPerSecond": 33469527.491692893
+        },
+        "build": {
+          "ms": 0.011333658935546886,
+          "madMs": 0.00010105371093747928,
+          "betweenRoundsMadMs": 0.0001805319824218915,
+          "roundMediansMs": [
+            0.011153126953124995,
+            0.011333658935546886,
+            0.012360819580078133
+          ],
+          "utf16UnitsPerSecond": 1941120.702953148
+        },
+        "search": {
+          "ms": 21.870708000000036,
+          "madMs": 0.7968759999999975,
+          "betweenRoundsMadMs": 1.3722080000000005,
+          "roundMediansMs": [
+            20.498500000000035,
+            21.870708000000036,
+            27.55541699999992
+          ],
+          "utf16UnitsPerSecond": 23776093.5768517
+        },
+        "match": {
+          "ms": 0.05017155078125057,
+          "madMs": 0.013224121093750263,
+          "betweenRoundsMadMs": 0.005830894531250408,
+          "roundMediansMs": [
+            0.044340656250000166,
+            0.05017155078125057,
+            0.07328678124999932
+          ],
+          "utf16UnitsPerSecond": 10364439446.315207
+        },
+        "count": {
+          "ms": 15.63889549999999,
+          "madMs": 0.5277500000000828,
+          "betweenRoundsMadMs": 0.5601244999999153,
+          "roundMediansMs": [
+            15.078771000000074,
+            15.63889549999999,
+            16.22616650000009
+          ],
+          "utf16UnitsPerSecond": 33250429.993601553
+        },
+        "iterate:leftmost-longest": {
+          "ms": 23.1087500000001,
+          "madMs": 0.8837499999999636,
+          "betweenRoundsMadMs": 1.3325835000000552,
+          "roundMediansMs": [
+            21.776166500000045,
+            23.1087500000001,
+            25.28058299999998
+          ],
+          "utf16UnitsPerSecond": 22502298.912749402
+        }
+      },
+      "dictionaryHeapBytes": 4804,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 9084960,
+      "checks": {
+        "search": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "frequencies": "a2f7bb6705f6060d24f38fd3a078f21481103e5c2832e501588146877d57f5ec",
+        "first": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "longest": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "replaceFirst": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7",
+        "replaceLongest": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": [
+    {
+      "scenario": "ascii-tiny",
+      "operation": "countByPattern",
+      "percent": 30.950160817041784,
+      "beforeMadMs": 3.3574462890624025e-05,
+      "afterMadMs": 0.00018123876953125059
+    },
+    {
+      "scenario": "ascii-prefix",
+      "operation": "countByPattern",
+      "percent": 9.969740239691681,
+      "beforeMadMs": 0.007275390624998934,
+      "afterMadMs": 0.022132156249999646
+    },
+    {
+      "scenario": "ascii-prefix",
+      "operation": "build",
+      "percent": 5.820548189547403,
+      "beforeMadMs": 0.0005937092285156209,
+      "afterMadMs": 0.0007877705078124797
+    },
+    {
+      "scenario": "ascii-prefix",
+      "operation": "search",
+      "percent": 6.937457424741877,
+      "beforeMadMs": 0.010122374999994577,
+      "afterMadMs": 0.07078649999999698
+    },
+    {
+      "scenario": "ascii-prefix",
+      "operation": "match",
+      "percent": 9.682244174522769,
+      "beforeMadMs": 0.005634109375002083,
+      "afterMadMs": 0.047562500000001506
+    },
+    {
+      "scenario": "ascii-prefix",
+      "operation": "count",
+      "percent": 21.622493234690342,
+      "beforeMadMs": 0.0059667968750005684,
+      "afterMadMs": 0.04521615624999953
+    },
+    {
+      "scenario": "ascii-prefix",
+      "operation": "iterate:leftmost-longest",
+      "percent": 11.194701208492997,
+      "beforeMadMs": 0.01909112499998855,
+      "afterMadMs": 0.27703100000002223
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "operation": "match",
+      "percent": 16.323443542161264,
+      "beforeMadMs": 9.251831054712945e-06,
+      "afterMadMs": 3.860986328124705e-05
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "operation": "count",
+      "percent": 19.514583468454628,
+      "beforeMadMs": 0.012585968750002507,
+      "afterMadMs": 0.007988281250000284
+    },
+    {
+      "scenario": "sparse",
+      "operation": "count",
+      "percent": 5.805602465349313,
+      "beforeMadMs": 0.017121093750002814,
+      "afterMadMs": 0.005276046875000162
+    },
+    {
+      "scenario": "sparse",
+      "operation": "iterate:leftmost-longest",
+      "percent": 5.069420839689487,
+      "beforeMadMs": 0.009302062500012198,
+      "afterMadMs": 0.018815125000003263
+    },
+    {
+      "scenario": "unicode",
+      "operation": "countByPattern",
+      "percent": 8.142917577120624,
+      "beforeMadMs": 0.003929687500000334,
+      "afterMadMs": 0.015817687499998456
+    },
+    {
+      "scenario": "unicode",
+      "operation": "match",
+      "percent": 10.625294639618076,
+      "beforeMadMs": 0.0001883745117187141,
+      "afterMadMs": 0.0005252077636718755
+    },
+    {
+      "scenario": "shared-prefix",
+      "operation": "countByPattern",
+      "percent": 13.384556350502685,
+      "beforeMadMs": 0.005344726562499513,
+      "afterMadMs": 0.004167312500000131
+    },
+    {
+      "scenario": "shared-prefix",
+      "operation": "match",
+      "percent": 62.24297272998744,
+      "beforeMadMs": 2.6545166015606858e-05,
+      "afterMadMs": 6.7596435547045974e-06
+    },
+    {
+      "scenario": "early-hit",
+      "operation": "build",
+      "percent": 6.068798381322327,
+      "beforeMadMs": 0.00010330200195311778,
+      "afterMadMs": 0.0002656555175781089
+    },
+    {
+      "scenario": "late-hit",
+      "operation": "countByPattern",
+      "percent": 45.59907473192253,
+      "beforeMadMs": 0.0306406250000002,
+      "afterMadMs": 0.11630212499999715
+    },
+    {
+      "scenario": "late-hit",
+      "operation": "build",
+      "percent": 8.483519496826709,
+      "beforeMadMs": 4.274987792968199e-05,
+      "afterMadMs": 0.0004531555175781299
+    },
+    {
+      "scenario": "late-hit",
+      "operation": "count",
+      "percent": 6.281517112783197,
+      "beforeMadMs": 0.017131500000004962,
+      "afterMadMs": 0.017257875000012746
+    },
+    {
+      "scenario": "large-dictionary",
+      "operation": "search",
+      "percent": 7.528088692900581,
+      "beforeMadMs": 0.022781249999994202,
+      "afterMadMs": 0.023898375000001693
+    },
+    {
+      "scenario": "large-dictionary",
+      "operation": "match",
+      "percent": 113.78395403852525,
+      "beforeMadMs": 5.926000976562429e-05,
+      "afterMadMs": 0.00015919995117187613
+    },
+    {
+      "scenario": "large-dictionary",
+      "operation": "iterate:leftmost-longest",
+      "percent": 9.366246586941894,
+      "beforeMadMs": 0.01980987499999287,
+      "afterMadMs": 0.02050781250001421
+    },
+    {
+      "scenario": "long-text",
+      "operation": "search",
+      "percent": 5.457120844740659,
+      "beforeMadMs": 0.40200000000004366,
+      "afterMadMs": 0.7968759999999975
+    },
+    {
+      "scenario": "long-text",
+      "operation": "match",
+      "percent": 70.93221876218027,
+      "beforeMadMs": 0.001545738281250486,
+      "afterMadMs": 0.013224121093750263
+    },
+    {
+      "scenario": "long-text",
+      "operation": "iterate:leftmost-longest",
+      "percent": 6.071966263159578,
+      "beforeMadMs": 0.0897504999999228,
+      "afterMadMs": 0.8837499999999636
+    }
+  ]
+}

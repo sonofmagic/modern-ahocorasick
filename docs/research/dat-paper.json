@@ -1,0 +1,89 @@
+{
+  "DOI": "10.1002/spe.3190",
+  "title": [
+    "Engineering faster double‐array Aho–Corasick automata"
+  ],
+  "author": [
+    {
+      "ORCID": "https://orcid.org/0000-0002-5462-122X",
+      "authenticated-orcid": false,
+      "given": "Shunsuke",
+      "family": "Kanda",
+      "sequence": "first",
+      "affiliation": [
+        {
+          "name": "LegalOn Technologies Research Tokyo Japan"
+        }
+      ],
+      "role": [
+        {
+          "role": "author",
+          "vocabulary": "crossref"
+        }
+      ]
+    },
+    {
+      "given": "Koichi",
+      "family": "Akabe",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "LegalOn Technologies Research Tokyo Japan"
+        }
+      ],
+      "role": [
+        {
+          "role": "author",
+          "vocabulary": "crossref"
+        }
+      ]
+    },
+    {
+      "given": "Yusuke",
+      "family": "Oda",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Center for Data‐driven Science and Artificial Intelligence Tohoku University Sendai Japan"
+        }
+      ],
+      "role": [
+        {
+          "role": "author",
+          "vocabulary": "crossref"
+        }
+      ]
+    }
+  ],
+  "published": {
+    "date-parts": [
+      [
+        2023,
+        2,
+        21
+      ]
+    ]
+  },
+  "URL": "https://doi.org/10.1002/spe.3190",
+  "link": [
+    {
+      "URL": "https://onlinelibrary.wiley.com/doi/pdf/10.1002/spe.3190",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://onlinelibrary.wiley.com/doi/full-xml/10.1002/spe.3190",
+      "content-type": "application/xml",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://onlinelibrary.wiley.com/doi/pdf/10.1002/spe.3190",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "abstractNotes": "The authors compare double-array implementation techniques on real datasets and find that the best combination differs from popular existing libraries. This motivates workload-specific layout measurement; their resulting implementation is daachorse."
+}

@@ -1,5 +1,5 @@
 /* eslint-disable antfu/no-import-dist -- These tests verify emitted declarations; packed tests verify public subpaths. */
-import type { Match, Token } from '..'
+import type { CompileStats, Match, QueryOptions, Token } from '..'
 import { expectError, expectType } from 'tsd'
 import AhoCorasick from '..'
 import DynamicDictionary from '../dist/dynamic'
@@ -22,3 +22,9 @@ expectError(createReplaceStream(matcher, 'X', { strategy: 'all' }))
 const dictionary = new DynamicDictionary([{ pattern: 'SS', data: 1 }], {}, (patterns, options) => new UnicodeAhoCorasick(patterns, options))
 expectType<readonly number[]>(dictionary.compile().ids)
 expectType<number[]>(dictionary.compile().matcher.countByPattern('ß'))
+
+const range: QueryOptions = { start: 1, end: 3, anchored: true }
+expectType<CompileStats>(new UnicodeAhoCorasick(['SS']).getStats())
+expectError(createMatchStream(matcher, range))
+expectError(createTokenStream(matcher, { anchored: false }))
+expectError(iterateChunksAsync(matcher, ['cat'], range))

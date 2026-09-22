@@ -1,4 +1,4 @@
-import type { BoundaryOptions, MatchStrategy, SearchOptions } from './types.js'
+import type { BoundaryOptions, MatchStrategy, QueryOptions, SearchOptions } from './types.js'
 
 export function assertText(text: string): void {
   if (typeof text !== 'string') {
@@ -43,4 +43,34 @@ export function resolveBoundary(text: string, options: BoundaryOptions | undefin
     }
   }
   return (start, end) => starts.has(start) && ends.has(end)
+}
+
+/** Validate original offsets before selection, without slicing away word context. */
+export function resolveQuery(text: string, options: QueryOptions | undefined, segmenter: Intl.Segmenter): Boundary {
+  const boundary = resolveBoundary(text, options)
+  if (options?.anchored !== undefined && typeof options.anchored !== 'boolean') {
+    throw new TypeError('anchored must be a boolean')
+  }
+  if (options?.start === undefined && options?.end === undefined && !options?.anchored) {
+    return boundary
+  }
+  const start = options?.start === undefined ? 0 : options.start
+  const end = options?.end === undefined ? text.length : options.end
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || end < start || end > text.length) {
+    throw new RangeError('range must be ordered UTF-16 offsets within the input')
+  }
+  const segments = segmenter.segment(text)
+  for (const offset of [start, end]) {
+    if (offset !== text.length && segments.containing(offset)?.index !== offset) {
+      throw new RangeError('range offsets must be original grapheme boundaries')
+    }
+  }
+  const anchored = options?.anchored === true
+  return (from, to) => from >= start && to <= end && (!anchored || from === start) && (!boundary || boundary(from, to))
+}
+
+export function assertStreamRange(options: BoundaryOptions | undefined): void {
+  if (options && ('start' in options || 'end' in options || 'anchored' in options)) {
+    throw new TypeError('start, end and anchored are only supported by whole-text queries')
+  }
 }

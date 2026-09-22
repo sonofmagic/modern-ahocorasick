@@ -1,7 +1,7 @@
 import type { AutomatonNode } from './internal.js'
 import type { Backend } from './runtime.js'
-/** Compile an explicit double-array trie, then release the Map-based build graph. */
-export function doubleArray(nodes: AutomatonNode[]): Backend {
+/** Keep temporary placement arrays outside the retained scanner closure scope. */
+function compileDoubleArray(nodes: AutomatonNode[]) {
   const alphabet = new Map<string, number>()
   for (const node of nodes) {
     for (const unit of node.next.keys()) {
@@ -37,14 +37,37 @@ export function doubleArray(nodes: AutomatonNode[]): Backend {
   const parents = Int32Array.from({ length: check.length }, (_, i) => check[i] ?? -1)
   const failures = new Int32Array(check.length)
   const outputs = new Int32Array(check.length).fill(-1)
-  const terminals: number[][] = []
+  const terminals = new Uint32Array(check.length + 1)
+  let patternCount = 0
+  for (let id = 0; id < nodes.length; id++) {
+    terminals[slots[id] + 1] = nodes[id].terminals.length
+    patternCount += nodes[id].terminals.length
+  }
+  for (let slot = 1; slot < terminals.length; slot++) {
+    terminals[slot] += terminals[slot - 1]
+  }
+  const patterns = new Uint32Array(patternCount)
   for (let id = 0; id < nodes.length; id++) {
     const slot = slots[id]
     failures[slot] = slots[nodes[id].failure]
     outputs[slot] = nodes[id].output === -1 ? -1 : slots[nodes[id].output]
-    terminals[slot] = [...nodes[id].terminals]
+    patterns.set(nodes[id].terminals, terminals[slot])
   }
+  return { alphabet, bases, parents, failures, outputs, terminals, patterns }
+}
+
+/** Compile an explicit double-array trie, then release the Map-based build graph. */
+export function doubleArray(nodes: AutomatonNode[]): Backend {
+  const { alphabet, bases, parents, failures, outputs, terminals, patterns } = compileDoubleArray(nodes)
   return {
+    stats: {
+      backend: 'double-array',
+      stateCount: nodes.length,
+      transitionCount: nodes.length - 1,
+      alphabetSize: alphabet.size,
+      typedArrayBytes: bases.byteLength + parents.byteLength + failures.byteLength
+        + outputs.byteLength + terminals.byteLength + patterns.byteLength,
+    },
     advance(state, unit) {
       const code = alphabet.get(unit)
       if (code === undefined) {
@@ -63,7 +86,9 @@ export function doubleArray(nodes: AutomatonNode[]): Backend {
     },
     * outputs(state) {
       for (let output = state; output !== -1; output = outputs[output]) {
-        yield* terminals[output] ?? []
+        for (let index = terminals[output]; index < terminals[output + 1]; index++) {
+          yield patterns[index]
+        }
       }
     },
   }

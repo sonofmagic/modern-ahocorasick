@@ -1,10 +1,10 @@
-import type { BoundaryOptions, Match, PatternInput, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
+import type { Match, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
 import { caseFold } from './case-folding.js'
 import AhoCorasick from './index.js'
-import { assertText, resolveBoundary, resolveStrategy } from './options.js'
+import { assertText, resolveQuery, resolveStrategy } from './options.js'
 import { operationReplacement, selectLongest } from './runtime.js'
 
-export type { BoundaryOptions, Match, PatternInput, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
+export type { BoundaryOptions, Match, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
 
 export interface TextOptions {
   normalization?: 'NFC' | 'NFD' | 'NFKC' | 'NFKD'
@@ -74,7 +74,7 @@ export default class TextMatcher<T = unknown> {
   iterate(text: string, options?: SearchOptions): IterableIterator<Match<T>> {
     assertText(text)
     const strategy = resolveStrategy(options, 'all')
-    const boundary = resolveBoundary(text, options)
+    const boundary = resolveQuery(text, options, this.#segmenter)
     const transformed = this.#transform(text)
     const matcher = this.#matcher
     const patterns = this.#patterns
@@ -112,18 +112,18 @@ export default class TextMatcher<T = unknown> {
     return selected()
   }
 
-  #all(text: string, options?: BoundaryOptions): IterableIterator<Match<T>> {
+  #all(text: string, options?: QueryOptions): IterableIterator<Match<T>> {
     if (options !== undefined && (options === null || typeof options !== 'object' || Array.isArray(options))) {
       throw new TypeError('options must be an object')
     }
     return this.iterate(text, { ...options, strategy: 'all' })
   }
 
-  match(text: string, options?: BoundaryOptions): boolean {
+  match(text: string, options?: QueryOptions): boolean {
     return !this.#all(text, options).next().done
   }
 
-  count(text: string, options?: BoundaryOptions): number {
+  count(text: string, options?: QueryOptions): number {
     let count = 0
     for (const _hit of this.#all(text, options)) {
       if (!Number.isSafeInteger(++count)) {
@@ -133,7 +133,7 @@ export default class TextMatcher<T = unknown> {
     return count
   }
 
-  countByPattern(text: string, options?: BoundaryOptions): number[] {
+  countByPattern(text: string, options?: QueryOptions): number[] {
     const counts = Array.from<number>({ length: this.#patterns.length }).fill(0)
     for (const hit of this.#all(text, options)) {
       counts[hit.patternIndex]++

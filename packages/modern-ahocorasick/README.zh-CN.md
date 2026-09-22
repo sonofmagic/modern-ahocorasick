@@ -186,3 +186,23 @@ Aho–Corasick 会编译可复用的字典。设输入有 `g` 个字素、产生
 
 可选文本适配器包含 Unicode 17 大小写折叠数据，采用
 [Unicode License V3](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/UNICODE-LICENSE.txt)。
+
+## 范围、锚定与编译统计
+
+所有整段查询支持 `start`、`end`、`anchored`，默认分别为 `0`、`text.length`、`false`。范围是原文 UTF-16 半开区间，坐标必须是输入范围内有序的安全整数，并落在原文字素边界，否则抛出 `RangeError`。非布尔 `anchored` 抛出 `TypeError`。空范围没有命中；锚定只接受恰好从 `start` 开始的命中。
+
+```ts
+import AhoCorasick from 'modern-ahocorasick'
+
+const matcher = new AhoCorasick(['abc', 'bc'])
+matcher.search('!abc!', { start: 2, end: 4, anchored: true })
+// [{ pattern: 'bc', patternIndex: 1, start: 2, end: 4, data: undefined }]
+matcher.replace('!abc!', 'X', { start: 2, end: 4 }) // '!aX!'
+matcher.getStats() // 冻结、缓存的标量统计
+```
+
+`search`、`iterate`、`match`、`count`、`countByPattern`、`replace`、`tokenize` 共用此契约，包括 `/unicode`、`/fast`、`/unicode-fast` 和 `/text`。范围先过滤再选择，整词及构造器边界仍读取完整原文。替换和分词保留范围外文本；折叠、正规化不改变坐标系统。当前是语义范围过滤，不承诺耗时只与选定区间长度成正比。流式拒绝这些离线选项，包括 `anchored: false`。
+
+默认及派生编译构造器的 `getStats()` 返回 `backend`（`compact`/`double-array`）、`patternCount`（含重复词条）、`stateCount`（含根，不含 DAT 空槽）、`transitionCount`（Trie 边）、`alphabetSize`、`maxPatternUnits`、`unit`（`grapheme`/`folded-codepoint`）和 `typedArrayBytes`。折叠单元是 Unicode 折叠后的码点，所以 `ß` 变为两个单元。字节统计含保留的扫描/辅助 TypedArray 及已分配空槽，不含字符串、Map、JS 对象、构建临时分配和原生 ICU，**不是总堆内存**。统计在编译时生成，读取不遍历自动机。紧凑后端反序列化统计一致；`/fast` 沿用可移植紧凑持久化格式，恢复后的后端及字节数因此描述紧凑布局。`/text` 属于映射适配器，不是编译构造器子类，不提供 `getStats()`。
+
+跨语言源码评估及实测放在仓库 `docs/research/`。本批吸收范围、诊断和连续输出布局的设计，默认仍使用紧凑后端，未新增原生运行时依赖。

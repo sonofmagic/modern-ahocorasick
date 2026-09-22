@@ -1,4 +1,4 @@
-import type { Match, MatchStrategy, PatternInput, Replacement, ReplaceOptions, SearchOptions } from '..'
+import type { CompileStats, Match, MatchStrategy, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions } from '..'
 import { expectError, expectType } from 'tsd'
 import AhoCorasick from '..'
 
@@ -50,3 +50,12 @@ expectType<AhoCorasick<unknown>>(AhoCorasick.deserialize(matcher.serialize()))
 expectType<AhoCorasick<Date>>(AhoCorasick.deserialize('serialized', { decodeData: value => new Date(String(value)) }))
 expectType<string>(new AhoCorasick([{ pattern: 'a', data: new Date() }]).serialize({ encodeData: date => date.toISOString() }))
 expectError(matcher.serialize({ encodeData: () => undefined }))
+
+const range: QueryOptions = { start: 0, end: 3, anchored: true }
+expectType<CompileStats>(matcher.getStats())
+expectType<number>(matcher.count('she', range))
+expectType<boolean>(matcher.match('she', range))
+expectType<number[]>(matcher.countByPattern('she', range))
+expectError(matcher.getStats().stateCount = 0)
+expectError(matcher.search('she', { start: '0' }))
+expectError(matcher.createStream(range))

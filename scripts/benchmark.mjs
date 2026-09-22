@@ -2,11 +2,11 @@ import assert from 'node:assert/strict'
 import { Buffer } from 'node:buffer'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { readFileSync } from 'node:fs'
+import { appendFileSync } from 'node:fs'
 import { cpus } from 'node:os'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { gitBaseline, implementationDigest, median, time } from './benchmark-utils.mjs'
+import { gitBaseline, implementationDigest, median, readBenchmarkInput, time } from './benchmark-utils.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const script = fileURLToPath(import.meta.url)
@@ -110,7 +110,7 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
   const text = scenarios[scenario].text.repeat(Number(scale))
   const Constructor = variant === 'v3'
     ? (await import('../packages/modern-ahocorasick/dist/index.js')).default
-    : (await import(`data:text/javascript;base64,${Buffer.from(readFileSync(0, 'utf8')).toString('base64')}`)).default
+    : (await import(`data:text/javascript;base64,${Buffer.from(await readBenchmarkInput()).toString('base64')}`)).default
   const { ac, ops } = operations(Constructor, patterns, text)
   if (mode === '--memory') {
     // Separate process per operation. OS high-water RSS includes startup, ICU,
@@ -169,6 +169,9 @@ else {
       const output = execFileSync(process.execPath, ['--expose-gc', script, '--child', variant, scenario], { cwd: root, input: sources[variant], encoding: 'utf8' })
       const result = JSON.parse(output)
       runs.push(result)
+      if (process.env.BENCH_RAW_FILE) {
+        appendFileSync(process.env.BENCH_RAW_FILE, `${JSON.stringify({ round: round + 1, ...result })}\n`)
+      }
       return result
     }
     for (let round = 0; round < rounds; round++) {
@@ -226,6 +229,7 @@ else {
     arch: process.arch,
     cpu: cpus()[0]?.model,
     baselineRef,
+    baselineBundling: 'public-multi-entry',
     icu: process.versions.icu,
     unicode: process.versions.unicode,
     corpusSha256: digest(scenarios),
@@ -234,7 +238,7 @@ else {
     samples,
     rounds,
     operations: requestedOperations ?? operationNames,
-    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
+    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
     results,
     memory,
     regressions,

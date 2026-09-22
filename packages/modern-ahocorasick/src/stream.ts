@@ -1,10 +1,10 @@
 import type { FilterPart, StreamFilter } from './stream/filters.js'
-import type { BoundaryOptions, Match, Matcher, MatchStrategy, Replacement, Token } from './types.js'
-import { resolveBoundary } from './options.js'
+import type { Match, Matcher, MatchStrategy, Replacement, StreamingBoundaryOptions, Token } from './types.js'
+import { assertStreamRange, resolveBoundary } from './options.js'
 import { assertText, operationReplacement, resolveStrategy, scanner } from './runtime.js'
 
 export type StreamStrategy = Exclude<MatchStrategy, 'longest-first'>
-export interface StreamOptions extends BoundaryOptions {
+export interface StreamOptions extends StreamingBoundaryOptions {
   strategy?: StreamStrategy
   /** Maximum undecided original UTF-16 units. Infinity explicitly disables the limit. */
   maxBufferLength?: number
@@ -38,6 +38,7 @@ export interface TokenStreamHandle<T> extends StreamHandle<Token<T>> {
 export type AsyncReplacement<T = unknown> = string | ((match: Match<T>, text: string) => string | PromiseLike<string>)
 function validateOptions(options: StreamOptions | undefined, tokenMode: boolean) {
   resolveBoundary('', options)
+  assertStreamRange(options)
   const strategy = resolveStrategy(options, tokenMode ? 'leftmost-longest' : 'all')
   if (strategy === 'longest-first' || (tokenMode && strategy === 'all')) {
     throw new TypeError('strategy is not supported by this stream')
