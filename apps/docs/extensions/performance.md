@@ -37,14 +37,17 @@ this package preserves its own ranges and semantics rather than copying defects 
 method aliases. Run `pnpm benchmark:external` for the printable-ASCII comparison,
 including normalized independent ranges, native results, build costs and memory.
 
-Run `pnpm benchmark:versions` to compare pinned npm v1.1.0 and v2.0.4 against the current local default entry: construction, native search, conversion to independent ranges and retained memory. Historical Unicode cases with incorrect results receive no speed ratios. See the [v1/v2/v3 report](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.md) for full data and targeted rechecks.
+Run `pnpm test:benchmark:versions` before `pnpm benchmark:versions` to compare pinned npm v1.1.0 and v2.0.4 against the current local default entry: construction, native search, lazy `iterate()`, conversion to independent UTF-16 ranges and retained memory. Historical Unicode cases with incorrect results receive no speed ratios. The report keeps grouped historical `search()` as explanatory data and uses `normalizedSearch` for the comparable output contract. See the [v1/v2/v3 report](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.md), [raw measurements](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.json) and [targeted rechecks](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions-recheck.json).
 
 ## Reproduce and interpret
 
 ```sh
+pnpm test:benchmark:versions
 pnpm benchmark
 pnpm benchmark:external
 pnpm benchmark:versions
+node --expose-gc scripts/benchmark-versions.mjs --recheck docs/benchmarks-versions.json > docs/benchmarks-versions-recheck.json
+node scripts/report-benchmark-versions.mjs docs/benchmarks-versions.json docs/benchmarks-versions-recheck.json
 pnpm benchmark:docs
 ```
 

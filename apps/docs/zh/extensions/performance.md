@@ -33,14 +33,17 @@ matcher.getStats().backend // 'double-array'
 运行 `pnpm benchmark:external` 查看可打印 ASCII 对照，分别报告统一后的独立范围、
 原生结果、构建成本及内存。
 
-三代版本对比使用 `pnpm benchmark:versions`：固定 npm v1.1.0、v2.0.4，与当前本地默认入口比较构建、原生搜索、独立范围转换和保留内存。Unicode 结果不正确的旧版场景不计算速度比。完整数据与复测见 [v1／v2／v3 对比报告](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.zh-CN.md)。
+三代版本对比先运行 `pnpm test:benchmark:versions`，再运行 `pnpm benchmark:versions`：固定 npm v1.1.0、v2.0.4，与当前本地默认入口比较构建、原生搜索、惰性 `iterate()`、统一独立 UTF-16 范围转换和保留内存。Unicode 结果不正确的旧版场景不计算速度比。报告保留旧版分组 `search()` 作为解释数据，并以 `normalizedSearch` 作为可比输出口径。完整报告、[原始测量](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.json) 和 [定向复测](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions-recheck.json) 见 [v1／v2／v3 对比报告](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.zh-CN.md)。
 
 ## 复现与解读
 
 ```sh
+pnpm test:benchmark:versions
 pnpm benchmark
 pnpm benchmark:external
 pnpm benchmark:versions
+node --expose-gc scripts/benchmark-versions.mjs --recheck docs/benchmarks-versions.json > docs/benchmarks-versions-recheck.json
+node scripts/report-benchmark-versions.mjs docs/benchmarks-versions.json docs/benchmarks-versions-recheck.json
 pnpm benchmark:docs
 ```
 

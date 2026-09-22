@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import V1 from 'modern-ahocorasick-v1'
 import V2 from 'modern-ahocorasick-v2'
-import { compare, normalizer, reference, selection } from '../../../scripts/benchmark-versions-utils.mjs'
+import { compare, normalizer, reference, scenarios, selection } from '../../../scripts/benchmark-versions-utils.mjs'
 
 it('historical end indices become original UTF-16 exclusive ranges', () => {
   const patterns = ['猫', '😀', 'e\u0301', '👨‍👩‍👧‍👦', '\r\n']
@@ -45,6 +45,27 @@ it('current ranges remain independent native results; empty search is valid', ()
   const result = reference(['a'], 'a')
   assert.equal(normalizer('current', ['a'])(result, 'a'), result)
   assert.equal(compare([], reference(['a'], 'b'), false).correct, true)
+})
+
+it('covers the targeted scanner benchmark fixtures and keeps v2 grapheme-correct', () => {
+  const names = ['empty-dictionary', 'tiny-no-match', 'ascii-fast', 'ascii-fanout', 'fail-chain', 'mixed-ascii-unicode', 'nested-duplicates'] as const
+  for (const name of names) {
+    const fixture = scenarios[name]
+    assert.ok(fixture, `missing benchmark fixture: ${name}`)
+    assert.ok(fixture.patterns.every(pattern => pattern.length > 0), `${name}: empty pattern`)
+    const expected = reference(fixture.patterns, fixture.text)
+    const matcher = new V2(fixture.patterns)
+    const actual = normalizer('v2', fixture.patterns)(matcher.search(fixture.text), fixture.text)
+    assert.equal(compare(actual, expected, matcher.match(fixture.text)).correct, true, name)
+  }
+})
+
+it('records the expected v1 mismatch only for mixed grapheme-sensitive input', () => {
+  const fixture = scenarios['mixed-ascii-unicode']
+  const matcher = new V1(fixture.patterns)
+  const checks = compare(normalizer('v1', fixture.patterns)(matcher.search(fixture.text), fixture.text), reference(fixture.patterns, fixture.text), matcher.match(fixture.text))
+  assert.equal(checks.correct, false)
+  assert.equal(fixture.expectedV1Mismatch, true)
 })
 
 it('selection rejects unknown, empty, and duplicate entries', () => {

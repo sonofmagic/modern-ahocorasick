@@ -2,7 +2,7 @@ import type { CompactAutomaton } from './internal.js'
 import type { Boundary as WordBoundary } from './options.js'
 import type { Backend, Profile } from './runtime.js'
 import type { Boundary, CompileStats, DeserializeOptions, Match, MatcherOptions, MatchStrategy, MatchStream, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
-import { advanceCompact, asciiPrefix, buildAutomaton, compactAutomaton, graphemeRuns } from './internal.js'
+import { advanceAscii, advanceCompact, buildAutomaton, compactAutomaton, graphemeRuns } from './internal.js'
 import { createStream } from './legacy-stream.js'
 import { assertStreamRange, assertText, resolveBoundary, resolveQuery, resolveStrategy } from './options.js'
 import { deserialize, serialize } from './persistence.js'
@@ -228,8 +228,22 @@ export default class AhoCorasick<T = unknown> {
 
   /** All matches, optionally reduced to a non-overlapping selection. */
   search(text: string, options?: SearchOptions): Match<T>[] {
+    assertText(text)
+    const strategy = resolveStrategy(options, 'all')
+    const boundary = options === undefined ? undefined : resolveQuery(text, options, this.#segmenter)
+    if (strategy === 'all' && boundary === undefined && !this.#generalScan) {
+      const matches: Match<T>[] = []
+      if (!this.#scanAscii(text, matches)) {
+        // A partial ASCII prefix can contain matches that are invalidated by
+        // a following combining mark, ZWJ or surrogate. Restart on ICU after
+        // discarding those provisional results.
+        matches.length = 0
+        this.#scanInto(text, matches)
+      }
+      return matches
+    }
     const matches: Match<T>[] = []
-    for (const match of this.iterate(text, options)) {
+    for (const match of this.#iterate(text, strategy, boundary)) {
       matches.push(match)
     }
     return matches
@@ -285,22 +299,34 @@ export default class AhoCorasick<T = unknown> {
     }
     let state = 0
     let count = 0
-    const ascii = asciiPrefix(text)
-    if (ascii !== undefined) {
-      for (const { segment } of ascii) {
-        state = advanceCompact(this.#nodes, state, segment)
-        count += this.#counts[state]
-        if (!Number.isSafeInteger(count)) {
-          throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
-        }
+    // The same safe ASCII probe as match(), with direct code-unit transitions
+    // for long plain-text queries. Stop before a grapheme adjacent to a
+    // non-ASCII unit so ICU can resolve combining and joined boundaries.
+    let position = 0
+    while (position < text.length) {
+      const code = text.charCodeAt(position)
+      if (code > 0x7F) {
+        break
       }
-      if (ascii.position === text.length) {
-        return count
+      const end = code === 0x0D && text.charCodeAt(position + 1) === 0x0A ? position + 2 : position + 1
+      if (end < text.length && text.charCodeAt(end) > 0x7F) {
+        break
       }
+      state = end - position === 1
+        ? advanceAscii(this.#nodes, state, code)
+        : advanceCompact(this.#nodes, state, text.slice(position, end))
+      count += this.#counts[state]
+      if (!Number.isSafeInteger(count)) {
+        throw new RangeError('match count exceeds Number.MAX_SAFE_INTEGER')
+      }
+      position = end
+    }
+    if (position === text.length) {
+      return count
     }
     // Keep native iteration at its own call site. Mixing the JS cursor and
     // native iterator in one hot loop penalizes long Unicode suffixes in V8.
-    const suffix = ascii === undefined ? text : text.slice(ascii.position)
+    const suffix = text.slice(position)
     for (const { segment } of this.#segmenter.segment(suffix)) {
       state = advanceCompact(this.#nodes, state, segment)
       count += this.#counts[state]
@@ -369,19 +395,31 @@ export default class AhoCorasick<T = unknown> {
       return false
     }
     let state = 0
-    const ascii = asciiPrefix(text)
-    if (ascii !== undefined) {
-      for (const { segment } of ascii) {
-        state = advanceCompact(this.#nodes, state, segment)
-        if (this.#counts[state] !== 0) {
-          return true
-        }
+    // Keep the common pure-ASCII probe allocation-free. Stop before an ASCII
+    // grapheme whose successor is non-ASCII: it may be a combining mark, so
+    // ICU must see that boundary together with the complete suffix.
+    let position = 0
+    while (position < text.length) {
+      const code = text.charCodeAt(position)
+      if (code > 0x7F) {
+        break
       }
-      if (ascii.position === text.length) {
-        return false
+      const end = code === 0x0D && text.charCodeAt(position + 1) === 0x0A ? position + 2 : position + 1
+      if (end < text.length && text.charCodeAt(end) > 0x7F) {
+        break
       }
+      state = end - position === 1
+        ? advanceAscii(this.#nodes, state, code)
+        : advanceCompact(this.#nodes, state, text.slice(position, end))
+      if (this.#counts[state] !== 0) {
+        return true
+      }
+      position = end
     }
-    const suffix = ascii === undefined ? text : text.slice(ascii.position)
+    if (position === text.length) {
+      return false
+    }
+    const suffix = text.slice(position)
     for (const { segment } of this.#segmenter.segment(suffix)) {
       state = advanceCompact(this.#nodes, state, segment)
       if (this.#counts[state] !== 0) {
@@ -464,6 +502,57 @@ export default class AhoCorasick<T = unknown> {
         }
       }
     }
+  }
+
+  /** Collect exact results directly, avoiding generator and iterator overhead. */
+  #scanInto(text: string, matches: Match<T>[], boundary?: WordBoundary): void {
+    if (this.#patterns.length === 0) {
+      return
+    }
+    let state = 0
+    for (const { segment, index } of this.#segmenter.segment(text)) {
+      state = advanceCompact(this.#nodes, state, segment)
+      if (this.#counts[state] === 0) {
+        continue
+      }
+      const end = index + segment.length
+      for (let output = state; output !== -1; output = this.#nodes.outputs[output]) {
+        for (let terminal = this.#nodes.terminals[output]; terminal < this.#nodes.terminals[output + 1]; terminal++) {
+          const patternIndex = this.#nodes.patterns[terminal]
+          const { pattern, data } = this.#patterns[patternIndex]
+          const start = end - pattern.length
+          if (!boundary || boundary(start, end)) {
+            matches.push({ pattern, patternIndex, start, end, data })
+          }
+        }
+      }
+    }
+  }
+
+  /** Collect exact ASCII results without generator or Intl.Segmenter overhead. */
+  #scanAscii(text: string, matches: Match<T>[]): boolean {
+    let state = 0
+    for (let index = 0; index < text.length;) {
+      const code = text.charCodeAt(index)
+      if (code > 0x7F) {
+        return false
+      }
+      const end = code === 0x0D && text.charCodeAt(index + 1) === 0x0A ? index + 2 : index + 1
+      state = end - index === 2 ? advanceCompact(this.#nodes, state, text.slice(index, end)) : advanceAscii(this.#nodes, state, code)
+      if (this.#counts[state] === 0) {
+        index = end
+        continue
+      }
+      for (let output = state; output !== -1; output = this.#nodes.outputs[output]) {
+        for (let terminal = this.#nodes.terminals[output]; terminal < this.#nodes.terminals[output + 1]; terminal++) {
+          const patternIndex = this.#nodes.patterns[terminal]
+          const { pattern, data } = this.#patterns[patternIndex]
+          matches.push({ pattern, patternIndex, start: end - pattern.length, end, data })
+        }
+      }
+      index = end
+    }
+    return true
   }
 
   * #select(text: string, strategy: Exclude<MatchStrategy, 'all' | 'longest-first'>, boundary?: WordBoundary): Generator<Match<T>> {

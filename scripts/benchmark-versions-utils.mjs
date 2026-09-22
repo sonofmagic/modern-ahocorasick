@@ -78,6 +78,16 @@ export function compare(actual, expected, presence) {
 }
 
 export const scenarios = {
+  // Baselines include this deliberately small corpus so empty dictionaries do
+  // not disappear behind the larger construction and scanning fixtures.
+  'empty-dictionary': { patterns: [], text: 'empty dictionaries still scan ordinary ASCII text. '.repeat(400) },
+  'tiny-no-match': { patterns: ['needle'], text: 'haystack only' },
+  // Plain ASCII text keeps the scanner on its cheapest grapheme path without
+  // making root fan-out the dominant variable.
+  'ascii-fast': {
+    patterns: ['a', 'ab', 'abc', 'cat', 'dog', 'needle', 'foo-bar'],
+    text: Array.from({ length: 12000 }, (_, i) => ['a', 'ab', 'abc', 'cat', 'dog', 'ordinary', 'text'][i % 7]).join(' '),
+  },
   'ordinary': {
     patterns: Array.from({ length: 200 }, (_, i) => `word${i}`),
     text: Array.from({ length: 2000 }, (_, i) => `line word${i % 200} end`).join(' '),
@@ -86,6 +96,18 @@ export const scenarios = {
   'shared-prefix': {
     patterns: Array.from({ length: 1000 }, (_, i) => `common-prefix-${i}-suffix`),
     text: Array.from({ length: 1000 }, (_, i) => `common-prefix-${i}-suffix`).join(' '),
+  },
+  // Root fan-out is intentionally wide while each pattern stays short. This
+  // distinguishes root transition lookup from the shared-prefix benchmark.
+  'ascii-fanout': {
+    patterns: Array.from({ length: 256 }, (_, i) => `k${i.toString(16).padStart(2, '0')}`),
+    text: Array.from({ length: 6000 }, (_, i) => `k${(i % 256).toString(16).padStart(2, '0')}`).join(' '),
+  },
+  // Long failure links with a final miss exercise fallback traversal without
+  // allocating a large result set for the final character.
+  'fail-chain': {
+    patterns: Array.from({ length: 64 }, (_, i) => 'a'.repeat(i + 1)),
+    text: `${'a'.repeat(1200)}b${'x'.repeat(1200)}`,
   },
   'dense-suffix': { patterns: Array.from({ length: 96 }, (_, i) => 'a'.repeat(i + 1)), text: 'a'.repeat(1000) },
   'duplicates': { patterns: Array.from({ length: 200 }, (_, i) => `word${i % 10}`), text: 'word0 word1 word9 '.repeat(1000) },
@@ -96,6 +118,20 @@ export const scenarios = {
     text: Array.from({ length: 2000 }, (_, i) => `keyword-${i * 7 % 10000}-end`).join(' '),
   },
   'long-text': { patterns: ['cat', 'dog', 'bird', 'cat dog'], text: 'cat dog bird ordinary text. '.repeat(20000) },
+  // Keep ASCII hits alongside grapheme-sensitive patterns. v1 is expected to
+  // miss the emoji and ZWJ entries; v2 and current must remain fully correct.
+  'mixed-ascii-unicode': {
+    unicode: true,
+    expectedV1Mismatch: true,
+    patterns: ['cat', 'dog', '😀', 'e\u0301', '👩‍👩‍👧‍👦', 'a', 'abc'],
+    text: 'cat a abc 😀 e\u0301 👩‍👩‍👧‍👦 dog '.repeat(2500),
+  },
+  // Duplicate nested suffixes make output cardinality and ordering visible
+  // without relying on a historical grouped-result representation.
+  'nested-duplicates': {
+    patterns: ['a', 'aa', 'aaa', 'aaaa', 'a', 'aa', 'aaa', 'aaaa'],
+    text: 'a'.repeat(700),
+  },
   'chinese': { unicode: true, patterns: ['猫', '中文', '文', '词条'], text: '猫 中文词条 测试文本 '.repeat(3000) },
   'emoji': { unicode: true, expectedV1Mismatch: true, patterns: ['😀', '😺'], text: '😀 😺 '.repeat(3000) },
   'zwj': { unicode: true, expectedV1Mismatch: true, patterns: ['👨', '👩', '👨‍👩‍👧‍👦'], text: '👨‍👩‍👧‍👦 '.repeat(2000) },

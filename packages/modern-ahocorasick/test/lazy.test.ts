@@ -36,6 +36,38 @@ it('constructs, counts and checks complete ASCII input without native segmentati
   }
 })
 
+it('collects complete ASCII search results without native segmentation', () => {
+  const spy = vi.spyOn(Intl.Segmenter.prototype, 'segment')
+  try {
+    const matcher = new AhoCorasick(['a', 'aa', '\r\n'])
+    expect(matcher.search('aa\r\n')).toEqual([
+      { pattern: 'a', patternIndex: 0, start: 0, end: 1, data: undefined },
+      { pattern: 'aa', patternIndex: 1, start: 0, end: 2, data: undefined },
+      { pattern: 'a', patternIndex: 0, start: 1, end: 2, data: undefined },
+      { pattern: '\r\n', patternIndex: 2, start: 2, end: 4, data: undefined },
+    ])
+    expect(spy).not.toHaveBeenCalled()
+  }
+  finally {
+    spy.mockRestore()
+  }
+})
+
+it('keeps the Unicode fallback for unsafe mixed grapheme input', () => {
+  const spy = vi.spyOn(Intl.Segmenter.prototype, 'segment')
+  try {
+    const matcher = new AhoCorasick(['e\u0301', 'a猫'])
+    expect(matcher.search('e\u0301 a猫')).toEqual([
+      { pattern: 'e\u0301', patternIndex: 0, start: 0, end: 2, data: undefined },
+      { pattern: 'a猫', patternIndex: 1, start: 3, end: 5, data: undefined },
+    ])
+    expect(spy).toHaveBeenCalled()
+  }
+  finally {
+    spy.mockRestore()
+  }
+})
+
 it('does not eagerly traverse the text and stops boolean queries on the first hit', () => {
   const matcher = new AhoCorasick(['猫'])
   const original = Intl.Segmenter.prototype.segment

@@ -16,7 +16,7 @@ const entries = {
   v2: import.meta.resolve('modern-ahocorasick-v2'),
   current: new URL('../packages/modern-ahocorasick/dist/index.js', import.meta.url).href,
 }
-const operations = selection(process.env.BENCH_OPERATIONS, ['build', 'search', 'match', 'normalizedSearch'], 'BENCH_OPERATIONS')
+const operations = selection(process.env.BENCH_OPERATIONS, ['build', 'search', 'match', 'iterate', 'normalizedSearch'], 'BENCH_OPERATIONS')
 const recheck = process.argv[2] === '--recheck'
   ? JSON.parse(readFileSync(process.argv[3], 'utf8'))
   : undefined
@@ -97,16 +97,30 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
       build: () => new Constructor(patterns),
       search: () => matcher.search(text),
       match: () => matcher.match(text),
+      // v1/v2 predate the lazy iterator API. Keep those rows in the output as
+      // explicitly unsupported instead of silently comparing a different path.
+      iterate: typeof matcher.iterate === 'function' ? () => Array.from(matcher.iterate(text)) : undefined,
       normalizedSearch: () => normalize(matcher.search(text), text),
     }
     const metrics = Object.fromEntries(operations.map((name) => {
+      if (typeof ops[name] !== 'function') {
+        return [name, { supported: false, reason: 'variant has no iterate API' }]
+      }
       const metric = time(ops[name], name === 'build' ? patterns.reduce((sum, p) => sum + p.length, 0) : text.length)
       if (name === 'match') {
         delete metric.utf16UnitsPerSecond
       }
-      return [name, metric]
+      return [name, { supported: true, ...metric }]
     }))
-    console.log(JSON.stringify({ variant, scenario, checks, metrics }))
+    const diagnostics = {
+      // `search` is the direct eager collector. The alias makes it explicit in
+      // raw JSON that this is the path being optimized against normalizedSearch.
+      directSearch: metrics.search ?? { supported: false, reason: 'search not selected' },
+      // `iterate` is lazy for current; Array.from only drains it so the output
+      // work is comparable to an eager search while retaining iterator costs.
+      lazyIterate: metrics.iterate ?? { supported: false, reason: 'iterate not selected' },
+    }
+    console.log(JSON.stringify({ variant, scenario, checks, metrics, diagnostics }))
   }
 }
 else {
@@ -136,6 +150,22 @@ else {
     for (const run of runs) {
       assert.deepEqual(run.checks, runs[0].checks, 'Correctness changed between rounds')
     }
+    const metrics = Object.fromEntries(operationsFor(scenario).map((operation) => {
+      const values = runs.map(run => run.metrics[operation]).filter(value => value?.supported !== false)
+      if (values.length === 0) {
+        return [operation, { supported: false, reason: 'variant has no implementation for operation' }]
+      }
+      const roundMediansMs = values.map(value => value.ms)
+      const ms = median(roundMediansMs)
+      return [operation, {
+        supported: values.length === runs.length,
+        ms,
+        withinRoundMadMs: median(values.map(value => value.madMs)),
+        betweenRoundsMadMs: median(roundMediansMs.map(value => Math.abs(value - ms))),
+        roundMediansMs,
+        ...(operation === 'match' ? {} : { utf16UnitsPerSecond: median(values.map(value => value.utf16UnitsPerSecond)) }),
+      }]
+    }))
     return {
       scenario,
       variant,
@@ -143,18 +173,11 @@ else {
       utf16Length: scenarios[scenario].text.length,
       unicode: scenarios[scenario].unicode === true,
       checks: runs[0].checks,
-      metrics: Object.fromEntries(operationsFor(scenario).map((operation) => {
-        const values = runs.map(run => run.metrics[operation])
-        const roundMediansMs = values.map(value => value.ms)
-        const ms = median(roundMediansMs)
-        return [operation, {
-          ms,
-          withinRoundMadMs: median(values.map(value => value.madMs)),
-          betweenRoundsMadMs: median(roundMediansMs.map(value => Math.abs(value - ms))),
-          roundMediansMs,
-          ...(operation === 'match' ? {} : { utf16UnitsPerSecond: median(values.map(value => value.utf16UnitsPerSecond)) }),
-        }]
-      })),
+      metrics,
+      diagnostics: {
+        directSearch: metrics.search ?? { supported: false, reason: 'search not selected' },
+        lazyIterate: metrics.iterate ?? { supported: false, reason: 'iterate not selected' },
+      },
       memory: recheck
         ? null
         : Object.fromEntries(['dictionary', 'nativeResults', 'normalizedResults'].map(kind => [kind, {
@@ -168,7 +191,7 @@ else {
     for (const variant of ['v1', 'v2']) {
       const baseline = results.find(result => result.scenario === current.scenario && result.variant === variant)
       for (const operation of operationsFor(current.scenario)) {
-        const comparable = baseline.checks.correct && current.checks.correct
+        const comparable = baseline.checks.correct && current.checks.correct && baseline.metrics[operation]?.supported !== false && current.metrics[operation]?.supported !== false
         const ratio = comparable ? current.metrics[operation].ms / baseline.metrics[operation].ms : null
         comparisons.push({ scenario: current.scenario, baseline: variant, operation, comparable, currentOverBaseline: ratio, recheck: ratio !== null && ratio > 1.05 })
       }
@@ -201,6 +224,7 @@ else {
     notes: [
       'Current is the local default ESM build; v1/v2 are exact published ESM artifacts, pinned by npm aliases and lockfile.',
       'Native search returns grouped arrays for v1/v2 and independent ranges for current; output work differs. normalizedSearch includes historical flattening and v2 per-query grapheme-to-UTF-16 segmentation; dictionary index maps are prepared outside timing. Current already returns the target format. Canonical sorting is correctness-only.',
+      'iterate drains the current lazy iterator with Array.from for a diagnostic eager-consumer cost; v1/v2 have no iterator API and are recorded as unsupported. directSearch and lazyIterate repeat these paths under diagnostics for consumers that parse raw child output.',
       'Correctness uses independent boundary-aware substring searches, including duplicate multiplicity. Known v1 Unicode defects are recorded, never repaired or used for ratios. Unexpected mismatches fail the run.',
       'Five rounds by default; seven calibrated batched samples per operation, GC outside timings, fresh processes with rotated version order. match has no throughput because it can exit early.',
       'Memory uses separate processes each round: post-GC deltas, ten retained native dictionaries, and one retained native/normalized result. Shared keyword arrays in historical native results are already owned by the dictionary; adapter maps are excluded. Signed deltas retain GC noise; buffers are separate from JS heap. Neither native ICU memory nor peak RSS is measured.',

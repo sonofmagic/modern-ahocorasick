@@ -1,6 +1,6 @@
 import type { CompactAutomaton } from './internal.js'
 import type { DeserializeOptions, JsonValue, SerializeOptions } from './types.js'
-import { advanceCompact, graphemeRuns } from './internal.js'
+import { advanceCompact, createAsciiSymbols, graphemeRuns } from './internal.js'
 
 interface Entry<T> {
   pattern: string
@@ -118,6 +118,7 @@ export function deserialize<T>(serialized: string, segmenter: Intl.Segmenter, op
   }
   const table: CompactAutomaton = {
     symbols,
+    asciiSymbols: createAsciiSymbols(symbols),
     roots: new Uint32Array(symbols.size),
     edges: Uint32Array.from(numbers(source['edges'], 0, size - 1)),
     labels: Uint32Array.from(numbers(source['labels'], 0, symbols.size - 1)),

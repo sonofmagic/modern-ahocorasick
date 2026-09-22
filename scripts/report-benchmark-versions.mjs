@@ -16,7 +16,7 @@ const variants = ['v1', 'v2', 'current']
 const label = variant => `${variant === 'current' ? 'v3' : variant} (${full.versions[variant].version})`
 const row = (scenario, variant) => full.results.find(item => item.scenario === scenario && item.variant === variant)
 const ratio = value => value === null || value === undefined ? '—' : `${value < 0.01 ? value.toPrecision(2) : value.toFixed(2)}×`
-const ms = value => value < 0.01 ? value.toFixed(6) : value.toFixed(3)
+const ms = value => value === null || value === undefined ? '—' : value < 0.01 ? value.toFixed(6) : value.toFixed(3)
 const kib = value => (value / 1024).toFixed(2)
 function table(headers, rows) {
   return [
@@ -45,7 +45,7 @@ for (const zh of [false, true]) {
     const pairs = full.comparisons.filter(item => item.baseline === variant && item.comparable)
     return [label(variant), ...full.operations.map((operation) => {
       const values = pairs.filter(item => item.operation === operation)
-      return `${values.filter(item => item.currentOverBaseline < 1).length}/${values.length}`
+      return `${values.filter(item => item.currentOverBaseline !== null && item.currentOverBaseline < 1).length}/${values.filter(item => item.currentOverBaseline !== null).length}`
     })]
   })
   add(t('Current has a lower initial median in the following comparable scenarios (count / total). These counts summarize this corpus, not a universal speedup or a significance test.', '下表是当前版本初测中位数更低的场景数量（较快场景数／可比场景总数）。它只描述本次语料，不代表普遍提速，也不是显著性检验。'))
@@ -73,8 +73,8 @@ for (const zh of [false, true]) {
     `每个场景／版本使用 ${full.rounds} 轮独立进程；预热后，每项操作采集 ${full.samples} 份批量计时样本，GC 在计时之外执行。轮次间轮换并反转版本顺序。表格展示各进程中位数的中位数；JSON 保留所有样本、轮内 MAD 和轮间 MAD。复测只针对被标记的场景／操作组合重跑三个版本，不重复测量内存。不设置自动耗时门禁。`,
   ))
   add(t(
-    '`build` measures only the native constructor. `search` measures native output; `match` measures native early-exit presence and has no throughput metric. `normalizedSearch` includes search plus historical conversion to `{pattern, patternIndex, start, end, data}`. v1 ends are UTF-16 indices; v2 ends are grapheme indices, so conversion segments each input inside the timed operation. Dictionary-to-index maps are prepared once outside timing. v3 already returns the target format. Canonical sorting is used only for validation, outside timing; normalization is a transparent consumer adapter, not a claim of optimal conversion.',
-    '`build` 只测原生构造器，`search` 测原生输出，`match` 测原生早停判断，不报告吞吐率。`normalizedSearch` 包含搜索和旧版结果到 `{pattern, patternIndex, start, end, data}` 的转换。v1 结束位置是 UTF-16 索引，v2 是字素索引，因此 v2 转换会在计时内对每次输入分段。词条到索引的映射在计时外预建一次。v3 已返回目标格式。排序只用于计时外校验；适配器用于展示调用方转换成本，不宣称转换实现最优。',
+    '`build` measures only the native constructor. `search` measures native eager output; `iterate` drains the lazy iterator with `Array.from` and is unsupported by v1/v2, which is shown as — rather than compared. Each child also exposes `diagnostics.directSearch` and `diagnostics.lazyIterate` aliases in JSON. `match` measures native early-exit presence and has no throughput metric. `normalizedSearch` includes search plus historical conversion to `{pattern, patternIndex, start, end, data}`. v1 ends are UTF-16 indices; v2 ends are grapheme indices, so conversion segments each input inside the timed operation. Dictionary-to-index maps are prepared once outside timing. v3 already returns the target format. Canonical sorting is used only for validation, outside timing; normalization is a transparent consumer adapter, not a claim of optimal conversion.',
+    '`build` 只测原生构造器，`search` 测原生 eager 输出；`iterate` 用 `Array.from` 消耗 lazy iterator，v1/v2 不支持该 API，因此显示为 — 而不进行比较。每个子进程也会在 JSON 中提供 `diagnostics.directSearch` 和 `diagnostics.lazyIterate` 别名。`match` 测原生早停判断，不报告吞吐率。`normalizedSearch` 包含搜索和旧版结果到 `{pattern, patternIndex, start, end, data}` 的转换。v1 结束位置是 UTF-16 索引，v2 是字素索引，因此 v2 转换会在计时内对每次输入分段。词条到索引的映射在计时外预建一次。v3 已返回目标格式。排序只用于计时外校验；适配器用于展示调用方转换成本，不宣称此转换实现最优。',
   ))
   add(t(
     'The independent oracle searches substrings at original grapheme boundaries and preserves duplicate pattern indices. Validation compares canonical ranges and boolean presence, not just counts. Historical missing results are never synthesized. ASCII mismatches or unexpected v2/v3 Unicode mismatches abort the run. Known v1 errors are asserted explicitly.',
@@ -87,7 +87,7 @@ for (const zh of [false, true]) {
     add(`### ${operation}`)
     add(table([t('Scenario', '场景'), label('v1'), label('v2'), label('current'), 'v3 / v1', 'v3 / v2'], full.scenarios.map((scenario) => {
       const values = variants.map(variant => row(scenario, variant))
-      return [scenario, ...values.map(item => `${ms(item.metrics[operation].ms)}${item.checks.correct ? '' : ' †'}`), ...['v1', 'v2'].map(baseline => ratio(full.comparisons.find(item => item.scenario === scenario && item.baseline === baseline && item.operation === operation).currentOverBaseline))]
+      return [scenario, ...values.map(item => `${ms(item.metrics[operation]?.ms)}${item.checks.correct ? '' : ' †'}`), ...['v1', 'v2'].map(baseline => ratio(full.comparisons.find(item => item.scenario === scenario && item.baseline === baseline && item.operation === operation)?.currentOverBaseline))]
     })))
   }
   add(t('## 4. Retained memory and Unicode correctness', '## 4. 保留内存与 Unicode 正确性'))

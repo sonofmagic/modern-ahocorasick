@@ -9,6 +9,8 @@ export interface AutomatonNode {
 /** Retained scan tables: interned graphemes and contiguous sparse transitions. */
 export interface CompactAutomaton {
   symbols: Map<string, number>
+  /** Direct symbol IDs for single-unit ASCII graphemes; -1 means absent. */
+  asciiSymbols: Int32Array | undefined
   roots: Uint32Array
   edges: Uint32Array
   labels: Uint32Array
@@ -17,6 +19,30 @@ export interface CompactAutomaton {
   outputs: Int32Array
   terminals: Uint32Array
   patterns: Uint32Array
+}
+
+/**
+ * Build the derived ASCII symbol table used by the scanner hot path.
+ *
+ * ASCII entries are ordinary one-code-unit graphemes. Other symbols stay in
+ * the Map because they can contain multiple code units or non-ASCII text.
+ * Omitting the table when no ASCII symbol exists avoids a fixed allocation for
+ * Unicode-only dictionaries.
+ */
+export function createAsciiSymbols(symbols: ReadonlyMap<string, number>): Int32Array | undefined {
+  let hasAscii = false
+  const table = new Int32Array(128)
+  table.fill(-1)
+  for (const [value, symbol] of symbols) {
+    if (value.length === 1) {
+      const code = value.charCodeAt(0)
+      if (code < 0x80) {
+        table[code] = symbol
+        hasAscii = true
+      }
+    }
+  }
+  return hasAscii ? table : undefined
 }
 
 export function compactAutomaton(nodes: AutomatonNode[], patternCount: number): CompactAutomaton {
@@ -68,17 +94,24 @@ export function compactAutomaton(nodes: AutomatonNode[], patternCount: number): 
   for (let index = edges[0]; index < edges[1]; index++) {
     roots[labels[index]] = targets[index]
   }
-  return { symbols, roots, edges, labels, targets, failures, outputs, terminals, patterns }
+  return { symbols, asciiSymbols: createAsciiSymbols(symbols), roots, edges, labels, targets, failures, outputs, terminals, patterns }
 }
 
-export function advanceCompact(table: CompactAutomaton, state: number, segment: string): number {
-  const symbol = table.symbols.get(segment)
-  if (symbol === undefined) {
+function advanceSymbol(table: CompactAutomaton, state: number, symbol: number): number {
+  if (symbol < 0) {
     return 0
   }
   while (state !== 0) {
     let low = table.edges[state]
-    let high = table.edges[state + 1] - 1
+    const end = table.edges[state + 1]
+    if (end - low === 1) {
+      if (table.labels[low] === symbol) {
+        return table.targets[low]
+      }
+      state = table.failures[state]
+      continue
+    }
+    let high = end - 1
     while (low <= high) {
       const middle = (low + high) >>> 1
       const label = table.labels[middle]
@@ -95,6 +128,38 @@ export function advanceCompact(table: CompactAutomaton, state: number, segment: 
     state = table.failures[state]
   }
   return table.roots[symbol]
+}
+
+/** Advance using a precomputed ASCII symbol ID, avoiding string slicing. */
+export function advanceAscii(table: CompactAutomaton, state: number, code: number): number {
+  const symbols = table.asciiSymbols
+  if (symbols === undefined || code < 0 || code >= 0x80) {
+    return 0
+  }
+  const symbol = symbols[code]
+  if (symbol < 0) {
+    return 0
+  }
+  // Root transitions are a direct table lookup and cover the usual no-failure
+  // case. Avoid entering the fallback loop for the first unit in a scan.
+  return state === 0 ? table.roots[symbol] : advanceSymbol(table, state, symbol)
+}
+
+export function advanceCompact(table: CompactAutomaton, state: number, segment: string): number {
+  let symbol: number | undefined
+  if (segment.length === 1) {
+    const code = segment.charCodeAt(0)
+    symbol = code < 0x80 && table.asciiSymbols !== undefined
+      ? table.asciiSymbols[code]
+      : table.symbols.get(segment)
+  }
+  else {
+    symbol = table.symbols.get(segment)
+  }
+  if (symbol === undefined || symbol < 0) {
+    return 0
+  }
+  return state === 0 ? table.roots[symbol] : advanceSymbol(table, state, symbol)
 }
 
 function createNode(): AutomatonNode {

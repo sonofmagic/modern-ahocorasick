@@ -85,7 +85,7 @@ export function compactBackend(table: CompactAutomaton): Backend {
       alphabetSize: table.symbols.size,
       typedArrayBytes: table.roots.byteLength + table.edges.byteLength + table.labels.byteLength
         + table.targets.byteLength + table.failures.byteLength + table.outputs.byteLength
-        + table.terminals.byteLength + table.patterns.byteLength,
+        + table.terminals.byteLength + table.patterns.byteLength + (table.asciiSymbols?.byteLength ?? 0),
     },
     advance: (state, unit) => advanceCompact(table, state, unit),
     * outputs(state) {
