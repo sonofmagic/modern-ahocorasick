@@ -11,6 +11,14 @@ import { createMatchStream } from './stream.js'
 
 export type { Boundary, BoundaryContext, BoundaryOptions, CompileStats, DeserializeOptions, JsonValue, Match, Matcher, MatcherOptions, MatchStrategy, MatchStream, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
 
+function checksum(value: string): string {
+  let hash = 0x811C9DC5
+  for (let index = 0; index < value.length; index++) {
+    hash = Math.imul(hash ^ value.charCodeAt(index), 0x01000193)
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0')
+}
+
 interface Pattern<T> {
   pattern: string
   data: T | undefined
@@ -134,6 +142,25 @@ export default class AhoCorasick<T = unknown> {
     return serialize(this.#nodes, this.#patterns, options)
   }
 
+  /** Wrap the compiled payload with profile and storage metadata for distribution. */
+  serializeArtifact(options?: SerializeOptions<T>): string {
+    const payload = this.serialize(options)
+    const backend = this.#profile.backend ? 'compact' : this.#stats.backend
+    const stats = { ...this.#stats, backend }
+    return JSON.stringify({
+      format: 'modern-ahocorasick/artifact',
+      version: 1,
+      segmentation: 'Intl.Segmenter:grapheme',
+      // Fast constructors intentionally persist through the portable compact format.
+      backend,
+      unit: this.#stats.unit,
+      stats,
+      dictionary: { patternCount: stats.patternCount, maxPatternUnits: stats.maxPatternUnits },
+      checksum: checksum(payload),
+      payload,
+    })
+  }
+
   /** Load and validate scan tables without rebuilding a trie. */
   static deserialize<T = unknown>(serialized: string, options?: DeserializeOptions<T>): AhoCorasick<T> {
     const matcher = new AhoCorasick<T>([])
@@ -146,6 +173,56 @@ export default class AhoCorasick<T = unknown> {
     matcher.#order = restored.order
     matcher.#maxLength = restored.maxLength
     matcher.#stats = matcher.#compileStats()
+    return matcher
+  }
+
+  /** Load a distributable artifact after validating its profile envelope. */
+  static deserializeArtifact<T = unknown>(serialized: string, options?: DeserializeOptions<T>): AhoCorasick<T> {
+    if (typeof serialized !== 'string') {
+      throw new TypeError('serialized must be a string')
+    }
+    let source: Record<string, unknown>
+    try {
+      const parsed = JSON.parse(serialized)
+      if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new Error('record expected')
+      }
+      source = parsed as Record<string, unknown>
+    }
+    catch {
+      throw new TypeError('Invalid compiled artifact')
+    }
+    if (source['format'] !== 'modern-ahocorasick/artifact' || source['version'] !== 1
+      || source['segmentation'] !== 'Intl.Segmenter:grapheme' || typeof source['payload'] !== 'string'
+      || !['compact', 'double-array'].includes(String(source['backend']))
+      || !['grapheme', 'folded-codepoint'].includes(String(source['unit']))
+      || source['stats'] === null || typeof source['stats'] !== 'object') {
+      throw new TypeError('Invalid or incompatible compiled artifact')
+    }
+    const stats = source['stats'] as Record<string, unknown>
+    if (stats['backend'] !== source['backend'] || stats['unit'] !== source['unit']) {
+      throw new TypeError('Invalid or incompatible compiled artifact')
+    }
+    if (source['checksum'] !== undefined && source['checksum'] !== checksum(source['payload'] as string)) {
+      throw new TypeError('Invalid or incompatible compiled artifact')
+    }
+    const matcher = AhoCorasick.deserialize(source['payload'] as string, options)
+    const actual = matcher.getStats()
+    for (const key of ['patternCount', 'maxPatternUnits'] as const) {
+      if (source['dictionary'] !== undefined) {
+        const dictionary = source['dictionary']
+        if (dictionary === null || typeof dictionary !== 'object' || Array.isArray(dictionary)
+          || (dictionary as Record<string, unknown>)[key] !== actual[key]) {
+          throw new TypeError('Invalid or incompatible compiled artifact')
+        }
+      }
+      if (stats[key] !== actual[key]) {
+        throw new TypeError('Invalid or incompatible compiled artifact')
+      }
+    }
+    if (actual.unit !== source['unit']) {
+      throw new TypeError('Compiled artifact requires a different Unicode unit profile')
+    }
     return matcher
   }
 
@@ -164,6 +241,25 @@ export default class AhoCorasick<T = unknown> {
     const strategy = resolveStrategy(options, 'all')
     const boundary = options === undefined ? undefined : resolveQuery(text, options, this.#segmenter)
     return this.#iterate(text, strategy, boundary)
+  }
+
+  /** Return the first match without collecting the result array. */
+  findFirst(text: string, options?: SearchOptions): Match<T> | undefined {
+    const iterator = this.iterate(text, options)
+    const result = iterator.next()
+    iterator.return?.()
+    return result.done ? undefined : result.value
+  }
+
+  /** Return the first match beginning at an original grapheme boundary. */
+  findAt(text: string, start: number, options?: Omit<SearchOptions, 'start' | 'anchored'>): Match<T> | undefined {
+    if (!Number.isSafeInteger(start) || start < 0 || start > text.length) {
+      throw new RangeError('start must be a safe integer within the input')
+    }
+    const iterator = this.iterate(text, { ...options, start, anchored: true })
+    const result = iterator.next()
+    iterator.return?.()
+    return result.done ? undefined : result.value
   }
 
   /** Reuse validated original-context filters; counting must not rebuild them. */

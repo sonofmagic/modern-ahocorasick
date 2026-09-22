@@ -36,11 +36,14 @@ matcher.replace(text, 'X') // 'X X'
 可以匹配 `ﬁ`，而 `f` 不行。完整词边界在原文上检查，先过滤再选择。`all` 按结束位置、
 更早的开始位置、输入顺序排列；不重叠策略使用原文范围及既有优先规则。
 
-## 能力与开销
+## 流式、持久化与开销
 
 适配器提供 `search`、`iterate`、`match`、`count`、`countByPattern`、`replace` 和 `tokenize`，
 接受相同的查询选项与参数校验规则。它先处理完整字符串并创建偏移映射；不重叠迭代还会
-收集并排序有效候选。它不提供编译词库保存或流式接口；这两项能力使用核心匹配器。
+收集并排序有效候选。createStream() 对分块输入执行相同的逐字素转换，并把匹配映射回原文
+UTF-16 范围；createTokenStream() 与 createReplaceStream() 提供对应的分块接口。分词流会
+保留尚未结束的原文，直到 end() 才生成完整 token。serialize() 与
+TextMatcher.deserialize() 会保存转换配置、原始关键词和转换后的编译词典。
 可选转换需要额外内存和扫描开销，不执行模糊匹配、音译或语言排序比较。
 
 参见 [支持流式处理的折叠](/zh/unicode/case-folding)。

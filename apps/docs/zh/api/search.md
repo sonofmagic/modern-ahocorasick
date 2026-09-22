@@ -46,6 +46,16 @@ for (const hit of matcher.iterate(text, { strategy: 'leftmost-longest' })) {
 }
 ```
 
+## findFirst(text, options?) 与 findAt(text, start, options?)
+
+findFirst() 按 iterate() 的顺序返回首个匹配，不创建结果数组。findAt() 在原始字素边界上
+执行锚定查询，返回从指定位置开始的首个匹配。
+
+```ts
+matcher.findFirst('ushers')?.pattern // 'she'
+matcher.findAt('ushers', 1)?.pattern // 'she'
+```
+
 ## 选择策略与内存
 
 两种方法均接受 `all`（默认）、`leftmost-first`、`leftmost-longest` 和 `longest-first`。迭代期间仍持有原文和词典。两种 leftmost 策略使用 O(L) 候选窗口，L 为最长关键词的字素数；`longest-first` 则会缓存并排序候选。`search()` 还会保存结果数组。

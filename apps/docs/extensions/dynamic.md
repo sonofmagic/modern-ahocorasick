@@ -29,8 +29,17 @@ same cached `{ matcher, ids }` snapshot until an effective edit. The frozen `ids
 maps each snapshot's dense `patternIndex` to the stable ID. Metadata references remain
 caller-owned. Existing iterators and streams keep their original snapshot.
 
+## Async compilation and persistence
+
+compileAsync({ signal? }) yields once before compiling, so a cancelled request
+does not start a synchronous build. Edits made while a build is pending do not
+enter that snapshot. serialize() preserves active entries and stable IDs;
+DynamicDictionary.deserialize() restores the next ID frontier and accepts the
+same metadata codec options as the core matcher.
+
 ## Choose a compiler
 
 Pass a third constructor argument `(patterns, options) => new UnicodeAhoCorasick(patterns, options)`
-to choose another built-in matcher. Compilation is explicit and synchronous; this API
-does not promise constant-time online index updates.
+to choose another built-in matcher. Compilation rebuilds an immutable snapshot and
+does not promise constant-time online index updates. The async method still runs
+the compiler on the calling thread, so use a Worker for very large builds.

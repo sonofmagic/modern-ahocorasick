@@ -15,5 +15,11 @@ declare namespace TextMatcher {
   type SearchOptions = Types.SearchOptions
   type ReplaceOptions = Types.ReplaceOptions
   type Replacement<T = unknown> = Types.Replacement<T>
+  type StreamOptions = Text.StreamOptions
+  type TokenStreamOptions = Text.TokenStreamOptions
+  type MatchStream<T = unknown> = Types.MatchStream<T>
+  type TokenStreamHandle<T = unknown> = Text.TokenStreamHandle<T>
+  type TextSerializeOptions<T = unknown> = Text.TextSerializeOptions<T>
+  type TextDeserializeOptions<T = unknown> = Text.TextDeserializeOptions<T>
 }
 export = TextMatcher

@@ -1,3 +1,4 @@
+import FastAhoCorasick from '@/fast'
 import AhoCorasick from '@/index'
 
 it('round-trips compiled Unicode dictionaries, duplicates and metadata through every query', () => {
@@ -20,6 +21,18 @@ it('round-trips compiled Unicode dictionaries, duplicates and metadata through e
   }
   expect(restored.serialize()).toBe(original.serialize())
   expect(AhoCorasick.deserialize(new AhoCorasick([]).serialize()).search('anything')).toEqual([])
+})
+
+it('round-trips portable compiled artifacts with profile metadata', () => {
+  const matcher = new AhoCorasick([{ pattern: 'cat', data: { id: 1 } }])
+  const restored = AhoCorasick.deserializeArtifact<{ id: number }>(matcher.serializeArtifact())
+  expect(restored.search('cat')).toEqual(matcher.search('cat'))
+  expect(() => AhoCorasick.deserializeArtifact('{"format":"modern-ahocorasick/artifact","version":1}')).toThrow(TypeError)
+  const tampered = JSON.parse(matcher.serializeArtifact())
+  tampered.payload = `${tampered.payload} `
+  expect(() => AhoCorasick.deserializeArtifact(JSON.stringify(tampered))).toThrow(TypeError)
+  const fast = new FastAhoCorasick(['dog'])
+  expect(FastAhoCorasick.deserializeArtifact(fast.serializeArtifact()).match('dog')).toBe(true)
 })
 
 it('supports explicit metadata codecs without changing caller-owned values', () => {

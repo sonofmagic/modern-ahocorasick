@@ -8,6 +8,8 @@ export interface StreamOptions extends StreamingBoundaryOptions {
   strategy?: StreamStrategy
   /** Maximum undecided original UTF-16 units. Infinity explicitly disables the limit. */
   maxBufferLength?: number
+  /** Alias used by the core matcher and text adapter. */
+  maxBufferedUnits?: number
   filter?: StreamFilter
 }
 export interface AsyncStreamOptions extends StreamOptions {
@@ -43,7 +45,7 @@ function validateOptions(options: StreamOptions | undefined, tokenMode: boolean)
   if (strategy === 'longest-first' || (tokenMode && strategy === 'all')) {
     throw new TypeError('strategy is not supported by this stream')
   }
-  const maxBufferLength = options?.maxBufferLength === undefined ? 1048576 : options.maxBufferLength
+  const maxBufferLength = options?.maxBufferLength ?? options?.maxBufferedUnits ?? 1048576
   if (maxBufferLength !== Number.POSITIVE_INFINITY && (!Number.isSafeInteger(maxBufferLength) || maxBufferLength < 1)) {
     throw new RangeError('maxBufferLength must be a positive safe integer or Infinity')
   }
@@ -395,6 +397,29 @@ export interface AsyncStreamHandle<T> {
   write: (chunk: string) => Promise<T[]>
   end: () => Promise<T[]>
   destroy: () => void
+}
+
+export type StreamConsumer<T> = (value: T) => void
+export type AsyncStreamConsumer<T> = (value: T) => void | PromiseLike<void>
+
+/** Consume synchronous chunks directly into a caller-owned sink. */
+export function consumeChunks<T>(matcher: Matcher<T>, source: Iterable<string>, consumer: StreamConsumer<Match<T>>, options?: StreamOptions): void {
+  if (typeof consumer !== 'function') {
+    throw new TypeError('consumer must be a function')
+  }
+  for (const match of iterateChunks(matcher, source, options)) {
+    consumer(match)
+  }
+}
+
+/** Consume asynchronous chunks directly into a caller-owned sink. */
+export async function consumeChunksAsync<T>(matcher: Matcher<T>, source: Iterable<string> | AsyncIterable<string>, consumer: AsyncStreamConsumer<Match<T>>, options?: AsyncStreamOptions): Promise<void> {
+  if (typeof consumer !== 'function') {
+    throw new TypeError('consumer must be a function')
+  }
+  for await (const match of iterateChunksAsync(matcher, source, options)) {
+    await consumer(match)
+  }
 }
 
 function asyncSession<I, O>(handle: StreamHandle<I>, convert: (item: I) => O | PromiseLike<O>, options?: AsyncStreamOptions): AsyncStreamHandle<O> {

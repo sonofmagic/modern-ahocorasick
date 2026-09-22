@@ -47,4 +47,4 @@ const loaded = AhoCorasick.deserialize(saved, {
 
 ## 支持的配置与开销
 
-默认精确匹配器与 `/fast` 支持持久化，后者保存为可移植的紧凑格式。带构造器字符边界或折叠配置的实例无法序列化，会抛错而不是丢弃选项。`/text` 不提供持久化接口。加载耗时仍与词库大小相关。
+默认精确匹配器与 /fast 支持持久化，后者保存为可移植的紧凑格式。serializeArtifact() 会在相同词库载荷外增加并校验分段、后端、单元、词库摘要、编译统计和载荷校验和，适合把预编译词库发送到 Worker 或 Serverless；使用 AhoCorasick.deserializeArtifact() 加载。带构造器字符边界或折叠配置的实例无法序列化，会抛错而不是丢弃选项。/text 入口提供自己的转换感知 serialize() 与 deserialize()。加载耗时仍与词库大小相关。

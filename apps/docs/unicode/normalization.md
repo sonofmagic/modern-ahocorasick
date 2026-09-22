@@ -40,13 +40,17 @@ accepted. Thus `ss` matches `ß` under folding, but `s` does not match half of i
 text before selection. `all` orders by end, earlier start, then input order;
 selected strategies use original ranges and the existing tie rules.
 
-## Capabilities and cost
+## Streaming, persistence and cost
 
 The adapter provides `search`, `iterate`, `match`, `count`, `countByPattern`, `replace` and `tokenize`, with the same query options and argument validation. It processes a
 complete string and builds an offset map before scanning; selected iteration
-materializes and sorts valid candidates. It does not expose compiled persistence
-or streaming. Use the core matcher for those APIs. These optional conversions
-carry extra memory and scanning costs and do not perform fuzzy matching,
-transliteration or locale-specific collation.
+materializes and sorts valid candidates. createStream() applies the same
+per-grapheme transformation to chunks and maps matches back to original UTF-16
+ranges. createTokenStream() and createReplaceStream() provide the matching
+stream variants; token sessions retain the undecided source until end() so
+their output is exact. serialize() and TextMatcher.deserialize() persist the
+transformation profile, original patterns and compiled transformed dictionary.
+These optional conversions carry extra memory and scanning costs and do not
+perform fuzzy matching, transliteration or locale-specific collation.
 
 See [Folding with stream support](/unicode/case-folding).

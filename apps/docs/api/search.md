@@ -46,6 +46,17 @@ for (const hit of matcher.iterate(text, { strategy: 'leftmost-longest' })) {
 }
 ```
 
+## findFirst(text, options?) and findAt(text, start, options?)
+
+findFirst() returns the first match in the same order as iterate() without
+allocating a result array. findAt() applies an anchored query at an original
+grapheme boundary and returns the first match beginning there.
+
+```ts
+matcher.findFirst('ushers')?.pattern // 'she'
+matcher.findAt('ushers', 1)?.pattern // 'she'
+```
+
 ## Selection and memory
 
 Both methods accept `all` (default), `leftmost-first`, `leftmost-longest` and `longest-first`. Iteration retains the input and dictionary. The two leftmost strategies use an O(L) candidate window, where L is the longest keyword in graphemes; `longest-first` instead buffers and sorts candidates. `search()` also retains its result array.

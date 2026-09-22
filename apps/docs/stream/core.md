@@ -28,6 +28,10 @@ const matches = [
 ]
 ```
 
+For high-hit inputs, the /stream entry exposes consumeChunks() and
+consumeChunksAsync() helpers that deliver matches directly to a caller-owned
+sink instead of requiring the caller to collect one final array.
+
 ## Chunk boundaries and EOF
 
 A write may return no matches while a trailing grapheme or selected match remains

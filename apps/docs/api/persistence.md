@@ -52,4 +52,4 @@ benchmark it for your dictionary rather than assuming constant-time startup.
 
 ## Supported profiles and cost
 
-Persistence supports the default exact matcher and `/fast`, which saves the portable compact format. Constructor character boundaries and folding profiles cannot be serialized: saving them throws rather than silently dropping options. `/text` has no persistence API. Loading still costs time proportional to dictionary size.
+Persistence supports the default exact matcher and /fast, which saves the portable compact format. serializeArtifact() wraps the same payload with validated segmentation, backend, unit, dictionary summary, compilation statistics and a payload checksum; load it with AhoCorasick.deserializeArtifact() when distributing a prebuilt dictionary to a Worker or Serverless process. Constructor character boundaries and folding profiles cannot be serialized: saving them throws rather than silently dropping options. The /text entry has its own transformation-aware serialize() and deserialize() methods. Loading still costs time proportional to dictionary size.

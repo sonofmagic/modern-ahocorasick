@@ -43,16 +43,18 @@ its dictionary.
 
 ## Choose a method
 
-| You need                         | Method                                      | Result                                                |
-| -------------------------------- | ------------------------------------------- | ----------------------------------------------------- |
-| Check whether any keyword occurs | `match(text)`                               | Boolean; stops at the first hit                       |
-| Count every occurrence           | `count(text)`                               | Number; includes overlaps and duplicate entries       |
-| Count each dictionary entry      | `countByPattern(text)`                      | Counts in input order; includes zeroes and duplicates |
-| Match incoming chunks            | `createStream(options?)`                    | Stateful writes, EOF flush and cancellation           |
-| Save or load a dictionary        | `serialize()` / `AhoCorasick.deserialize()` | Versioned, validated compiled data                    |
-| Collect matched ranges           | `search(text, options?)`                    | Array of independent match objects                    |
-| Read matches as needed           | `iterate(text, options?)`                   | Lazy iterator over match objects                      |
-| Replace non-overlapping matches  | `replace(text, replacement, options?)`      | New string                                            |
+| You need                            | Method                                          | Result                                                |
+| ----------------------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| Check whether any keyword occurs    | `match(text)`                                   | Boolean; stops at the first hit                       |
+| Count every occurrence              | `count(text)`                                   | Number; includes overlaps and duplicate entries       |
+| Count each dictionary entry         | `countByPattern(text)`                          | Counts in input order; includes zeroes and duplicates |
+| Match incoming chunks               | `createStream(options?)`                        | Stateful writes, EOF flush and cancellation           |
+| Return one match without collecting | `findFirst()` / `findAt()`                      | Low-allocation first-hit queries                      |
+| Save or load a dictionary           | `serialize()` / `AhoCorasick.deserialize()`     | Versioned, validated compiled data                    |
+| Distribute a compiled artifact      | `serializeArtifact()` / `deserializeArtifact()` | Profile-validated Worker/Serverless payload           |
+| Collect matched ranges              | `search(text, options?)`                        | Array of independent match objects                    |
+| Read matches as needed              | `iterate(text, options?)`                       | Lazy iterator over match objects                      |
+| Replace non-overlapping matches     | `replace(text, replacement, options?)`          | New string                                            |
 
 `count()` avoids creating match objects. `iterate()` avoids collecting a result
 array and stops scanning when you stop consuming it. It accepts a complete string,
@@ -92,8 +94,10 @@ const hits = [...stream.write('ush'), ...stream.write('ers'), ...stream.finish()
 
 For normalization or full Unicode case folding, import the separate
 `TextMatcher` constructor from `modern-ahocorasick/text`. It maps results back to
-original UTF-16 ranges, including expansions such as `ß` → `ss`. The default
-entry keeps exact matching and does not load the folding table.
+original UTF-16 ranges, including expansions such as `ß` → `ss`. It also provides
+transformed createStream(), createTokenStream(), createReplaceStream(),
+serialize() and deserialize(). The default entry keeps exact matching and does
+not load the folding table.
 
 See the [API guide](https://aho.icebreaker.top/api#whole-word-matching) for word
 boundary rules, metadata codecs, stream buffering/cancellation and conversion

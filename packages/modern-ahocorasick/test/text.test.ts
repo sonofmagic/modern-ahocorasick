@@ -108,6 +108,46 @@ it('keeps exact defaults and distinguishes canonical, compatibility and Turkic r
   expect(new TextMatcher(['ı'], { caseFold: 'turkic' }).count('Iİıi')).toBe(2)
 })
 
+it('supports transformed incremental streams and low-allocation first-hit queries', () => {
+  const matcher = new TextMatcher(['ss', 'strasse'], { caseFold: true })
+  const whole = '😀Straße SS'
+  for (let split = 0; split <= whole.length; split++) {
+    const stream = matcher.createStream({ strategy: 'leftmost-longest' })
+    const hits = [...stream.write(whole.slice(0, split)), ...stream.write(whole.slice(split)), ...stream.finish()]
+    expect(hits, `split ${split}`).toEqual(matcher.search(whole, { strategy: 'leftmost-longest' }))
+  }
+  expect(matcher.findFirst('xxStraße')).toEqual(matcher.search('xxStraße')[0])
+  expect(matcher.findAt('xxStraße', 2)?.pattern).toBe('strasse')
+  expect(matcher.findAt('xxStraße', 1)).toBeUndefined()
+})
+
+it('keeps complete transformed expansions before applying leftmost selection', () => {
+  const matcher = new TextMatcher(['s', 'ss', 'strasse'], { caseFold: true })
+  for (const strategy of ['leftmost-first', 'leftmost-longest'] as const) {
+    const text = '😀Straße SS'
+    const stream = matcher.createStream({ strategy })
+    const hits = [...stream.write(text.slice(0, 1)), ...stream.write(text.slice(1)), ...stream.finish()]
+    expect(hits).toEqual(matcher.search(text, { strategy }))
+  }
+})
+
+it('round-trips transformed compiled artifacts and supports token/replacement sessions', () => {
+  const matcher = new TextMatcher([{ pattern: 'STRASSE', data: { id: 1 } }], { caseFold: true })
+  const restored = TextMatcher.deserialize<{ id: number }>(matcher.serialize())
+  expect(restored.search('Straße')).toEqual(matcher.search('Straße'))
+  expect(restored.getStats().stateCount).toBeGreaterThan(0)
+  const tokens = restored.createTokenStream()
+  expect(tokens.write('xxStra')).toEqual([])
+  expect(tokens.end().map(token => token.text).join('')).toBe('xxStra')
+  const replacement = restored.createReplaceStream('X')
+  replacement.write('xxStraße')
+  expect(replacement.end().join('')).toBe('xxX')
+  expect(() => restored.createTokenStream({ strategy: 'all' as never })).toThrow(TypeError)
+  const invalid = restored.createReplaceStream(() => 1 as never)
+  invalid.write('Straße')
+  expect(() => invalid.end()).toThrow(TypeError)
+})
+
 it('checks word boundaries on the original text and preserves longest/first tie rules', () => {
   const ac = new TextMatcher(['strasse', 'strasse!cat', 'cat'], { caseFold: true })
   const text = 'Straße!catx CAT'

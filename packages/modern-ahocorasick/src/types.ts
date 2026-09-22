@@ -107,6 +107,10 @@ export type Token<T = unknown> = {
 export interface Matcher<T = unknown> {
   search: (text: string, options?: SearchOptions) => Match<T>[]
   iterate: (text: string, options?: SearchOptions) => IterableIterator<Match<T>>
+  /** Return the first match in the selected iteration order. */
+  findFirst?: (text: string, options?: SearchOptions) => Match<T> | undefined
+  /** Return a match whose original range starts at the supplied grapheme boundary. */
+  findAt?: (text: string, start: number, options?: Omit<SearchOptions, 'start' | 'anchored'>) => Match<T> | undefined
   match: (text: string, options?: QueryOptions) => boolean
   count: (text: string, options?: QueryOptions) => number
   countByPattern: (text: string, options?: QueryOptions) => number[]

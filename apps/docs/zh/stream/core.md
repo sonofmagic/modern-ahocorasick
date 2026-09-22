@@ -27,6 +27,9 @@ const matches = [
 ]
 ```
 
+命中密集时，可从 /stream 入口使用 consumeChunks() 或 consumeChunksAsync()，
+把匹配直接交给调用方的 sink，避免调用方再收集一个总结果数组。
+
 ## 分块边界与结束
 
 尾部字素或不重叠候选尚未确定时，写入可能返回空数组。代理对、CRLF、组合字符、旗帜和

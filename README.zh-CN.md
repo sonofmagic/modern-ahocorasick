@@ -39,16 +39,18 @@ matches.map(({ start, end }) => text.slice(start, end))
 
 ## 选择合适的方法
 
-| 需求               | 方法                                        | 返回结果                               |
-| ------------------ | ------------------------------------------- | -------------------------------------- |
-| 判断是否存在关键词 | `match(text)`                               | 布尔值；首次命中后停止                 |
-| 统计所有出现次数   | `count(text)`                               | 数值；包含重叠匹配和重复字典项         |
-| 分别统计每个词条   | `countByPattern(text)`                      | 按输入顺序返回次数，保留零次及重复词条 |
-| 匹配分块输入       | `createStream(options?)`                    | 连续写入、结束刷新和取消               |
-| 保存或加载词库     | `serialize()` / `AhoCorasick.deserialize()` | 带版本和校验的编译数据                 |
-| 收集匹配范围       | `search(text, options?)`                    | 独立匹配对象组成的数组                 |
-| 按需读取匹配       | `iterate(text, options?)`                   | 惰性匹配迭代器                         |
-| 替换不重叠的匹配   | `replace(text, replacement, options?)`      | 新字符串                               |
+| 需求               | 方法                                            | 返回结果                               |
+| ------------------ | ----------------------------------------------- | -------------------------------------- |
+| 判断是否存在关键词 | `match(text)`                                   | 布尔值；首次命中后停止                 |
+| 统计所有出现次数   | `count(text)`                                   | 数值；包含重叠匹配和重复字典项         |
+| 分别统计每个词条   | `countByPattern(text)`                          | 按输入顺序返回次数，保留零次及重复词条 |
+| 匹配分块输入       | `createStream(options?)`                        | 连续写入、结束刷新和取消               |
+| 低分配获取首个匹配 | `findFirst()` / `findAt()`                      | 返回首个结果，不创建结果数组           |
+| 保存或加载词库     | `serialize()` / `AhoCorasick.deserialize()`     | 带版本和校验的编译数据                 |
+| 分发编译词库       | `serializeArtifact()` / `deserializeArtifact()` | 带配置校验的 Worker/Serverless 载荷    |
+| 收集匹配范围       | `search(text, options?)`                        | 独立匹配对象组成的数组                 |
+| 按需读取匹配       | `iterate(text, options?)`                       | 惰性匹配迭代器                         |
+| 替换不重叠的匹配   | `replace(text, replacement, options?)`          | 新字符串                               |
 
 `count()` 不创建匹配对象。`iterate()` 不收集结果数组，停止迭代后也会停止扫描。它接收完整字符串；分块输入使用 `createStream()`。迭代器会持有原文和字典。
 
@@ -86,7 +88,8 @@ const hits = [...stream.write('ush'), ...stream.write('ers'), ...stream.finish()
 
 需要归一化或完整 Unicode 大小写折叠时，从 `modern-ahocorasick/text` 导入独立的
 `TextMatcher` 构造器。它会把结果映射回原文 UTF-16 范围，包括 `ß` → `ss` 这类展开。
-默认入口保持精确匹配，不加载折叠表。
+默认入口保持精确匹配，不加载折叠表。TextMatcher 还提供转换后的 createStream()、
+createTokenStream()、createReplaceStream()、serialize() 和 deserialize()。
 
 词边界规则、元数据编解码、流式缓冲和取消、转换开销详见
 [API 指南](https://aho.icebreaker.top/zh/api#完整词匹配)。流的待定尾部有明确上限，

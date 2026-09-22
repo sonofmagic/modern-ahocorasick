@@ -79,6 +79,18 @@ it('keeps dynamic IDs stable and compiled snapshots isolated', () => {
   const folding = new DynamicDictionary(['SS'], {}, patterns => new UnicodeAhoCorasick(patterns))
   expect(folding.compile().matcher.match('ß')).toBe(true)
 })
+
+it('supports cancellable async compilation and dynamic snapshot persistence', async () => {
+  const dictionary = new DynamicDictionary([{ pattern: 'cat', data: { id: 1 } }])
+  const snapshot = await dictionary.compileAsync()
+  expect(snapshot.ids).toEqual([0])
+  const serialized = dictionary.serialize()
+  const restored = DynamicDictionary.deserialize<{ id: number }>(serialized)
+  expect(restored.compile().matcher.search('cat')[0]?.data).toEqual({ id: 1 })
+  const controller = new AbortController()
+  controller.abort()
+  await expect(dictionary.compileAsync({ signal: controller.signal })).rejects.toBeDefined()
+})
 it('implements literal replacement helpers without changing original text semantics', () => {
   const matcher = new AhoCorasick(['cat', 'dog', '👨‍👩‍👧‍👦'])
   expect(matcher.replace('cat dog', keep())).toBe('cat dog')

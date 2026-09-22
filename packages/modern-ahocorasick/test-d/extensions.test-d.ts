@@ -3,7 +3,7 @@ import type { CompileStats, Match, QueryOptions, Token } from '..'
 import { expectError, expectType } from 'tsd'
 import AhoCorasick from '..'
 import DynamicDictionary from '../dist/dynamic'
-import { createMatchStream, createReplaceStream, createReplaceStreamAsync, createTokenStream, iterateChunksAsync } from '../dist/stream'
+import { consumeChunks, consumeChunksAsync, createMatchStream, createReplaceStream, createReplaceStreamAsync, createTokenStream, iterateChunksAsync } from '../dist/stream'
 import UnicodeAhoCorasick from '../dist/unicode'
 
 const matcher = new AhoCorasick([{ pattern: 'cat', data: { id: 1 } }], { boundary: 'unicode' })
@@ -16,11 +16,16 @@ expectType<Match<{ id: number }>[]>(createMatchStream(matcher).write('cat'))
 expectType<Token<{ id: number }>[]>(createTokenStream(matcher).preview().tokens)
 expectType<Promise<string[]>>(createReplaceStreamAsync(matcher, async match => String(match.data?.id)).end())
 expectType<AsyncIterableIterator<Match<{ id: number }>>>(iterateChunksAsync(matcher, ['cat']))
+expectType<void>(consumeChunks(matcher, ['cat'], () => { }))
+expectType<Promise<void>>(consumeChunksAsync(matcher, ['cat'], async () => { }))
 expectError(createMatchStream(matcher, { strategy: 'longest-first' }))
 expectError(createReplaceStream(matcher, async () => 'X'))
 expectError(createReplaceStream(matcher, 'X', { strategy: 'all' }))
 const dictionary = new DynamicDictionary([{ pattern: 'SS', data: 1 }], {}, (patterns, options) => new UnicodeAhoCorasick(patterns, options))
 expectType<readonly number[]>(dictionary.compile().ids)
+expectType<Promise<ReturnType<typeof dictionary.compile>>>(dictionary.compileAsync())
+expectType<string>(dictionary.serialize())
+expectType<typeof dictionary>(DynamicDictionary.deserialize(dictionary.serialize()))
 expectType<number[]>(dictionary.compile().matcher.countByPattern('ß'))
 
 const range: QueryOptions = { start: 1, end: 3, anchored: true }

@@ -37,11 +37,14 @@ this package preserves its own ranges and semantics rather than copying defects 
 method aliases. Run `pnpm benchmark:external` for the printable-ASCII comparison,
 including normalized independent ranges, native results, build costs and memory.
 
+Run `pnpm benchmark:versions` to compare pinned npm v1.1.0 and v2.0.4 against the current local default entry: construction, native search, conversion to independent ranges and retained memory. Historical Unicode cases with incorrect results receive no speed ratios. See the [v1/v2/v3 report](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.md) for full data and targeted rechecks.
+
 ## Reproduce and interpret
 
 ```sh
 pnpm benchmark
 pnpm benchmark:external
+pnpm benchmark:versions
 pnpm benchmark:docs
 ```
 
