@@ -1,9 +1,10 @@
-import type { BoundaryOptions, Match, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
+import type { BoundaryOptions, Match, PatternInput, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
 import { caseFold } from './case-folding.js'
 import AhoCorasick from './index.js'
 import { assertText, resolveBoundary, resolveStrategy } from './options.js'
+import { operationReplacement, selectLongest } from './runtime.js'
 
-export type { BoundaryOptions, Match, PatternInput, Replacement, ReplaceOptions, SearchOptions } from './types.js'
+export type { BoundaryOptions, Match, PatternInput, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
 
 export interface TextOptions {
   normalization?: 'NFC' | 'NFD' | 'NFKC' | 'NFKD'
@@ -88,6 +89,9 @@ export default class TextMatcher<T = unknown> {
         yield { pattern, patternIndex: hit.patternIndex, start, end, data }
       }
     }
+    if (strategy === 'longest-first') {
+      return selectLongest(all(), text, this.#segmenter)
+    }
     if (strategy === 'all') {
       return all()
     }
@@ -146,6 +150,7 @@ export default class TextMatcher<T = unknown> {
     if (strategy === 'all') {
       throw new TypeError('replace requires a non-overlapping strategy')
     }
+    replacement = operationReplacement(replacement)
     const parts: string[] = []
     let cursor = 0
     for (const hit of this.iterate(text, { ...options, strategy })) {
@@ -159,5 +164,27 @@ export default class TextMatcher<T = unknown> {
     }
     parts.push(text.slice(cursor))
     return parts.join('')
+  }
+
+  /** Partition original text into non-empty literal and selected match tokens. */
+  tokenize(text: string, options?: ReplaceOptions): Token<T>[] {
+    assertText(text)
+    const strategy = resolveStrategy(options, 'leftmost-longest')
+    if (strategy === 'all') {
+      throw new TypeError('tokenize requires a non-overlapping strategy')
+    }
+    const tokens: Token<T>[] = []
+    let cursor = 0
+    for (const match of this.iterate(text, { ...options, strategy })) {
+      if (cursor < match.start) {
+        tokens.push({ type: 'text', text: text.slice(cursor, match.start), start: cursor, end: match.start })
+      }
+      tokens.push({ type: 'match', text: text.slice(match.start, match.end), start: match.start, end: match.end, match })
+      cursor = match.end
+    }
+    if (cursor < text.length) {
+      tokens.push({ type: 'text', text: text.slice(cursor), start: cursor, end: text.length })
+    }
+    return tokens
   }
 }

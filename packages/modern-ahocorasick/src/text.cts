@@ -8,6 +8,7 @@ type TextMatcher<T = unknown> = Matcher<T>
 declare namespace TextMatcher {
   type TextOptions = Text.TextOptions
   type PatternInput<T = unknown> = Types.PatternInput<T>
+  type Token<T = unknown> = Types.Token<T>
   type Match<T = unknown> = Types.Match<T>
   type BoundaryOptions = Types.BoundaryOptions
   type SearchOptions = Types.SearchOptions

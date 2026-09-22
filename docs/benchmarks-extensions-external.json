@@ -1,0 +1,3436 @@
+{
+  "node": "v24.18.0",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "rounds": 3,
+  "samples": 7,
+  "corpusSha256": "24eb43ba8d017c3b9aed6153d5b414b642aee7dcd04fe46151db467492281650",
+  "implementationSha256": "253913d801783f0a2197f676fd59d4c05f497d298cdbb6ef3c87b1e6847caa97",
+  "externalVersions": {
+    "ahocorasick": "1.0.2",
+    "@monyone/aho-corasick": "1.5.10",
+    "@tanishiking/aho-corasick": "0.0.1"
+  },
+  "note": "Printable ASCII only; overlaps and input-index duplicates preserved. Search includes conversion to independent UTF-16 range objects and canonical sorting; upstream rawSearch is reported separately and is not equivalent output. Upstream count/match use grouped search; monyone/tanishiking count uses normalized search, tanishiking presence uses full search. firstResult is lazy only for modern variants; others materialize complete results. indexOf rescans per keyword. Build includes adapter preparation. Boolean latency, not nominal full-input throughput, is meaningful for early exits. Retained dictionary heap includes adapters, with buffers separate. Process peak RSS includes warmup, verification, repeated builds and results, not isolated dictionary storage. No universal ranking.",
+  "results": [
+    {
+      "variant": "modern",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 0.07471093750000007,
+          "madMs": 0.0010421542968749864,
+          "betweenRoundsMadMs": 3.1494140624921396e-05,
+          "roundMediansMs": [
+            0.07471093750000007,
+            0.07455777929687496,
+            0.074742431640625
+          ]
+        },
+        "search": {
+          "ms": 0.954411437500001,
+          "madMs": 0.008369781249999875,
+          "betweenRoundsMadMs": 0.010502562499999257,
+          "roundMediansMs": [
+            1.0129192812499994,
+            0.9439088750000018,
+            0.954411437500001
+          ]
+        },
+        "count": {
+          "ms": 0.2656191406249997,
+          "madMs": 0.004557945312499534,
+          "betweenRoundsMadMs": 0.0068193359375001705,
+          "roundMediansMs": [
+            0.2936246718750004,
+            0.2587998046874995,
+            0.2656191406249997
+          ]
+        },
+        "match": {
+          "ms": 0.0002807515869140409,
+          "madMs": 3.429663085940948e-05,
+          "betweenRoundsMadMs": 6.967773437949187e-07,
+          "roundMediansMs": [
+            0.0002814483642578358,
+            0.0002613983154296923,
+            0.0002807515869140409
+          ]
+        },
+        "firstResult": {
+          "ms": 0.0032922363281249756,
+          "madMs": 0.00029917407226559556,
+          "betweenRoundsMadMs": 0.00013109350585938095,
+          "roundMediansMs": [
+            0.0034233298339843565,
+            0.0032922363281249756,
+            0.002896382812499987
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 14637.6,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 367000,
+      "processPeakRssBytes": 755761152
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 0.10169970703124998,
+          "madMs": 0.0008754882812499476,
+          "betweenRoundsMadMs": 0.0006370449218748853,
+          "roundMediansMs": [
+            0.11427197265625,
+            0.10106266210937509,
+            0.10169970703124998
+          ]
+        },
+        "search": {
+          "ms": 2.2658411875000013,
+          "madMs": 0.02086974999999569,
+          "betweenRoundsMadMs": 0.002768250000002581,
+          "roundMediansMs": [
+            2.278440062500003,
+            2.2630729374999987,
+            2.2658411875000013
+          ]
+        },
+        "count": {
+          "ms": 2.1622864375000006,
+          "madMs": 0.01188799999999901,
+          "betweenRoundsMadMs": 0.004231750000002421,
+          "roundMediansMs": [
+            2.1622864375000006,
+            2.167208374999994,
+            2.158054687499998
+          ]
+        },
+        "match": {
+          "ms": 0.004913238525390662,
+          "madMs": 0.0003425090332031533,
+          "betweenRoundsMadMs": 1.213598632809898e-05,
+          "roundMediansMs": [
+            0.004265441894531263,
+            0.004925374511718761,
+            0.004913238525390662
+          ]
+        },
+        "firstResult": {
+          "ms": 0.003971618652343745,
+          "madMs": 9.623217773435666e-05,
+          "betweenRoundsMadMs": 7.471704101558174e-05,
+          "roundMediansMs": [
+            0.003971618652343745,
+            0.003896901611328163,
+            0.004343159912109373
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 31595.2,
+      "dictionaryBufferBytes": 5716,
+      "resultHeapBytes": 368328,
+      "processPeakRssBytes": 1141342208
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 0.047615804687499985,
+          "madMs": 0.00035091210937499007,
+          "betweenRoundsMadMs": 0.0001529121093750141,
+          "roundMediansMs": [
+            0.04722615527343749,
+            0.047768716796875,
+            0.047615804687499985
+          ]
+        },
+        "search": {
+          "ms": 1.2282864687499995,
+          "madMs": 0.015212249999999372,
+          "betweenRoundsMadMs": 0.015643218750000187,
+          "roundMediansMs": [
+            1.2065403749999994,
+            1.2282864687499995,
+            1.2439296874999997
+          ]
+        },
+        "count": {
+          "ms": 1.1991119999999995,
+          "madMs": 0.013406218749999255,
+          "betweenRoundsMadMs": 0.00896740625000092,
+          "roundMediansMs": [
+            1.2080794062500004,
+            1.1850690000000021,
+            1.1991119999999995
+          ]
+        },
+        "match": {
+          "ms": 5.322265624999045e-05,
+          "madMs": 2.4464111327837657e-06,
+          "betweenRoundsMadMs": 1.0238647460941719e-05,
+          "roundMediansMs": [
+            5.322265624999045e-05,
+            6.346130371093217e-05,
+            4.0512084960919736e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 1.2015195312499998,
+          "madMs": 0.006714843750003752,
+          "betweenRoundsMadMs": 0.00354037500000004,
+          "roundMediansMs": [
+            1.183776031249998,
+            1.2015195312499998,
+            1.2050599062499998
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.39050228125000075,
+          "madMs": 0.0037522812499997116,
+          "betweenRoundsMadMs": 0.004156578125000365,
+          "roundMediansMs": [
+            0.39050228125000075,
+            0.4038652343750009,
+            0.3863457031250004
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 136442.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 366904,
+      "processPeakRssBytes": 208879616
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 0.11268131445312501,
+          "madMs": 0.001605710937499949,
+          "betweenRoundsMadMs": 0.0009375000000000355,
+          "roundMediansMs": [
+            0.11174381445312498,
+            0.11268131445312501,
+            0.11927603906250006
+          ]
+        },
+        "search": {
+          "ms": 0.96873309375,
+          "madMs": 0.008171875000000384,
+          "betweenRoundsMadMs": 0.001614625000001979,
+          "roundMediansMs": [
+            0.9671184687499981,
+            0.96873309375,
+            1.0088203124999993
+          ]
+        },
+        "count": {
+          "ms": 0.9916197812500016,
+          "madMs": 0.009829437499998761,
+          "betweenRoundsMadMs": 0.008955749999998375,
+          "roundMediansMs": [
+            1.00057553125,
+            0.9686158749999976,
+            0.9916197812500016
+          ]
+        },
+        "match": {
+          "ms": 5.07354736328236e-05,
+          "madMs": 3.2144775390513525e-06,
+          "betweenRoundsMadMs": 3.067016601576711e-06,
+          "roundMediansMs": [
+            4.766845703124689e-05,
+            5.07354736328236e-05,
+            5.735278320312398e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 0.9755455625000025,
+          "madMs": 0.011614593749996516,
+          "betweenRoundsMadMs": 0.007484375000004206,
+          "roundMediansMs": [
+            0.9680611874999983,
+            0.9755455625000025,
+            0.9972343749999979
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.15865869140625044,
+          "madMs": 0.0013367500000001087,
+          "betweenRoundsMadMs": 0.004313152343750737,
+          "roundMediansMs": [
+            0.1543455390624997,
+            0.15865869140625044,
+            0.2034485625000002
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 94776,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 367264,
+      "processPeakRssBytes": 206045184
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 0.04504650878906252,
+          "madMs": 0.0003830966796875279,
+          "betweenRoundsMadMs": 2.5797851562481267e-05,
+          "roundMediansMs": [
+            0.045072306640625004,
+            0.04504650878906252,
+            0.0425375576171875
+          ]
+        },
+        "search": {
+          "ms": 1.738161437499997,
+          "madMs": 0.01800781249999517,
+          "betweenRoundsMadMs": 0.0027943125000007285,
+          "roundMediansMs": [
+            1.738161437499997,
+            1.7323828124999991,
+            1.7409557499999977
+          ]
+        },
+        "count": {
+          "ms": 1.7182681875000014,
+          "madMs": 0.011897124999997288,
+          "betweenRoundsMadMs": 0.002377687499993897,
+          "roundMediansMs": [
+            1.6064192499999983,
+            1.7182681875000014,
+            1.7206458749999953
+          ]
+        },
+        "match": {
+          "ms": 0.7720800781250006,
+          "madMs": 0.04952473437499805,
+          "betweenRoundsMadMs": 0.031219406249999082,
+          "roundMediansMs": [
+            0.7720800781250006,
+            0.8032994843749997,
+            0.7221868593750003
+          ]
+        },
+        "firstResult": {
+          "ms": 1.6187161562499952,
+          "madMs": 0.03311328124999591,
+          "betweenRoundsMadMs": 0.0014583437499950946,
+          "roundMediansMs": [
+            1.6172578125000001,
+            1.6187161562499952,
+            1.643445312499999
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.8255104062500038,
+          "madMs": 0.004989593750003962,
+          "betweenRoundsMadMs": 0.0020377812499958736,
+          "roundMediansMs": [
+            0.8275481874999997,
+            0.8255104062500038,
+            0.8162890625000045
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 136806.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 368056,
+      "processPeakRssBytes": 216252416
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 0.047922281249999976,
+          "madMs": 0.00014782617187503178,
+          "betweenRoundsMadMs": 5.444335937493383e-05,
+          "roundMediansMs": [
+            0.048399007812500006,
+            0.04786783789062504,
+            0.047922281249999976
+          ]
+        },
+        "search": {
+          "ms": 0.5132122500000005,
+          "madMs": 0.005932296875002407,
+          "betweenRoundsMadMs": 0.0014550624999998263,
+          "roundMediansMs": [
+            0.5146673125000003,
+            0.4964843750000014,
+            0.5132122500000005
+          ]
+        },
+        "count": {
+          "ms": 0.3079306640625008,
+          "madMs": 0.003745117187501812,
+          "betweenRoundsMadMs": 0.000521812500001495,
+          "roundMediansMs": [
+            0.3074088515624993,
+            0.3079306640625008,
+            0.30870833593749936
+          ]
+        },
+        "match": {
+          "ms": 0.2819892578124996,
+          "madMs": 0.001829101562499602,
+          "betweenRoundsMadMs": 0.0009082031250002842,
+          "roundMediansMs": [
+            0.2828974609374999,
+            0.2819892578124996,
+            0.27868619531249905
+          ]
+        },
+        "firstResult": {
+          "ms": 0.5102858125000012,
+          "madMs": 0.0036126250000023674,
+          "betweenRoundsMadMs": 0.0009134062499995821,
+          "roundMediansMs": [
+            0.5049791718750001,
+            0.5111992187500007,
+            0.5102858125000012
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.2837076796874989,
+          "madMs": 0.002479164062501482,
+          "betweenRoundsMadMs": 0.0013284531250015164,
+          "roundMediansMs": [
+            0.2850361328125004,
+            0.2769238281250015,
+            0.2837076796874989
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 98972.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 304336,
+      "processPeakRssBytes": 205422592
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "ordinary",
+      "patterns": 200,
+      "utf16Length": 14899,
+      "count": 4900,
+      "checks": "520b94195ba34911446d26623c2f8ced30ebcbb57d53505ea8acb700afd85624",
+      "metrics": {
+        "build": {
+          "ms": 6.174206542968776e-05,
+          "madMs": 5.788085937499798e-06,
+          "betweenRoundsMadMs": 3.4992675781251453e-06,
+          "roundMediansMs": [
+            6.924438476562517e-05,
+            5.824279785156261e-05,
+            6.174206542968776e-05
+          ]
+        },
+        "search": {
+          "ms": 2.4768828125000013,
+          "madMs": 0.010973999999999151,
+          "betweenRoundsMadMs": 0.011497437500000984,
+          "roundMediansMs": [
+            2.4653853750000003,
+            2.4768828125000013,
+            2.5026953125
+          ]
+        },
+        "count": {
+          "ms": 2.298669312499996,
+          "madMs": 0.013393250000000023,
+          "betweenRoundsMadMs": 0.0010754999999988968,
+          "roundMediansMs": [
+            2.298669312499996,
+            2.263328125000001,
+            2.299744812499995
+          ]
+        },
+        "match": {
+          "ms": 1.564025878905695e-05,
+          "madMs": 1.1394042968709828e-06,
+          "betweenRoundsMadMs": 4.0686035157611045e-07,
+          "roundMediansMs": [
+            1.604711914063306e-05,
+            1.564025878905695e-05,
+            1.4877319335943051e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 2.4910365,
+          "madMs": 0.02182031250000449,
+          "betweenRoundsMadMs": 0.04051037500000376,
+          "roundMediansMs": [
+            2.5315468750000036,
+            2.443643187500001,
+            2.4910365
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2008.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 366904,
+      "processPeakRssBytes": 87736320
+    },
+    {
+      "variant": "modern",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.2042073593749999,
+          "madMs": 0.006445316406249901,
+          "betweenRoundsMadMs": 0.0016925429687500992,
+          "roundMediansMs": [
+            0.20589990234375,
+            0.2042073593749999,
+            0.20062239843749996
+          ]
+        },
+        "search": {
+          "ms": 2.085221374999996,
+          "madMs": 0.010218749999999943,
+          "betweenRoundsMadMs": 0.006429687499995396,
+          "roundMediansMs": [
+            2.0787916875000008,
+            2.085221374999996,
+            2.1749791875
+          ]
+        },
+        "count": {
+          "ms": 0.5024635468749992,
+          "madMs": 0.006003906250001023,
+          "betweenRoundsMadMs": 0.005566406249998934,
+          "roundMediansMs": [
+            0.49689714062500023,
+            0.5314700468750004,
+            0.5024635468749992
+          ]
+        },
+        "match": {
+          "ms": 0.4769863281249975,
+          "madMs": 0.005113921875000926,
+          "betweenRoundsMadMs": 0.0006178437499961831,
+          "roundMediansMs": [
+            0.4769863281249975,
+            0.5028658750000012,
+            0.47636848437500134
+          ]
+        },
+        "firstResult": {
+          "ms": 2.085114562499996,
+          "madMs": 0.016747375000008446,
+          "betweenRoundsMadMs": 0.008825499999986164,
+          "roundMediansMs": [
+            2.0762890625000097,
+            2.085114562499996,
+            2.162960937500003
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 30396.8,
+      "dictionaryBufferBytes": 20356,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 145981440
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.2883554687500003,
+          "madMs": 0.0024039687500001516,
+          "betweenRoundsMadMs": 0.00012727343750018605,
+          "roundMediansMs": [
+            0.2882281953125001,
+            0.29137988281250005,
+            0.2883554687500003
+          ]
+        },
+        "search": {
+          "ms": 4.716812500000003,
+          "madMs": 0.021442750000005617,
+          "betweenRoundsMadMs": 0.03812499999999375,
+          "roundMediansMs": [
+            4.664541624999998,
+            4.716812500000003,
+            4.754937499999997
+          ]
+        },
+        "count": {
+          "ms": 4.693885375000008,
+          "madMs": 0.016796874999997158,
+          "betweenRoundsMadMs": 0.020354125000011436,
+          "roundMediansMs": [
+            4.673531249999996,
+            4.693885375000008,
+            4.7216666249999975
+          ]
+        },
+        "match": {
+          "ms": 4.688489624999988,
+          "madMs": 0.05022387500000036,
+          "betweenRoundsMadMs": 0.03791662500000825,
+          "roundMediansMs": [
+            4.620895749999988,
+            4.688489624999988,
+            4.726406249999997
+          ]
+        },
+        "firstResult": {
+          "ms": 4.679598999999996,
+          "madMs": 0.03132287499997233,
+          "betweenRoundsMadMs": 0.03505725000002258,
+          "roundMediansMs": [
+            4.679598999999996,
+            4.6151093749999745,
+            4.714656250000019
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 72725.6,
+      "dictionaryBufferBytes": 14212,
+      "resultHeapBytes": 48,
+      "processPeakRssBytes": 140820480
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.14607470703125003,
+          "madMs": 0.002591957031250036,
+          "betweenRoundsMadMs": 0.0002679062499999496,
+          "roundMediansMs": [
+            0.14607470703125003,
+            0.14656494140624998,
+            0.14580680078125008
+          ]
+        },
+        "search": {
+          "ms": 0.33572753906249986,
+          "madMs": 0.0050332031250004405,
+          "betweenRoundsMadMs": 0.014663734375000459,
+          "roundMediansMs": [
+            0.30850228125000045,
+            0.33572753906249986,
+            0.3503912734375003
+          ]
+        },
+        "count": {
+          "ms": 0.34305957031250056,
+          "madMs": 0.0033697890624999616,
+          "betweenRoundsMadMs": 0.00926367187499988,
+          "roundMediansMs": [
+            0.3074554062499999,
+            0.35232324218750044,
+            0.34305957031250056
+          ]
+        },
+        "match": {
+          "ms": 0.3408570937500013,
+          "madMs": 0.003812828124999612,
+          "betweenRoundsMadMs": 1.5632812498722615e-05,
+          "roundMediansMs": [
+            0.314828125,
+            0.3408727265625,
+            0.3408570937500013
+          ]
+        },
+        "firstResult": {
+          "ms": 0.33282291406250053,
+          "madMs": 0.004401039062500445,
+          "betweenRoundsMadMs": 0.01577539062500044,
+          "roundMediansMs": [
+            0.3067874296874997,
+            0.33282291406250053,
+            0.34859830468750097
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.33302603906250283,
+          "madMs": 0.004468749999997357,
+          "betweenRoundsMadMs": 0.011793945312497556,
+          "roundMediansMs": [
+            0.3034876250000007,
+            0.33302603906250283,
+            0.3448199843750004
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 332186.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 138461184
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.5541914062500002,
+          "madMs": 0.012774093749999604,
+          "betweenRoundsMadMs": 0.003729156249999921,
+          "roundMediansMs": [
+            0.5579205625000001,
+            0.5281054687499998,
+            0.5541914062500002
+          ]
+        },
+        "search": {
+          "ms": 0.3464495468750002,
+          "madMs": 0.001436843749999639,
+          "betweenRoundsMadMs": 0.0231923828124998,
+          "roundMediansMs": [
+            0.3696419296875,
+            0.30079687499999963,
+            0.3464495468750002
+          ]
+        },
+        "count": {
+          "ms": 0.34882552343750106,
+          "madMs": 0.0020468749999995595,
+          "betweenRoundsMadMs": 0.017865234374998984,
+          "roundMediansMs": [
+            0.36669075781250005,
+            0.3008805312499998,
+            0.34882552343750106
+          ]
+        },
+        "match": {
+          "ms": 0.4037050781250002,
+          "madMs": 0.0021009140625007916,
+          "betweenRoundsMadMs": 0.023645828124999824,
+          "roundMediansMs": [
+            0.42735090625000005,
+            0.3764498671874996,
+            0.4037050781250002
+          ]
+        },
+        "firstResult": {
+          "ms": 0.3460865859374991,
+          "madMs": 0.010546554687500986,
+          "betweenRoundsMadMs": 0.03255142968749958,
+          "roundMediansMs": [
+            0.4039101562499994,
+            0.3135351562499995,
+            0.3460865859374991
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.3449557265624996,
+          "madMs": 0.0026074218750018474,
+          "betweenRoundsMadMs": 0.025030273437501194,
+          "roundMediansMs": [
+            0.3699860000000008,
+            0.31623697656250016,
+            0.3449557265624996
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 250743.2,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 146194432
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.15477262109375,
+          "madMs": 0.0032451210937498587,
+          "betweenRoundsMadMs": 0.002556152343750062,
+          "roundMediansMs": [
+            0.15732877343750007,
+            0.15142692187500006,
+            0.15477262109375
+          ]
+        },
+        "search": {
+          "ms": 1.2005638125000004,
+          "madMs": 0.006371093749999446,
+          "betweenRoundsMadMs": 0.019052093750000054,
+          "roundMediansMs": [
+            1.2005638125000004,
+            1.2601679687500003,
+            1.1815117187500004
+          ]
+        },
+        "count": {
+          "ms": 1.2193150937500015,
+          "madMs": 0.04124087499999618,
+          "betweenRoundsMadMs": 0.020109375000004093,
+          "roundMediansMs": [
+            1.1992057187499974,
+            1.2904687499999987,
+            1.2193150937500015
+          ]
+        },
+        "match": {
+          "ms": 1.5339583125000047,
+          "madMs": 0.032502625000006446,
+          "betweenRoundsMadMs": 0.026049437500006434,
+          "roundMediansMs": [
+            1.5079088749999983,
+            1.6181562499999984,
+            1.5339583125000047
+          ]
+        },
+        "firstResult": {
+          "ms": 1.5103489375000052,
+          "madMs": 0.015085999999996602,
+          "betweenRoundsMadMs": 0.013315062500005581,
+          "roundMediansMs": [
+            1.5103489375000052,
+            1.60581775,
+            1.4970338749999996
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.5184166875000074,
+          "madMs": 0.010929687500009777,
+          "betweenRoundsMadMs": 0.03462762499999883,
+          "roundMediansMs": [
+            1.5184166875000074,
+            1.578557250000003,
+            1.4837890625000085
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 342218.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 218398720
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.15089257812500012,
+          "madMs": 0.0022998046875000178,
+          "betweenRoundsMadMs": 0.0026466484375001764,
+          "roundMediansMs": [
+            0.15433544921874998,
+            0.15089257812500012,
+            0.14824592968749994
+          ]
+        },
+        "search": {
+          "ms": 0.37719889062499945,
+          "madMs": 0.003069664062500088,
+          "betweenRoundsMadMs": 0.0036311875000007987,
+          "roundMediansMs": [
+            0.37719889062499945,
+            0.37103873437500035,
+            0.38083007812500025
+          ]
+        },
+        "count": {
+          "ms": 0.37241015624999996,
+          "madMs": 0.002435218750001411,
+          "betweenRoundsMadMs": 0.005659828124999322,
+          "roundMediansMs": [
+            0.37241015624999996,
+            0.3646061171875008,
+            0.3780699843749993
+          ]
+        },
+        "match": {
+          "ms": 0.3694860078124993,
+          "madMs": 0.00458105468749892,
+          "betweenRoundsMadMs": 0.001655929687498059,
+          "roundMediansMs": [
+            0.37574511718749903,
+            0.36783007812500124,
+            0.3694860078124993
+          ]
+        },
+        "firstResult": {
+          "ms": 0.37958952343750063,
+          "madMs": 0.002871742187497972,
+          "betweenRoundsMadMs": 8.984374999876366e-05,
+          "roundMediansMs": [
+            0.3796793671874994,
+            0.37781087500000154,
+            0.37958952343750063
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.3762812499999981,
+          "madMs": 0.005027343750001023,
+          "betweenRoundsMadMs": 0.0004785156249980105,
+          "roundMediansMs": [
+            0.3758027343750001,
+            0.3762812499999981,
+            0.382198890625002
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 249752.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 104333312
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "sparse",
+      "patterns": 500,
+      "utf16Length": 42000,
+      "count": 0,
+      "checks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "metrics": {
+        "build": {
+          "ms": 0.00012746691894531276,
+          "madMs": 7.16650390625035e-06,
+          "betweenRoundsMadMs": 6.255981445311455e-06,
+          "roundMediansMs": [
+            0.00013372290039062422,
+            0.00012746691894531276,
+            0.00011814880371093742
+          ]
+        },
+        "search": {
+          "ms": 0.34966178125,
+          "madMs": 0.0009423828125005862,
+          "betweenRoundsMadMs": 0.00047785937499966735,
+          "roundMediansMs": [
+            0.34966178125,
+            0.35112142187499984,
+            0.34918392187500036
+          ]
+        },
+        "count": {
+          "ms": 0.35084049218750035,
+          "madMs": 0.004806640625000469,
+          "betweenRoundsMadMs": 0.00099250781249971,
+          "roundMediansMs": [
+            0.34984798437500064,
+            0.35084049218750035,
+            0.3618795625000004
+          ]
+        },
+        "match": {
+          "ms": 0.3507405625000004,
+          "madMs": 0.00031249218749795915,
+          "betweenRoundsMadMs": 7.650000000047896e-05,
+          "roundMediansMs": [
+            0.35010025781250054,
+            0.3508170625000009,
+            0.3507405625000004
+          ]
+        },
+        "firstResult": {
+          "ms": 0.35053873437500016,
+          "madMs": 0.0010192109374997926,
+          "betweenRoundsMadMs": 0.00011328906250085424,
+          "roundMediansMs": [
+            0.350652023437501,
+            0.35030664062499994,
+            0.35053873437500016
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 4408.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 48,
+      "processPeakRssBytes": 76857344
+    },
+    {
+      "variant": "modern",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 0.07633748242187505,
+          "madMs": 0.0017466621093750745,
+          "betweenRoundsMadMs": 0.0008493652343750657,
+          "roundMediansMs": [
+            0.07548811718749998,
+            0.09284895312499986,
+            0.07633748242187505
+          ]
+        },
+        "search": {
+          "ms": 2.406333312500003,
+          "madMs": 0.06759893750000145,
+          "betweenRoundsMadMs": 0.018080687500003023,
+          "roundMediansMs": [
+            2.648651062500001,
+            2.406333312500003,
+            2.388252625
+          ]
+        },
+        "count": {
+          "ms": 0.011480295654296868,
+          "madMs": 5.457568359376608e-05,
+          "betweenRoundsMadMs": 4.883862304688735e-05,
+          "roundMediansMs": [
+            0.011529134277343756,
+            0.011357279541015619,
+            0.011480295654296868
+          ]
+        },
+        "match": {
+          "ms": 0.00010391235351561723,
+          "madMs": 5.251562499997142e-05,
+          "betweenRoundsMadMs": 1.9073486328125e-06,
+          "roundMediansMs": [
+            3.990173339843417e-05,
+            0.00010391235351561723,
+            0.00010581970214842973
+          ]
+        },
+        "firstResult": {
+          "ms": 0.0010364379882812358,
+          "madMs": 2.9566406249986743e-05,
+          "betweenRoundsMadMs": 9.663818359373355e-06,
+          "roundMediansMs": [
+            0.0010267741699218624,
+            0.0010364379882812358,
+            0.001103586914062482
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 9124,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6767896,
+      "processPeakRssBytes": 387399680
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 0.09713476562499995,
+          "madMs": 0.0005665703125000698,
+          "betweenRoundsMadMs": 0.0016104316406249652,
+          "roundMediansMs": [
+            0.09713476562499995,
+            0.09552433398437499,
+            0.10777636718749994
+          ]
+        },
+        "search": {
+          "ms": 7.659635500000007,
+          "madMs": 0.2976355000000126,
+          "betweenRoundsMadMs": 0.018323000000009415,
+          "roundMediansMs": [
+            7.641312499999998,
+            7.659635500000007,
+            7.777333249999998
+          ]
+        },
+        "count": {
+          "ms": 6.818062499999996,
+          "madMs": 0.06260424999999259,
+          "betweenRoundsMadMs": 0.06303124999999454,
+          "roundMediansMs": [
+            6.755031250000002,
+            6.952073000000013,
+            6.818062499999996
+          ]
+        },
+        "match": {
+          "ms": 0.0016050211181640461,
+          "madMs": 6.920373535154734e-05,
+          "betweenRoundsMadMs": 4.823303222653563e-05,
+          "roundMediansMs": [
+            0.0016050211181640461,
+            0.00165566003417969,
+            0.0015567880859375105
+          ]
+        },
+        "firstResult": {
+          "ms": 0.0015538278808593653,
+          "madMs": 7.403564453126177e-05,
+          "betweenRoundsMadMs": 2.481591796876792e-05,
+          "roundMediansMs": [
+            0.0015538278808593653,
+            0.0015786437988281332,
+            0.0015132598876952952
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 19173.6,
+      "dictionaryBufferBytes": 2708,
+      "resultHeapBytes": 6797352,
+      "processPeakRssBytes": 509132800
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 0.16196630859375005,
+          "madMs": 0.0009471015624998858,
+          "betweenRoundsMadMs": 0.0013020820312500403,
+          "roundMediansMs": [
+            0.16477181249999973,
+            0.1606642265625,
+            0.16196630859375005
+          ]
+        },
+        "search": {
+          "ms": 28.006250000000023,
+          "madMs": 0.9854579999999942,
+          "betweenRoundsMadMs": 0.5747499999999945,
+          "roundMediansMs": [
+            27.049834000000033,
+            28.581000000000017,
+            28.006250000000023
+          ]
+        },
+        "count": {
+          "ms": 27.107334000000037,
+          "madMs": 0.565874000000008,
+          "betweenRoundsMadMs": 0.11100100000010116,
+          "roundMediansMs": [
+            28.01233400000001,
+            27.107334000000037,
+            26.996332999999936
+          ]
+        },
+        "match": {
+          "ms": 1.4760375976557993e-05,
+          "madMs": 3.718139648445362e-06,
+          "betweenRoundsMadMs": 1.5258789051730837e-08,
+          "roundMediansMs": [
+            1.4745117187506263e-05,
+            1.6143798828138767e-05,
+            1.4760375976557993e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 27.358417000000145,
+          "madMs": 0.9692489999999907,
+          "betweenRoundsMadMs": 0.38708299999996143,
+          "roundMediansMs": [
+            27.745500000000106,
+            27.358417000000145,
+            26.225666000000047
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.1872265625000011,
+          "madMs": 0.024222656249996533,
+          "betweenRoundsMadMs": 0.01220568749999984,
+          "roundMediansMs": [
+            1.2131614999999982,
+            1.1750208750000013,
+            1.1872265625000011
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 191509.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 6767864,
+      "processPeakRssBytes": 374702080
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 0.20978906249999962,
+          "madMs": 0.04846614062499954,
+          "betweenRoundsMadMs": 0.001854828125000374,
+          "roundMediansMs": [
+            0.20793423437499925,
+            0.30240559374999965,
+            0.20978906249999962
+          ]
+        },
+        "search": {
+          "ms": 28.32725000000005,
+          "madMs": 0.9220000000000255,
+          "betweenRoundsMadMs": 1.0830829999999878,
+          "roundMediansMs": [
+            28.32725000000005,
+            29.410333000000037,
+            26.340417000000002
+          ]
+        },
+        "count": {
+          "ms": 29.312582999999904,
+          "madMs": 1.043042000000014,
+          "betweenRoundsMadMs": 0.12187500000015916,
+          "roundMediansMs": [
+            29.312582999999904,
+            29.434458000000063,
+            27.482792000000018
+          ]
+        },
+        "match": {
+          "ms": 1.624548339843046e-05,
+          "madMs": 2.9653320312572617e-06,
+          "betweenRoundsMadMs": 4.0698242187442446e-07,
+          "roundMediansMs": [
+            1.6652465820304885e-05,
+            1.5619995117191476e-05,
+            1.624548339843046e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 27.31770800000004,
+          "madMs": 0.8257510000000821,
+          "betweenRoundsMadMs": 1.1518740000000207,
+          "roundMediansMs": [
+            26.165834000000018,
+            29.38908400000014,
+            27.31770800000004
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.6933320312500015,
+          "madMs": 0.05154687499999966,
+          "betweenRoundsMadMs": 0.036746093749997044,
+          "roundMediansMs": [
+            0.5569075625000011,
+            0.6933320312500015,
+            0.7300781249999986
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 87280.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 6767864,
+      "processPeakRssBytes": 415694848
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 0.08147501562500015,
+          "madMs": 0.0007034492187502073,
+          "betweenRoundsMadMs": 0.0006350117187498006,
+          "roundMediansMs": [
+            0.08147501562500015,
+            0.07957495117187507,
+            0.08211002734374995
+          ]
+        },
+        "search": {
+          "ms": 59.17320899999993,
+          "madMs": 1.285583999999858,
+          "betweenRoundsMadMs": 1.1807929999999942,
+          "roundMediansMs": [
+            57.992415999999935,
+            59.17320899999993,
+            61.22604200000012
+          ]
+        },
+        "count": {
+          "ms": 57.68604200000004,
+          "madMs": 0.9735000000000582,
+          "betweenRoundsMadMs": 0.24750099999982922,
+          "roundMediansMs": [
+            57.68604200000004,
+            57.438541000000214,
+            60.937625000000025
+          ]
+        },
+        "match": {
+          "ms": 30.38458300000002,
+          "madMs": 0.22037599999998747,
+          "betweenRoundsMadMs": 0.28412500000013097,
+          "roundMediansMs": [
+            30.10045799999989,
+            30.38458300000002,
+            30.754916999999978
+          ]
+        },
+        "firstResult": {
+          "ms": 58.251708000000235,
+          "madMs": 0.3594169999996666,
+          "betweenRoundsMadMs": 1.0285420000004706,
+          "roundMediansMs": [
+            57.223165999999765,
+            58.251708000000235,
+            59.899832999999944
+          ]
+        },
+        "rawSearch": {
+          "ms": 29.999582999999802,
+          "madMs": 0.15395800000032978,
+          "betweenRoundsMadMs": 0.082915999999841,
+          "roundMediansMs": [
+            29.999582999999802,
+            30.137500000000273,
+            29.91666699999996
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 62768.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 6775752,
+      "processPeakRssBytes": 301858816
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 0.030474812500000004,
+          "madMs": 0.00023535156250001354,
+          "betweenRoundsMadMs": 1.5380859374997113e-05,
+          "roundMediansMs": [
+            0.030474812500000004,
+            0.030459431640625007,
+            0.03055513476562499
+          ]
+        },
+        "search": {
+          "ms": 3.473578124999996,
+          "madMs": 0.06756262500002208,
+          "betweenRoundsMadMs": 0.021895750000005876,
+          "roundMediansMs": [
+            3.473578124999996,
+            3.495473875000002,
+            3.44047925000001
+          ]
+        },
+        "count": {
+          "ms": 0.01070096826171879,
+          "madMs": 0.0027115678710937785,
+          "betweenRoundsMadMs": 2.986621093753472e-05,
+          "roundMediansMs": [
+            0.01070096826171879,
+            0.010671102050781256,
+            0.010823384765625
+          ]
+        },
+        "match": {
+          "ms": 0.006937510009765613,
+          "madMs": 3.712988281245888e-05,
+          "betweenRoundsMadMs": 9.08398437499125e-06,
+          "roundMediansMs": [
+            0.006928426025390622,
+            0.006937510009765613,
+            0.007021535156250036
+          ]
+        },
+        "firstResult": {
+          "ms": 3.486437499999994,
+          "madMs": 0.08544800000001374,
+          "betweenRoundsMadMs": 0.03709374999999682,
+          "roundMediansMs": [
+            3.449343749999997,
+            3.5851927500000045,
+            3.486437499999994
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.007114308593750007,
+          "madMs": 5.071020507813051e-05,
+          "betweenRoundsMadMs": 7.3608398437508e-05,
+          "roundMediansMs": [
+            0.007040700195312499,
+            0.007322662353515641,
+            0.007114308593750007
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 72821.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 6767864,
+      "processPeakRssBytes": 308953088
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "dense-suffix",
+      "patterns": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "checks": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+      "metrics": {
+        "build": {
+          "ms": 3.911340332031152e-05,
+          "madMs": 3.5196533203114833e-06,
+          "betweenRoundsMadMs": 8.748779296869486e-07,
+          "roundMediansMs": [
+            3.911340332031152e-05,
+            4.224145507812638e-05,
+            3.823852539062457e-05
+          ]
+        },
+        "search": {
+          "ms": 5.83546874999999,
+          "madMs": 0.05343750000000114,
+          "betweenRoundsMadMs": 0.014458249999989903,
+          "roundMediansMs": [
+            5.8210105,
+            5.898250000000004,
+            5.83546874999999
+          ]
+        },
+        "count": {
+          "ms": 2.049450499999999,
+          "madMs": 0.18772656249999642,
+          "betweenRoundsMadMs": 0.027971312500000067,
+          "roundMediansMs": [
+            2.021479187499999,
+            2.165299499999996,
+            2.049450499999999
+          ]
+        },
+        "match": {
+          "ms": 1.2532592773437101e-05,
+          "madMs": 1.9073486328125e-06,
+          "betweenRoundsMadMs": 3.4582519531367595e-07,
+          "roundMediansMs": [
+            1.2532592773437101e-05,
+            1.2878417968750777e-05,
+            1.1723754882814186e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 5.893708249999989,
+          "madMs": 0.09438537500000166,
+          "betweenRoundsMadMs": 0.018077999999988492,
+          "roundMediansMs": [
+            5.934317750000005,
+            5.893708249999989,
+            5.87563025
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 1172,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 6767864,
+      "processPeakRssBytes": 204210176
+    },
+    {
+      "variant": "modern",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 0.03796936035156251,
+          "madMs": 0.0008010253906250431,
+          "betweenRoundsMadMs": 0.00013403320312502243,
+          "roundMediansMs": [
+            0.03796936035156251,
+            0.037835327148437486,
+            0.039987385742187465
+          ]
+        },
+        "search": {
+          "ms": 2.4660416250000026,
+          "madMs": 0.04229425000000475,
+          "betweenRoundsMadMs": 0.07544537499999393,
+          "roundMediansMs": [
+            2.4660416250000026,
+            2.345385437499999,
+            2.5414869999999965
+          ]
+        },
+        "count": {
+          "ms": 0.30705306249999964,
+          "madMs": 0.0045351562500011156,
+          "betweenRoundsMadMs": 0.0033375625000005016,
+          "roundMediansMs": [
+            0.2776940156249994,
+            0.30705306249999964,
+            0.31039062500000014
+          ]
+        },
+        "match": {
+          "ms": 0.00029675805664061694,
+          "madMs": 2.1545410156253997e-05,
+          "betweenRoundsMadMs": 1.2522460937497426e-05,
+          "roundMediansMs": [
+            0.00032691442871093934,
+            0.00029675805664061694,
+            0.0002842355957031195
+          ]
+        },
+        "firstResult": {
+          "ms": 0.004196980957031249,
+          "madMs": 0.00028490185546869995,
+          "betweenRoundsMadMs": 0.0001985270996093802,
+          "roundMediansMs": [
+            0.005002329589843757,
+            0.003998453857421869,
+            0.004196980957031249
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 15498.4,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4448424,
+      "processPeakRssBytes": 1097351168
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 0.03933052539062504,
+          "madMs": 0.0006698408203124617,
+          "betweenRoundsMadMs": 0.0006293125000000621,
+          "roundMediansMs": [
+            0.04024698828124998,
+            0.03933052539062504,
+            0.038701212890624975
+          ]
+        },
+        "search": {
+          "ms": 6.985562499999986,
+          "madMs": 0.07420849999999746,
+          "betweenRoundsMadMs": 0.029333249999979216,
+          "roundMediansMs": [
+            8.284229249999981,
+            6.985562499999986,
+            6.956229250000007
+          ]
+        },
+        "count": {
+          "ms": 6.366833249999985,
+          "madMs": 0.02118237499999509,
+          "betweenRoundsMadMs": 0.012760499999984631,
+          "roundMediansMs": [
+            6.366833249999985,
+            6.3795937499999695,
+            5.949520750000005
+          ]
+        },
+        "match": {
+          "ms": 0.006660014160156269,
+          "madMs": 0.0005132246093750847,
+          "betweenRoundsMadMs": 7.859277343746918e-05,
+          "roundMediansMs": [
+            0.006660014160156269,
+            0.006738606933593738,
+            0.006376902099609394
+          ]
+        },
+        "firstResult": {
+          "ms": 0.006093831542968775,
+          "madMs": 0.00025492358398437887,
+          "betweenRoundsMadMs": 9.380053710933423e-05,
+          "roundMediansMs": [
+            0.006093831542968775,
+            0.005878397705078087,
+            0.006187632080078109
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 18913.6,
+      "dictionaryBufferBytes": 800,
+      "resultHeapBytes": 4450464,
+      "processPeakRssBytes": 1325400064
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 0.01903883837890627,
+          "madMs": 0.00034816455078126585,
+          "betweenRoundsMadMs": 0.0002603349609374972,
+          "roundMediansMs": [
+            0.018778503417968773,
+            0.01903883837890627,
+            0.02011053466796875
+          ]
+        },
+        "search": {
+          "ms": 1.8579427499999994,
+          "madMs": 0.012765625000000114,
+          "betweenRoundsMadMs": 0.013661499999997773,
+          "roundMediansMs": [
+            1.8579427499999994,
+            1.8442812500000016,
+            1.9102630000000005
+          ]
+        },
+        "count": {
+          "ms": 1.8300990000000041,
+          "madMs": 0.019710874999994132,
+          "betweenRoundsMadMs": 0.014489625000003059,
+          "roundMediansMs": [
+            1.9336068124999954,
+            1.8300990000000041,
+            1.815609375000001
+          ]
+        },
+        "match": {
+          "ms": 5.4585815429691875e-05,
+          "madMs": 2.202392578143364e-06,
+          "betweenRoundsMadMs": 1.408935546898249e-06,
+          "roundMediansMs": [
+            5.703735351561545e-05,
+            5.3176879882793626e-05,
+            5.4585815429691875e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 1.8386458124999905,
+          "madMs": 0.03275781249998033,
+          "betweenRoundsMadMs": 0.05417193750000138,
+          "roundMediansMs": [
+            1.8928177499999919,
+            1.8386458124999905,
+            1.7787395625000073
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.4235156250000003,
+          "madMs": 0.005555343750000219,
+          "betweenRoundsMadMs": 0.005421874999999687,
+          "roundMediansMs": [
+            0.4180937500000006,
+            0.4235156250000003,
+            0.43024154687499916
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 10778.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 4450464,
+      "processPeakRssBytes": 253837312
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 0.022208251953125008,
+          "madMs": 0.0003442583007812333,
+          "betweenRoundsMadMs": 0.00011948632812502913,
+          "roundMediansMs": [
+            0.022208251953125008,
+            0.02313295458984374,
+            0.02208876562499998
+          ]
+        },
+        "search": {
+          "ms": 1.6039765625000015,
+          "madMs": 0.03352081250000083,
+          "betweenRoundsMadMs": 0.01843487500000407,
+          "roundMediansMs": [
+            1.6312734375000062,
+            1.5855416874999975,
+            1.6039765625000015
+          ]
+        },
+        "count": {
+          "ms": 1.5193151250000057,
+          "madMs": 0.009729124999999783,
+          "betweenRoundsMadMs": 0.006880250000008914,
+          "roundMediansMs": [
+            1.5193151250000057,
+            1.5124348749999967,
+            1.528174437500006
+          ]
+        },
+        "match": {
+          "ms": 4.724633789063293e-05,
+          "madMs": 2.354980468743939e-06,
+          "betweenRoundsMadMs": 5.391845703250908e-07,
+          "roundMediansMs": [
+            4.670715332030784e-05,
+            5.1757812499997335e-05,
+            4.724633789063293e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 1.5212578124999965,
+          "madMs": 0.018382812500007617,
+          "betweenRoundsMadMs": 0.0006640624999931788,
+          "roundMediansMs": [
+            1.5205937500000033,
+            1.5212578124999965,
+            1.5481315000000038
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.18372460937500001,
+          "madMs": 0.0012397460937494387,
+          "betweenRoundsMadMs": 0.00041064453125017053,
+          "roundMediansMs": [
+            0.18413525390625018,
+            0.18372460937500001,
+            0.17581542968749986
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 8428,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 4442424,
+      "processPeakRssBytes": 271777792
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 0.028256347656249958,
+          "madMs": 0.001678669921874959,
+          "betweenRoundsMadMs": 0.0003778076171875311,
+          "roundMediansMs": [
+            0.02863415527343749,
+            0.028256347656249958,
+            0.02635400390624998
+          ]
+        },
+        "search": {
+          "ms": 11.651062500000023,
+          "madMs": 0.3778124999999761,
+          "betweenRoundsMadMs": 0.9328960000000279,
+          "roundMediansMs": [
+            12.626082999999994,
+            11.651062500000023,
+            10.718166499999995
+          ]
+        },
+        "count": {
+          "ms": 11.054239499999994,
+          "madMs": 0.12688524999998663,
+          "betweenRoundsMadMs": 0.45207274999998504,
+          "roundMediansMs": [
+            12.763292000000092,
+            10.60216675000001,
+            11.054239499999994
+          ]
+        },
+        "match": {
+          "ms": 3.4924009999999726,
+          "madMs": 0.14331775000002267,
+          "betweenRoundsMadMs": 0.16030724999995982,
+          "roundMediansMs": [
+            3.9771249999999867,
+            3.3320937500000127,
+            3.4924009999999726
+          ]
+        },
+        "firstResult": {
+          "ms": 10.820499999999981,
+          "madMs": 0.059239499999989675,
+          "betweenRoundsMadMs": 0.29371874999998226,
+          "roundMediansMs": [
+            11.55268749999999,
+            10.526781249999999,
+            10.820499999999981
+          ]
+        },
+        "rawSearch": {
+          "ms": 3.6527135000000044,
+          "madMs": 0.05236974999996846,
+          "betweenRoundsMadMs": 0.055125000000003865,
+          "roundMediansMs": [
+            3.7238906249999957,
+            3.5975885000000005,
+            3.6527135000000044
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 12266.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 4458320,
+      "processPeakRssBytes": 274710528
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 0.018412679199218768,
+          "madMs": 0.0002446899414062509,
+          "betweenRoundsMadMs": 2.9501953125177227e-06,
+          "roundMediansMs": [
+            0.021062744140625006,
+            0.01840972900390625,
+            0.018412679199218768
+          ]
+        },
+        "search": {
+          "ms": 1.7197890624999985,
+          "madMs": 0.05465362500000026,
+          "betweenRoundsMadMs": 0.00013018750000171053,
+          "roundMediansMs": [
+            1.760567750000007,
+            1.7197890624999985,
+            1.7196588749999968
+          ]
+        },
+        "count": {
+          "ms": 0.3522890624999997,
+          "madMs": 0.0017005234375009337,
+          "betweenRoundsMadMs": 0.005982093749999251,
+          "roundMediansMs": [
+            0.37024218749999704,
+            0.34630696875000044,
+            0.3522890624999997
+          ]
+        },
+        "match": {
+          "ms": 0.3375530625000014,
+          "madMs": 0.004984054687501072,
+          "betweenRoundsMadMs": 0.006376624999997915,
+          "roundMediansMs": [
+            0.3439296874999993,
+            0.3236442031249993,
+            0.3375530625000014
+          ]
+        },
+        "firstResult": {
+          "ms": 1.7074740000000048,
+          "madMs": 0.034562500000006935,
+          "betweenRoundsMadMs": 0.055140687499999785,
+          "roundMediansMs": [
+            1.8242760625000045,
+            1.652333312500005,
+            1.7074740000000048
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.33169596875000096,
+          "madMs": 0.0046354218750011,
+          "betweenRoundsMadMs": 0.008592781249999959,
+          "roundMediansMs": [
+            0.3492421874999998,
+            0.323103187500001,
+            0.33169596875000096
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 9370.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 4444776,
+      "processPeakRssBytes": 256901120
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "duplicates",
+      "patterns": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "checks": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+      "metrics": {
+        "build": {
+          "ms": 5.0867797851562174e-05,
+          "madMs": 4.186035156250947e-06,
+          "betweenRoundsMadMs": 1.2055664062506771e-06,
+          "roundMediansMs": [
+            5.0867797851562174e-05,
+            8.709716796875128e-05,
+            4.96622314453115e-05
+          ]
+        },
+        "search": {
+          "ms": 6.7288645,
+          "madMs": 0.029854000000007375,
+          "betweenRoundsMadMs": 0.010479250000003049,
+          "roundMediansMs": [
+            6.7288645,
+            6.739343750000003,
+            6.586833499999997
+          ]
+        },
+        "count": {
+          "ms": 3.560921874999991,
+          "madMs": 0.021395874999988962,
+          "betweenRoundsMadMs": 0.016374999999996476,
+          "roundMediansMs": [
+            3.560921874999991,
+            3.647932250000011,
+            3.5445468749999947
+          ]
+        },
+        "match": {
+          "ms": 1.6657470703132504e-05,
+          "madMs": 2.8076171875029976e-06,
+          "betweenRoundsMadMs": 4.6789550781078937e-07,
+          "roundMediansMs": [
+            1.7374633789063454e-05,
+            1.6189575195321715e-05,
+            1.6657470703132504e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 6.733635249999992,
+          "madMs": 0.3560105000000249,
+          "betweenRoundsMadMs": 0.15378100000000927,
+          "roundMediansMs": [
+            7.331937500000009,
+            6.733635249999992,
+            6.579854249999983
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2008.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 4450368,
+      "processPeakRssBytes": 150372352
+    },
+    {
+      "variant": "modern",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 0.006153478027343756,
+          "madMs": 0.00010315942382812388,
+          "betweenRoundsMadMs": 2.824401855469616e-05,
+          "roundMediansMs": [
+            0.00612523400878906,
+            0.006153478027343756,
+            0.0064777626953125
+          ]
+        },
+        "search": {
+          "ms": 7.219760500000007,
+          "madMs": 0.0721247500000004,
+          "betweenRoundsMadMs": 0.06521849999998608,
+          "roundMediansMs": [
+            7.0790832499999965,
+            7.219760500000007,
+            7.284978999999993
+          ]
+        },
+        "count": {
+          "ms": 1.8436796874999999,
+          "madMs": 0.035007812500005286,
+          "betweenRoundsMadMs": 0.04800781250000341,
+          "roundMediansMs": [
+            1.9378671875000038,
+            1.7956718749999965,
+            1.8436796874999999
+          ]
+        },
+        "match": {
+          "ms": 0.00011937463378905444,
+          "madMs": 2.7430175781245625e-05,
+          "betweenRoundsMadMs": 4.018554687346132e-07,
+          "roundMediansMs": [
+            0.00011937463378905444,
+            0.00027133691406250326,
+            0.00011897277832031983
+          ]
+        },
+        "firstResult": {
+          "ms": 0.013921102539062646,
+          "madMs": 0.0008736972656246955,
+          "betweenRoundsMadMs": 0.0005002851562501132,
+          "roundMediansMs": [
+            0.013921102539062646,
+            0.0144222822265625,
+            0.013420817382812533
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 3689.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 3688,
+      "processPeakRssBytes": 1383776256
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 0.008381520751953128,
+          "madMs": 0.0002505393066406236,
+          "betweenRoundsMadMs": 8.1115722656247e-05,
+          "roundMediansMs": [
+            0.008381520751953128,
+            0.008256622314453135,
+            0.008462636474609375
+          ]
+        },
+        "search": {
+          "ms": 16.857083000000046,
+          "madMs": 0.16849950000005265,
+          "betweenRoundsMadMs": 0.05339550000002191,
+          "roundMediansMs": [
+            16.857083000000046,
+            16.803687500000024,
+            16.935583500000007
+          ]
+        },
+        "count": {
+          "ms": 16.870228999999995,
+          "madMs": 0.09841699999998355,
+          "betweenRoundsMadMs": 0.01435449999996763,
+          "roundMediansMs": [
+            16.884583499999962,
+            16.870228999999995,
+            16.804749999999956
+          ]
+        },
+        "match": {
+          "ms": 0.016990641601562384,
+          "madMs": 0.0018704013671875241,
+          "betweenRoundsMadMs": 0.00047021484375009415,
+          "roundMediansMs": [
+            0.016990641601562384,
+            0.01652042675781229,
+            0.018370483398437498
+          ]
+        },
+        "firstResult": {
+          "ms": 0.017599121093749948,
+          "madMs": 0.0012645668945312494,
+          "betweenRoundsMadMs": 0.001689046386718629,
+          "roundMediansMs": [
+            0.023683044433593703,
+            0.017599121093749948,
+            0.01591007470703132
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 5464.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23744,
+      "processPeakRssBytes": 1896349696
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 0.0005920562744140632,
+          "madMs": 2.8961181640625375e-05,
+          "betweenRoundsMadMs": 7.0852050781233106e-06,
+          "roundMediansMs": [
+            0.0005920562744140632,
+            0.0005991414794921865,
+            0.0005732421874999998
+          ]
+        },
+        "search": {
+          "ms": 3.1451822499999977,
+          "madMs": 0.03941675000000089,
+          "betweenRoundsMadMs": 0.008255124999998031,
+          "roundMediansMs": [
+            3.1369271249999997,
+            3.1451822499999977,
+            3.202859374999999
+          ]
+        },
+        "count": {
+          "ms": 3.1389349375000037,
+          "madMs": 0.06513550000000379,
+          "betweenRoundsMadMs": 0.039575437499998145,
+          "roundMediansMs": [
+            3.0276771250000003,
+            3.1389349375000037,
+            3.178510375000002
+          ]
+        },
+        "match": {
+          "ms": 4.4850585937505905e-05,
+          "madMs": 1.7751464843757114e-06,
+          "betweenRoundsMadMs": 4.077148436920641e-08,
+          "roundMediansMs": [
+            4.4479370117186945e-05,
+            4.4850585937505905e-05,
+            4.489135742187511e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 3.168328125000002,
+          "madMs": 0.021468749999996817,
+          "betweenRoundsMadMs": 0.11926049999999577,
+          "roundMediansMs": [
+            2.9656849375000007,
+            3.168328125000002,
+            3.287588624999998
+          ]
+        },
+        "rawSearch": {
+          "ms": 3.1089583750000003,
+          "madMs": 0.040429687499994316,
+          "betweenRoundsMadMs": 0.1254322500000029,
+          "roundMediansMs": [
+            2.957963562499998,
+            3.1089583750000003,
+            3.234390625000003
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2922.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 77103104
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 0.002165064453124999,
+          "madMs": 0.0003828073730468753,
+          "betweenRoundsMadMs": 7.770788574218597e-05,
+          "roundMediansMs": [
+            0.002165064453124999,
+            0.002087356567382813,
+            0.0025211690673828113
+          ]
+        },
+        "search": {
+          "ms": 1.3255794375,
+          "madMs": 0.01926303124999862,
+          "betweenRoundsMadMs": 0.019325500000000773,
+          "roundMediansMs": [
+            1.3255794375,
+            1.2389127812500007,
+            1.3449049375000008
+          ]
+        },
+        "count": {
+          "ms": 1.3001966250000017,
+          "madMs": 0.0057616875000015,
+          "betweenRoundsMadMs": 0.0036848749999975894,
+          "roundMediansMs": [
+            1.3038814999999992,
+            1.2109752812500005,
+            1.3001966250000017
+          ]
+        },
+        "match": {
+          "ms": 5.2663208007813767e-05,
+          "madMs": 6.464721679685925e-06,
+          "betweenRoundsMadMs": 1.4953613281243339e-06,
+          "roundMediansMs": [
+            5.2663208007813767e-05,
+            5.116784667968943e-05,
+            6.033325195312078e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 1.2997955937500052,
+          "madMs": 0.00872137500000747,
+          "betweenRoundsMadMs": 0.0039700312499917345,
+          "roundMediansMs": [
+            1.303765624999997,
+            1.2189882812499988,
+            1.2997955937500052
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.303713531250004,
+          "madMs": 0.006522156249992861,
+          "betweenRoundsMadMs": 0.006731781249996516,
+          "roundMediansMs": [
+            1.3104453125000006,
+            1.2286106562500052,
+            1.303713531250004
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2168.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 83820544
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 0.0002853037109375005,
+          "madMs": 1.6647338867187625e-05,
+          "betweenRoundsMadMs": 3.382446289060953e-06,
+          "roundMediansMs": [
+            0.0002785695800781255,
+            0.0002853037109375005,
+            0.00028868615722656144
+          ]
+        },
+        "search": {
+          "ms": 4.267354125000001,
+          "madMs": 0.07983849999999748,
+          "betweenRoundsMadMs": 0.03711450000000127,
+          "roundMediansMs": [
+            4.230239624999999,
+            4.312578125000002,
+            4.267354125000001
+          ]
+        },
+        "count": {
+          "ms": 4.291333374999994,
+          "madMs": 0.03373449999999423,
+          "betweenRoundsMadMs": 0.018458250000009002,
+          "roundMediansMs": [
+            4.204791749999998,
+            4.309791625000003,
+            4.291333374999994
+          ]
+        },
+        "match": {
+          "ms": 4.177260375000003,
+          "madMs": 0.02510412499999859,
+          "betweenRoundsMadMs": 0.0010521250000010696,
+          "roundMediansMs": [
+            4.178312500000004,
+            4.060442749999993,
+            4.177260375000003
+          ]
+        },
+        "firstResult": {
+          "ms": 4.179275999999987,
+          "madMs": 0.03052612499999441,
+          "betweenRoundsMadMs": 0.026203124999966576,
+          "roundMediansMs": [
+            4.225255250000004,
+            4.153072875000021,
+            4.179275999999987
+          ]
+        },
+        "rawSearch": {
+          "ms": 4.223234374999976,
+          "madMs": 0.06408325000003856,
+          "betweenRoundsMadMs": 0.007338624999988497,
+          "roundMediansMs": [
+            4.223234374999976,
+            4.254468750000001,
+            4.215895749999987
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2970.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 229294080
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 0.0005603790283203128,
+          "madMs": 1.4409423828125323e-05,
+          "betweenRoundsMadMs": 1.7904052734378506e-06,
+          "roundMediansMs": [
+            0.0005636953124999993,
+            0.0005603790283203128,
+            0.000558588623046875
+          ]
+        },
+        "search": {
+          "ms": 1.5491562499999993,
+          "madMs": 0.030562437500002204,
+          "betweenRoundsMadMs": 0.0001927499999965221,
+          "roundMediansMs": [
+            1.5614140625000026,
+            1.5491562499999993,
+            1.5489635000000028
+          ]
+        },
+        "count": {
+          "ms": 1.599390624999998,
+          "madMs": 0.01824218750000206,
+          "betweenRoundsMadMs": 0.005906250000002444,
+          "roundMediansMs": [
+            1.599390624999998,
+            1.6052968750000005,
+            1.5428789062500012
+          ]
+        },
+        "match": {
+          "ms": 1.557825500000007,
+          "madMs": 0.016990906249993998,
+          "betweenRoundsMadMs": 0.0032122187500007726,
+          "roundMediansMs": [
+            1.557825500000007,
+            1.6238528749999972,
+            1.5546132812500062
+          ]
+        },
+        "firstResult": {
+          "ms": 1.5752473749999965,
+          "madMs": 0.03385150000001147,
+          "betweenRoundsMadMs": 0.012679687500003922,
+          "roundMediansMs": [
+            1.5625676874999925,
+            1.6099349375000003,
+            1.5752473749999965
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.585549499999999,
+          "madMs": 0.029559906250000267,
+          "betweenRoundsMadMs": 0.010762999999997191,
+          "roundMediansMs": [
+            1.5963124999999962,
+            1.585549499999999,
+            1.5259973750000029
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2178.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 76742656
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "early-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+      "metrics": {
+        "build": {
+          "ms": 3.0166625976562993e-05,
+          "madMs": 4.704833984374088e-06,
+          "betweenRoundsMadMs": 1.2257080078134988e-06,
+          "roundMediansMs": [
+            3.3432006835937104e-05,
+            2.8940917968749494e-05,
+            3.0166625976562993e-05
+          ]
+        },
+        "search": {
+          "ms": 0.05815909765625002,
+          "madMs": 0.001033609375000022,
+          "betweenRoundsMadMs": 0.001492023437500073,
+          "roundMediansMs": [
+            0.05666707421874995,
+            0.06022550390624998,
+            0.05815909765625002
+          ]
+        },
+        "count": {
+          "ms": 0.05931380273437503,
+          "madMs": 0.00044238281249997513,
+          "betweenRoundsMadMs": 0.000402099609374873,
+          "roundMediansMs": [
+            0.05931380273437503,
+            0.06014624023437509,
+            0.05891170312500016
+          ]
+        },
+        "match": {
+          "ms": 1.642858886717613e-05,
+          "madMs": 1.3225097656305307e-06,
+          "betweenRoundsMadMs": 8.289794921761962e-07,
+          "roundMediansMs": [
+            2.804052734374507e-05,
+            1.5599609374999934e-05,
+            1.642858886717613e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 0.05851196289062499,
+          "madMs": 0.0003343906249997364,
+          "betweenRoundsMadMs": 0.0009912109375000977,
+          "roundMediansMs": [
+            0.05851196289062499,
+            0.05950317382812509,
+            0.05650235937500003
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 392.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 75513856
+    },
+    {
+      "variant": "modern",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 0.006129811645507813,
+          "madMs": 0.00013601684570312828,
+          "betweenRoundsMadMs": 5.383813476562277e-05,
+          "roundMediansMs": [
+            0.0064052734375000045,
+            0.006129811645507813,
+            0.00607597351074219
+          ]
+        },
+        "search": {
+          "ms": 7.2773229999999955,
+          "madMs": 0.057645750000006046,
+          "betweenRoundsMadMs": 0.13744775000000686,
+          "roundMediansMs": [
+            7.414770750000002,
+            7.074677000000008,
+            7.2773229999999955
+          ]
+        },
+        "count": {
+          "ms": 1.8012187500000039,
+          "madMs": 0.01942968749999352,
+          "betweenRoundsMadMs": 0.052531250000008356,
+          "roundMediansMs": [
+            1.9291822499999967,
+            1.7486874999999955,
+            1.8012187500000039
+          ]
+        },
+        "match": {
+          "ms": 1.9362630625000037,
+          "madMs": 0.06332031249999659,
+          "betweenRoundsMadMs": 0.16429431250000448,
+          "roundMediansMs": [
+            1.9362630625000037,
+            1.7719687499999992,
+            3.190375000000131
+          ]
+        },
+        "firstResult": {
+          "ms": 7.313729249999994,
+          "madMs": 0.05238550000001396,
+          "betweenRoundsMadMs": 0.009104250000007141,
+          "roundMediansMs": [
+            7.3228335000000015,
+            6.996312499999988,
+            7.313729249999994
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 3689.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 3592,
+      "processPeakRssBytes": 86048768
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 0.008350830078124996,
+          "madMs": 0.00010409545898436984,
+          "betweenRoundsMadMs": 1.883959960938264e-05,
+          "roundMediansMs": [
+            0.008350830078124996,
+            0.008369669677734379,
+            0.00813404345703124
+          ]
+        },
+        "search": {
+          "ms": 16.356708500000025,
+          "madMs": 0.2654579999999669,
+          "betweenRoundsMadMs": 0.11783350000001747,
+          "roundMediansMs": [
+            16.80422950000002,
+            16.238875000000007,
+            16.356708500000025
+          ]
+        },
+        "count": {
+          "ms": 16.359353999999996,
+          "madMs": 0.13704199999995126,
+          "betweenRoundsMadMs": 0.13352050000003146,
+          "roundMediansMs": [
+            16.55752050000001,
+            16.225833499999965,
+            16.359353999999996
+          ]
+        },
+        "match": {
+          "ms": 16.325479499999915,
+          "madMs": 0.19564599999989696,
+          "betweenRoundsMadMs": 0.3907919999999194,
+          "roundMediansMs": [
+            16.986374999999953,
+            15.934687499999995,
+            16.325479499999915
+          ]
+        },
+        "firstResult": {
+          "ms": 16.377770499999997,
+          "madMs": 0.12877100000002883,
+          "betweenRoundsMadMs": 0.29758399999991525,
+          "roundMediansMs": [
+            16.675354499999912,
+            16.06499999999994,
+            16.377770499999997
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 5464.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23744,
+      "processPeakRssBytes": 85032960
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 0.0005907287597656258,
+          "madMs": 3.373217773437569e-05,
+          "betweenRoundsMadMs": 3.9672851562429223e-07,
+          "roundMediansMs": [
+            0.0005684102783203131,
+            0.0005907287597656258,
+            0.0005911254882812501
+          ]
+        },
+        "search": {
+          "ms": 1.5086158750000003,
+          "madMs": 0.012615874999999832,
+          "betweenRoundsMadMs": 0.006122375000000346,
+          "roundMediansMs": [
+            1.5024935,
+            1.5322044375000008,
+            1.5086158750000003
+          ]
+        },
+        "count": {
+          "ms": 1.5425716250000008,
+          "madMs": 0.0367421874999998,
+          "betweenRoundsMadMs": 0.03178515624999889,
+          "roundMediansMs": [
+            1.4970703125,
+            1.5743567812499997,
+            1.5425716250000008
+          ]
+        },
+        "match": {
+          "ms": 1.3233815000000035,
+          "madMs": 0.02421353124999115,
+          "betweenRoundsMadMs": 0.04971743750000712,
+          "roundMediansMs": [
+            1.2736640624999964,
+            1.6196809687500036,
+            1.3233815000000035
+          ]
+        },
+        "firstResult": {
+          "ms": 1.4473398437499938,
+          "madMs": 0.012947906249998198,
+          "betweenRoundsMadMs": 0.019044249999993212,
+          "roundMediansMs": [
+            1.4473398437499938,
+            1.627739562500011,
+            1.4282955937500006
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.4490573125000026,
+          "madMs": 0.008949187499993627,
+          "betweenRoundsMadMs": 0.019734406250002223,
+          "roundMediansMs": [
+            1.4490573125000026,
+            1.524026062499999,
+            1.4293229062500004
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2922.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 76742656
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 0.0021610565185546885,
+          "madMs": 0.00039349365234374843,
+          "betweenRoundsMadMs": 6.620275878906415e-05,
+          "roundMediansMs": [
+            0.0021610565185546885,
+            0.002587961791992187,
+            0.0020948537597656244
+          ]
+        },
+        "search": {
+          "ms": 1.2507825624999995,
+          "madMs": 0.008625000000002103,
+          "betweenRoundsMadMs": 0.0067421875000004405,
+          "roundMediansMs": [
+            1.244040374999999,
+            1.2507825624999995,
+            1.261606781250002
+          ]
+        },
+        "count": {
+          "ms": 1.2463515624999992,
+          "madMs": 0.01019662499999896,
+          "betweenRoundsMadMs": 0.002536468750001575,
+          "roundMediansMs": [
+            1.2488880312500008,
+            1.2463515624999992,
+            1.2370013124999986
+          ]
+        },
+        "match": {
+          "ms": 1.1212656249999995,
+          "madMs": 0.009270812499998726,
+          "betweenRoundsMadMs": 0.012104187500000307,
+          "roundMediansMs": [
+            1.1212656249999995,
+            1.239322937499999,
+            1.1091614374999992
+          ]
+        },
+        "firstResult": {
+          "ms": 1.2461875000000049,
+          "madMs": 0.01077862499999327,
+          "betweenRoundsMadMs": 0.007574218750001194,
+          "roundMediansMs": [
+            1.2551419374999995,
+            1.2386132812500037,
+            1.2461875000000049
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.259964843749998,
+          "madMs": 0.020980468749996817,
+          "betweenRoundsMadMs": 0.02180728124999831,
+          "roundMediansMs": [
+            1.2381575624999996,
+            1.259964843749998,
+            1.2958111875
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2168.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 0,
+      "processPeakRssBytes": 83656704
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 0.00028530371093749875,
+          "madMs": 1.5970825195311955e-05,
+          "betweenRoundsMadMs": 4.247070312501239e-06,
+          "roundMediansMs": [
+            0.00028530371093749875,
+            0.00028955078125,
+            0.00027280175781249985
+          ]
+        },
+        "search": {
+          "ms": 4.3805572500000025,
+          "madMs": 0.06083849999999913,
+          "betweenRoundsMadMs": 0.029661499999999563,
+          "roundMediansMs": [
+            4.3805572500000025,
+            4.410218750000002,
+            4.206250000000004
+          ]
+        },
+        "count": {
+          "ms": 4.2824583750000045,
+          "madMs": 0.03604174999999543,
+          "betweenRoundsMadMs": 0.03559899999999061,
+          "roundMediansMs": [
+            4.2824583750000045,
+            4.318057374999995,
+            4.127427124999997
+          ]
+        },
+        "match": {
+          "ms": 4.255145874999997,
+          "madMs": 0.04051037499999666,
+          "betweenRoundsMadMs": 0.16154699999999877,
+          "roundMediansMs": [
+            4.255145874999997,
+            4.615359374999997,
+            4.093598874999998
+          ]
+        },
+        "firstResult": {
+          "ms": 4.281677000000002,
+          "madMs": 0.010718749999995225,
+          "betweenRoundsMadMs": 0.07851575000000821,
+          "roundMediansMs": [
+            4.281677000000002,
+            4.36019275000001,
+            4.135156249999994
+          ]
+        },
+        "rawSearch": {
+          "ms": 4.255140624999996,
+          "madMs": 0.08758337500000835,
+          "betweenRoundsMadMs": 0.1601457499999981,
+          "roundMediansMs": [
+            4.255140624999996,
+            4.426338500000014,
+            4.094994874999998
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2970.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 229490688
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 0.0005620067138671879,
+          "madMs": 1.735424804687538e-05,
+          "betweenRoundsMadMs": 4.821899414062664e-06,
+          "roundMediansMs": [
+            0.0005620067138671879,
+            0.0005714466552734377,
+            0.0005571848144531252
+          ]
+        },
+        "search": {
+          "ms": 1.5747890625000025,
+          "madMs": 0.02261587499999962,
+          "betweenRoundsMadMs": 0.037851562500003766,
+          "roundMediansMs": [
+            1.5747890625000025,
+            1.6729192499999996,
+            1.5369374999999987
+          ]
+        },
+        "count": {
+          "ms": 1.562960937499998,
+          "madMs": 0.020622374999994975,
+          "betweenRoundsMadMs": 0.03689843749999966,
+          "roundMediansMs": [
+            1.562960937499998,
+            1.6792968749999986,
+            1.5260624999999983
+          ]
+        },
+        "match": {
+          "ms": 1.5530104374999993,
+          "madMs": 0.025145843750003394,
+          "betweenRoundsMadMs": 0.029320343750001143,
+          "roundMediansMs": [
+            1.5530104374999993,
+            1.6174244374999986,
+            1.5236900937499982
+          ]
+        },
+        "firstResult": {
+          "ms": 1.5703880000000083,
+          "madMs": 0.021026000000020417,
+          "betweenRoundsMadMs": 0.008115906249990701,
+          "roundMediansMs": [
+            1.578503906249999,
+            1.5703880000000083,
+            1.541733093749997
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.537033812499999,
+          "madMs": 0.01862756250000075,
+          "betweenRoundsMadMs": 0.013124968749991694,
+          "roundMediansMs": [
+            1.623625000000004,
+            1.537033812499999,
+            1.5239088437500072
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 2178.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 76480512
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "late-hit",
+      "patterns": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "checks": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+      "metrics": {
+        "build": {
+          "ms": 2.8539062500000136e-05,
+          "madMs": 4.109741210937649e-06,
+          "betweenRoundsMadMs": 2.6855468749998126e-06,
+          "roundMediansMs": [
+            3.543090820312504e-05,
+            2.5853515625000323e-05,
+            2.8539062500000136e-05
+          ]
+        },
+        "search": {
+          "ms": 0.05976660156250002,
+          "madMs": 0.0006949863281250357,
+          "betweenRoundsMadMs": 0.00039379882812501377,
+          "roundMediansMs": [
+            0.06049056054687507,
+            0.05976660156250002,
+            0.05937280273437501
+          ]
+        },
+        "count": {
+          "ms": 0.059821695312500034,
+          "madMs": 0.0005380859375001545,
+          "betweenRoundsMadMs": 3.5482421875010495e-05,
+          "roundMediansMs": [
+            0.059857177734375044,
+            0.059821695312500034,
+            0.05944392968750001
+          ]
+        },
+        "match": {
+          "ms": 0.05907568359375004,
+          "madMs": 0.0007783203125000249,
+          "betweenRoundsMadMs": 6.136132812506467e-05,
+          "roundMediansMs": [
+            0.05907568359375004,
+            0.05928515625000008,
+            0.059014322265624974
+          ]
+        },
+        "firstResult": {
+          "ms": 0.05974365234375023,
+          "madMs": 0.000474773437499465,
+          "betweenRoundsMadMs": 0.00010848046875056028,
+          "roundMediansMs": [
+            0.06155989453124988,
+            0.05974365234375023,
+            0.05963517187499967
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 392.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 264,
+      "processPeakRssBytes": 75415552
+    },
+    {
+      "variant": "modern",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 13.611062500000003,
+          "madMs": 0.4234375000000057,
+          "betweenRoundsMadMs": 0.4143124999999941,
+          "roundMediansMs": [
+            12.99981249999999,
+            14.025374999999997,
+            13.611062500000003
+          ]
+        },
+        "search": {
+          "ms": 2.004773437499999,
+          "madMs": 0.012179687500001535,
+          "betweenRoundsMadMs": 0.027242187500000625,
+          "roundMediansMs": [
+            1.9775312499999984,
+            2.004773437499999,
+            2.098507812500003
+          ]
+        },
+        "count": {
+          "ms": 0.5559153593750015,
+          "madMs": 0.002877609374998258,
+          "betweenRoundsMadMs": 0.0001529999999974052,
+          "roundMediansMs": [
+            0.5452135468750008,
+            0.5560683593749989,
+            0.5559153593750015
+          ]
+        },
+        "match": {
+          "ms": 0.00023576867675781377,
+          "madMs": 4.904687500001392e-05,
+          "betweenRoundsMadMs": 1.3732910156272204e-07,
+          "roundMediansMs": [
+            0.00023563134765625104,
+            0.00023576867675781377,
+            0.00023948669433596081
+          ]
+        },
+        "firstResult": {
+          "ms": 0.006892354003906309,
+          "madMs": 0.0008198237304687384,
+          "betweenRoundsMadMs": 6.433154296869859e-05,
+          "roundMediansMs": [
+            0.006892354003906309,
+            0.006956685546875008,
+            0.006126261230468777
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 497189.6,
+      "dictionaryBufferBytes": 1680360,
+      "resultHeapBytes": 151552,
+      "processPeakRssBytes": 1001684992
+    },
+    {
+      "variant": "modern-fast",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 28.22716600000001,
+          "madMs": 1.4864169999999604,
+          "betweenRoundsMadMs": 0.11995899999999438,
+          "roundMediansMs": [
+            28.22716600000001,
+            27.94070899999997,
+            28.347125000000005
+          ]
+        },
+        "search": {
+          "ms": 4.3362865,
+          "madMs": 0.044796875000002956,
+          "betweenRoundsMadMs": 0.015838500000000977,
+          "roundMediansMs": [
+            4.320447999999999,
+            4.3362865,
+            4.5257968749999975
+          ]
+        },
+        "count": {
+          "ms": 4.3353281249999895,
+          "madMs": 0.04844274999999243,
+          "betweenRoundsMadMs": 0.04753125000002001,
+          "roundMediansMs": [
+            4.220406249999996,
+            4.3353281249999895,
+            4.3828593750000095
+          ]
+        },
+        "match": {
+          "ms": 0.008223978515625063,
+          "madMs": 0.0011467485351562834,
+          "betweenRoundsMadMs": 4.779052734382727e-05,
+          "roundMediansMs": [
+            0.008223978515625063,
+            0.008556844238281291,
+            0.008176187988281236
+          ]
+        },
+        "firstResult": {
+          "ms": 0.0072169189453125115,
+          "madMs": 9.641503906243631e-05,
+          "betweenRoundsMadMs": 2.8177734375023356e-05,
+          "roundMediansMs": [
+            0.007042927734374982,
+            0.0072169189453125115,
+            0.007245096679687535
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 3691154.4,
+      "dictionaryBufferBytes": 1240212,
+      "resultHeapBytes": 172840,
+      "processPeakRssBytes": 1454866432
+    },
+    {
+      "variant": "@monyone/aho-corasick@1.5.10",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 11.61793750000001,
+          "madMs": 0.593625000000003,
+          "betweenRoundsMadMs": 0.08220849999999302,
+          "roundMediansMs": [
+            11.61793750000001,
+            11.204270500000007,
+            11.700146000000004
+          ]
+        },
+        "search": {
+          "ms": 1.6695052500000003,
+          "madMs": 0.07904687499999952,
+          "betweenRoundsMadMs": 0.008239625000001638,
+          "roundMediansMs": [
+            1.6612656249999986,
+            1.7430416875000034,
+            1.6695052500000003
+          ]
+        },
+        "count": {
+          "ms": 1.6932369375000036,
+          "madMs": 0.027979124999994553,
+          "betweenRoundsMadMs": 0.008208374999995272,
+          "roundMediansMs": [
+            1.6765599375000022,
+            1.7014453124999989,
+            1.6932369375000036
+          ]
+        },
+        "match": {
+          "ms": 0.00012657678222656454,
+          "madMs": 3.5806884765704483e-06,
+          "betweenRoundsMadMs": 8.906127929683705e-06,
+          "roundMediansMs": [
+            0.00013702392578124334,
+            0.00012657678222656454,
+            0.00011767065429688084
+          ]
+        },
+        "firstResult": {
+          "ms": 1.6837916875000047,
+          "madMs": 0.04933593749998977,
+          "betweenRoundsMadMs": 0.025851531249990956,
+          "roundMediansMs": [
+            1.6837916875000047,
+            1.7096432187499957,
+            1.626768250000012
+          ]
+        },
+        "rawSearch": {
+          "ms": 1.130097656249994,
+          "madMs": 0.03245312499999642,
+          "betweenRoundsMadMs": 0.009497406249991514,
+          "roundMediansMs": [
+            1.1503046874999967,
+            1.1206002500000025,
+            1.130097656249994
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 17592474.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 151616,
+      "processPeakRssBytes": 407109632
+    },
+    {
+      "variant": "@monyone/aho-corasick/fast@1.5.10",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 1350.8257090000006,
+          "madMs": 2.9712089999993623,
+          "betweenRoundsMadMs": 2.024583999999777,
+          "roundMediansMs": [
+            1348.8011250000009,
+            1350.8257090000006,
+            1356.185707999999
+          ]
+        },
+        "search": {
+          "ms": 0.7389114531250129,
+          "madMs": 0.0064524843749893535,
+          "betweenRoundsMadMs": 0.027656250000035243,
+          "roundMediansMs": [
+            0.7112552031249777,
+            0.7709856718749961,
+            0.7389114531250129
+          ]
+        },
+        "count": {
+          "ms": 0.7314732968749809,
+          "madMs": 0.01046225000004597,
+          "betweenRoundsMadMs": 0.01051885937496877,
+          "roundMediansMs": [
+            0.7209544375000121,
+            0.7476080937500456,
+            0.7314732968749809
+          ]
+        },
+        "match": {
+          "ms": 9.544873046873903e-05,
+          "madMs": 2.55334472654134e-06,
+          "betweenRoundsMadMs": 1.3020019531406746e-06,
+          "roundMediansMs": [
+            9.544873046873903e-05,
+            0.0001081390380859304,
+            9.414672851559835e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 0.7408730468750093,
+          "madMs": 0.0058828125000331966,
+          "betweenRoundsMadMs": 0.007174484374985468,
+          "roundMediansMs": [
+            0.7336985625000239,
+            0.7485605468750123,
+            0.7408730468750093
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.3461289062500015,
+          "madMs": 0.0023450546874954625,
+          "betweenRoundsMadMs": 0.000732421875,
+          "roundMediansMs": [
+            0.3453964843750015,
+            0.3710351562500023,
+            0.3461289062500015
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 6722593.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 151520,
+      "processPeakRssBytes": 366329856
+    },
+    {
+      "variant": "@tanishiking/aho-corasick@0.0.1",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 5.427,
+          "madMs": 0.057906250000002046,
+          "betweenRoundsMadMs": 0.06246875000000074,
+          "roundMediansMs": [
+            5.364531249999999,
+            5.427,
+            5.523677000000006
+          ]
+        },
+        "search": {
+          "ms": 2.958927062499999,
+          "madMs": 0.1118593750000052,
+          "betweenRoundsMadMs": 0.06829425000000455,
+          "roundMediansMs": [
+            2.5204921875000004,
+            2.958927062499999,
+            3.0272213125000036
+          ]
+        },
+        "count": {
+          "ms": 2.8441901249999972,
+          "madMs": 0.1393411250000085,
+          "betweenRoundsMadMs": 0.211880249999993,
+          "roundMediansMs": [
+            2.6323098750000042,
+            2.8441901249999972,
+            4.0078125
+          ]
+        },
+        "match": {
+          "ms": 2.018479187500006,
+          "madMs": 0.04944268750000447,
+          "betweenRoundsMadMs": 0.02827343750000466,
+          "roundMediansMs": [
+            1.9902057500000012,
+            2.018479187500006,
+            2.1658593749999966
+          ]
+        },
+        "firstResult": {
+          "ms": 2.683015624999996,
+          "madMs": 0.09996093750000057,
+          "betweenRoundsMadMs": 0.09988543750000645,
+          "roundMediansMs": [
+            2.683015624999996,
+            2.7829010625000024,
+            2.5604453124999935
+          ]
+        },
+        "rawSearch": {
+          "ms": 2.1769140625000034,
+          "madMs": 0.06003381250002349,
+          "betweenRoundsMadMs": 0.047101562500017735,
+          "roundMediansMs": [
+            2.1298124999999857,
+            2.2643958124999983,
+            2.1769140625000034
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 18155088,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 152976,
+      "processPeakRssBytes": 326598656
+    },
+    {
+      "variant": "ahocorasick@1.0.2",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 8.428281249999998,
+          "madMs": 0.08312499999999545,
+          "betweenRoundsMadMs": 0.01650000000000773,
+          "roundMediansMs": [
+            8.545500000000004,
+            8.41178124999999,
+            8.428281249999998
+          ]
+        },
+        "search": {
+          "ms": 0.807434875000002,
+          "madMs": 0.004657531250003899,
+          "betweenRoundsMadMs": 0.0020195624999956863,
+          "roundMediansMs": [
+            0.8094544374999977,
+            0.807434875000002,
+            0.8037278749999999
+          ]
+        },
+        "count": {
+          "ms": 0.659367828125001,
+          "madMs": 0.0034615781250018074,
+          "betweenRoundsMadMs": 0.005363296875000145,
+          "roundMediansMs": [
+            0.653673828125001,
+            0.659367828125001,
+            0.6647311250000012
+          ]
+        },
+        "match": {
+          "ms": 0.646583984374999,
+          "madMs": 0.004813812499996573,
+          "betweenRoundsMadMs": 0.002669281249996658,
+          "roundMediansMs": [
+            0.6439147031250023,
+            0.646583984374999,
+            0.6494088437500025
+          ]
+        },
+        "firstResult": {
+          "ms": 0.8090156250000007,
+          "madMs": 0.016083343749997425,
+          "betweenRoundsMadMs": 0.0145768125000032,
+          "roundMediansMs": [
+            0.7944388124999975,
+            0.8090156250000007,
+            0.8345090937500004
+          ]
+        },
+        "rawSearch": {
+          "ms": 0.6471289062499999,
+          "madMs": 0.008015625000002302,
+          "betweenRoundsMadMs": 0.0017740937500008158,
+          "roundMediansMs": [
+            0.6408157500000016,
+            0.6471289062499999,
+            0.6489030000000007
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 9664138.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 151520,
+      "processPeakRssBytes": 312328192
+    },
+    {
+      "variant": "indexOf",
+      "scenario": "large-dictionary",
+      "patterns": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "checks": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+      "metrics": {
+        "build": {
+          "ms": 0.000911081909179684,
+          "madMs": 2.367651367187612e-05,
+          "betweenRoundsMadMs": 1.0833740234382494e-05,
+          "roundMediansMs": [
+            0.0009219156494140665,
+            0.0008756763916015625,
+            0.000911081909179684
+          ]
+        },
+        "search": {
+          "ms": 111.761417,
+          "madMs": 0.41508299999998144,
+          "betweenRoundsMadMs": 0.23779199999995626,
+          "roundMediansMs": [
+            111.761417,
+            111.52362500000004,
+            113.742208
+          ]
+        },
+        "count": {
+          "ms": 111.46245799999974,
+          "madMs": 0.5415000000002692,
+          "betweenRoundsMadMs": 0.43579099999965365,
+          "roundMediansMs": [
+            111.02666700000009,
+            111.46245799999974,
+            112.56941699999993
+          ]
+        },
+        "match": {
+          "ms": 1.816821289063464e-05,
+          "madMs": 9.9194335934083e-07,
+          "betweenRoundsMadMs": 2.69653320339458e-07,
+          "roundMediansMs": [
+            1.789855957029518e-05,
+            2.0518066406238766e-05,
+            1.816821289063464e-05
+          ]
+        },
+        "firstResult": {
+          "ms": 111.65829200000007,
+          "madMs": 0.5031670000003032,
+          "betweenRoundsMadMs": 0.5244590000002063,
+          "roundMediansMs": [
+            111.65829200000007,
+            111.13383299999987,
+            112.82541700000002
+          ]
+        }
+      },
+      "dictionaryHeapBytes": 80408.8,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 151520,
+      "processPeakRssBytes": 140132352
+    }
+  ]
+}

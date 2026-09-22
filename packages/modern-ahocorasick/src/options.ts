@@ -11,7 +11,7 @@ export function resolveStrategy(options: SearchOptions | undefined, fallback: Ma
     throw new TypeError('options must be an object')
   }
   const strategy = options?.strategy === undefined ? fallback : options.strategy
-  if (strategy !== 'all' && strategy !== 'leftmost-first' && strategy !== 'leftmost-longest') {
+  if (strategy !== 'all' && strategy !== 'leftmost-first' && strategy !== 'leftmost-longest' && strategy !== 'longest-first') {
     throw new TypeError(`Unknown match strategy: ${String(strategy)}`)
   }
   return strategy

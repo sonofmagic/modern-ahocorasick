@@ -1,5 +1,7 @@
 # API
 
+See [Extensions & streams](./extensions) for constructor character boundaries, global `longest-first`, tokenization, dynamic dictionaries and advanced streams. Existing `wholeWord`, persistence, `countByPattern()` and `/text` APIs remain compatible.
+
 ## Constructor
 
 ```text

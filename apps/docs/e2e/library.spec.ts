@@ -2,22 +2,29 @@ import { readFileSync } from 'node:fs'
 import { stripTypeScriptTypes } from 'node:module'
 import { expect, test } from '@playwright/test'
 
-const library = readFileSync(new URL('../../../packages/modern-ahocorasick/dist/index.js', import.meta.url), 'utf8')
-const textLibrary = readFileSync(new URL('../../../packages/modern-ahocorasick/dist/text.js', import.meta.url), 'utf8')
 const reference = stripTypeScriptTypes(readFileSync(new URL('../../../packages/modern-ahocorasick/test/helpers/reference.ts', import.meta.url), 'utf8'))
+
+test.beforeEach(async ({ page }) => {
+  await page.route('**/__package/**', (route) => {
+    const path = new URL(route.request().url()).pathname.slice('/__package/'.length)
+    if (!/^[\w./-]+\.js$/.test(path) || path.includes('..')) {
+      return route.abort()
+    }
+    const body = readFileSync(new URL(`../../../packages/modern-ahocorasick/dist/${path}`, import.meta.url), 'utf8')
+    return route.fulfill({ contentType: 'text/javascript', body })
+  })
+})
 
 test('built library preserves Unicode contracts in the browser engine', async ({ page }, testInfo) => {
   // Serve the actual built ESM and the independent native oracle without
   // shipping test code or an internal entrypoint in the production site.
-  await page.route('**/__library.js', route => route.fulfill({ contentType: 'text/javascript', body: library }))
   await page.route('**/__reference.js', route => route.fulfill({ contentType: 'text/javascript', body: reference }))
-  await page.route('**/__text-library.js', route => route.fulfill({ contentType: 'text/javascript', body: textLibrary }))
   await page.goto('/')
   const result = await page.evaluate(async () => {
-    const libraryURL = '/__library.js'
+    const libraryURL = '/__package/index.js'
     const referenceURL = '/__reference.js'
     const [{ default: Constructor }, { verifyCases, contractCases }] = await Promise.all([import(libraryURL), import(referenceURL)])
-    const textURL = '/__text-library.js'
+    const textURL = '/__package/text.js'
     const { default: TextMatcher } = await import(textURL)
     const patterns = ['a', 'aa', 'a', 'e\u0301', '👩‍😀', '\r\n', 'cat', 'cat\ndog', 'dog']
     const text = 'aa e\u0301 👩‍😀\r\ncat\ndog!'
@@ -47,4 +54,34 @@ test('built library preserves Unicode contracts in the browser engine', async ({
   })
   expect(result.cases).toBe(1078)
   await testInfo.attach('runtime', { body: JSON.stringify(result), contentType: 'application/json' })
+})
+
+test('optional entries preserve folding and chunked replacement in the browser', async ({ page }) => {
+  await page.goto('/extensions')
+  const result = await page.evaluate(async () => {
+    const entry = (name: string) => import(`/__package/${name}.js`)
+    const [{ default: Unicode }, { default: Fast }, stream, filters, web] = await Promise.all(['unicode', 'fast', 'stream', 'stream/filters', 'stream/web'].map(entry))
+    const matcher = new Unicode(['STRASSE', 'ss', 's'])
+    const chunks = '😀Straße ss'.split('')
+    const folded = [...stream.replaceChunks(matcher, chunks, 'X')].join('')
+    const filtered = [...stream.replaceChunks(new Fast(['cat']), 'cat `cat` https://cat cat'.split(''), 'X', { filter: filters.protectedText({ urls: true, markdown: true }) })].join('')
+    const input = new ReadableStream<string>({ start(controller) {
+      controller.enqueue('Stra')
+      controller.enqueue('ße')
+      controller.close()
+    } })
+    const reader = input.pipeThrough<string>(web.createReplaceTransform(matcher, async () => 'X')).getReader()
+    let transformed = ''
+    while (true) {
+      const next = await reader.read()
+      if (next.done) {
+        break
+      }
+      transformed += next.value
+    }
+    return { folded, filtered, transformed, halfExpansion: new Unicode(['s']).match('ß') }
+  })
+  expect(result).toEqual({ folded: '😀X X', filtered: 'X `cat` https://cat X', transformed: 'X', halfExpansion: false })
+  await page.goto('/zh/extensions')
+  await expect(page.getByRole('heading', { name: /^可选文本处理扩展/, level: 1 })).toBeVisible()
 })

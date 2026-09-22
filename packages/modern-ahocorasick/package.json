@@ -2,7 +2,7 @@
   "name": "modern-ahocorasick",
   "type": "module",
   "version": "3.1.0",
-  "description": "Unicode-aware Aho–Corasick multi-pattern matching with UTF-16 ranges, counting, lazy iteration, and replacement.",
+  "description": "Unicode-aware Aho\u2013Corasick multi-pattern matching with UTF-16 ranges, counting, lazy iteration, and replacement.",
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
   "homepage": "https://aho.icebreaker.top/",
@@ -46,7 +46,98 @@
         "types": "./dist/text.d.cts",
         "default": "./dist/text.cjs"
       }
-    }
+    },
+    "./unicode": {
+      "import": {
+        "types": "./dist/unicode.d.ts",
+        "default": "./dist/unicode.js"
+      },
+      "require": {
+        "types": "./dist/unicode.d.cts",
+        "default": "./dist/unicode.cjs"
+      }
+    },
+    "./unicode-fast": {
+      "import": {
+        "types": "./dist/unicode-fast.d.ts",
+        "default": "./dist/unicode-fast.js"
+      },
+      "require": {
+        "types": "./dist/unicode-fast.d.cts",
+        "default": "./dist/unicode-fast.cjs"
+      }
+    },
+    "./fast": {
+      "import": {
+        "types": "./dist/fast.d.ts",
+        "default": "./dist/fast.js"
+      },
+      "require": {
+        "types": "./dist/fast.d.cts",
+        "default": "./dist/fast.cjs"
+      }
+    },
+    "./dynamic": {
+      "import": {
+        "types": "./dist/dynamic.d.ts",
+        "default": "./dist/dynamic.js"
+      },
+      "require": {
+        "types": "./dist/dynamic.d.cts",
+        "default": "./dist/dynamic.cjs"
+      }
+    },
+    "./replace": {
+      "import": {
+        "types": "./dist/replace.d.ts",
+        "default": "./dist/replace.js"
+      },
+      "require": {
+        "types": "./dist/replace.d.cts",
+        "default": "./dist/replace.cjs"
+      }
+    },
+    "./stream": {
+      "import": {
+        "types": "./dist/stream.d.ts",
+        "default": "./dist/stream.js"
+      },
+      "require": {
+        "types": "./dist/stream.d.cts",
+        "default": "./dist/stream.cjs"
+      }
+    },
+    "./stream/filters": {
+      "import": {
+        "types": "./dist/stream/filters.d.ts",
+        "default": "./dist/stream/filters.js"
+      },
+      "require": {
+        "types": "./dist/stream/filters.d.cts",
+        "default": "./dist/stream/filters.cjs"
+      }
+    },
+    "./stream/node": {
+      "import": {
+        "types": "./dist/stream/node.d.ts",
+        "default": "./dist/stream/node.js"
+      },
+      "require": {
+        "types": "./dist/stream/node.d.cts",
+        "default": "./dist/stream/node.cjs"
+      }
+    },
+    "./stream/web": {
+      "import": {
+        "types": "./dist/stream/web.d.ts",
+        "default": "./dist/stream/web.js"
+      },
+      "require": {
+        "types": "./dist/stream/web.d.cts",
+        "default": "./dist/stream/web.cjs"
+      }
+    },
+    "./dist/_private/*": null
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",

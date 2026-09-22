@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
@@ -34,7 +34,7 @@ try {
   assert.equal(manifest.name, 'modern-ahocorasick')
   assert.notEqual(manifest.private, true)
   assert.ok(!existsSync(path.join(installed, 'dist/internal.d.ts')), 'private builder has no package entry')
-  for (const file of ['internal', 'persistence', 'stream', 'options', 'case-folding'].flatMap(name => [`dist/${name}.js`, `dist/${name}.cjs`, `dist/${name}.d.ts`])) {
+  for (const file of ['internal', 'persistence', 'legacy-stream', 'options', 'case-folding'].flatMap(name => [`dist/${name}.js`, `dist/${name}.cjs`, `dist/${name}.d.ts`])) {
     assert.ok(!existsSync(path.join(installed, file)), 'private scanner has no package entry')
   }
   for (const file of ['dist/index.d.ts', 'dist/index.d.cts', 'dist/text.d.ts', 'dist/text.d.cts']) {
@@ -42,6 +42,12 @@ try {
   }
   assert.ok(!existsSync(path.join(installed, 'src')), 'source is not part of the published package')
   assert.doesNotMatch(readFileSync(path.join(installed, 'dist/index.js'), 'utf8'), /0041:0061|function caseFold/)
+  for (const name of ['runtime', 'double-array', 'legacy-stream']) {
+    assert.ok(!existsSync(path.join(installed, `dist/${name}.d.ts`)), 'private declarations must not be published')
+  }
+  assert.ok(existsSync(path.join(installed, 'UNICODE-LICENSE.txt')))
+  assert.equal(manifest.exports['./dist/_private/*'], null)
+  assert.equal(manifest.dependencies, undefined, 'package remains dependency-free')
   const checks = `
 const normalized = new TextMatcher(['STRASSE', 'é'], { caseFold: true, normalization: 'NFC' })
 assert.equal(normalized.replace('Straße e\\u0301', 'X'), 'X X')
@@ -82,6 +88,31 @@ assert.equal(typeof AhoCorasick, 'function')
 ${checks}`)
   run(process.execPath, ['consumer.mjs'])
   run(process.execPath, ['consumer.cjs'])
+  const extensionChecks = `
+const folded = new Unicode(['STRASSE', 'ss', 's'])
+assert.equal(folded.replace('Straße', 'X'), 'X')
+assert.deepEqual(folded.search('ß').map(m => m.pattern), ['ss'])
+assert.deepEqual(new Fast(['cat']).search('cat'), new AhoCorasick(['cat']).search('cat'))
+assert.equal(new UnicodeFast(['SS']).match('ß'), true)
+const dictionary = new Dynamic(['cat'])
+const snapshot = dictionary.compile()
+dictionary.add('dog')
+assert.equal(snapshot.matcher.match('dog'), false)
+assert.equal(dictionary.compile().matcher.match('dog'), true)
+assert.equal([...stream.replaceChunks(folded, ['Stra', 'ße'], 'X')].join(''), 'X')
+assert.equal([...stream.replaceChunks(new AhoCorasick(['cat']), ['cat https://cat'], 'X', { filter: filters.urls() })].join(''), 'X https://cat')
+assert.equal(new AhoCorasick(['cat']).replace('cat cat', replacements.once('X')), 'X cat')
+assert.equal(typeof nodeStreams.createReplaceTransform, 'function')
+assert.equal(typeof webStreams.createReplaceTransform, 'function')
+`
+  const entries = { Unicode: 'unicode', UnicodeFast: 'unicode-fast', Fast: 'fast', Dynamic: 'dynamic', stream: 'stream', filters: 'stream/filters', replacements: 'replace', nodeStreams: 'stream/node', webStreams: 'stream/web' }
+  const constructors = new Set(['Unicode', 'UnicodeFast', 'Fast', 'Dynamic'])
+  writeFileSync(path.join(temporary, 'extensions.mjs'), `import assert from 'node:assert/strict'\nimport AhoCorasick from 'modern-ahocorasick'\n${Object.entries(entries).map(([local, entry]) => `import ${constructors.has(local) ? local : `* as ${local}`} from 'modern-ahocorasick/${entry}'`).join('\n')}\n${extensionChecks}`)
+  writeFileSync(path.join(temporary, 'extensions.cjs'), `const assert = require('node:assert/strict')\nconst AhoCorasick = require('modern-ahocorasick')\n${Object.entries(entries).map(([local, entry]) => `const ${local} = require('modern-ahocorasick/${entry}')`).join('\n')}\n${extensionChecks}\nassert.throws(() => require('modern-ahocorasick/dist/_private/anything.cjs'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' })`)
+  run(process.execPath, ['extensions.mjs'])
+  run(process.execPath, ['extensions.cjs'])
+  writeFileSync(path.join(temporary, 'default-only.cjs'), `const assert = require('node:assert/strict')\nrequire('modern-ahocorasick')\nassert.ok(Object.keys(require.cache).every(file => !/case-folding|string_decoder/.test(file)))`)
+  run(process.execPath, ['default-only.cjs'])
   const types = `
 const adapter = new TextMatcher([{ pattern: 'é', data: 1 }], { normalization: 'NFC', caseFold: true })
 const mapped: Match<number>[] = adapter.search('é')
@@ -116,11 +147,37 @@ ${types}`)
 import TextMatcher = require('modern-ahocorasick/text')
 import type { BoundaryOptions, Match, MatchStream } from 'modern-ahocorasick'
 ${types}`)
+  const extensionTypes = `
+const matcher: Matcher = new Unicode(['SS'])
+const options: MatcherOptions = { boundary: 'unicode' }
+const token: Token[] = new Fast(['cat'], options).tokenize('cat')
+const snapshot: DictionarySnapshot = new Dynamic(['cat']).compile()
+const replaced: IterableIterator<string> = stream.replaceChunks(matcher, ['ß'], replacements.mask(), { filter: filters.markdown() })
+const pair: ReadableWritablePair<string, string> = webStreams.createReplaceTransform(matcher, 'X')
+void token; void snapshot; void replaced; void pair
+`
+  for (const format of ['mts', 'cts']) {
+    const imports = Object.entries(entries).filter(([, entry]) => entry !== 'stream/node').map(([local, entry]) => format === 'cts'
+      ? `import ${local} = require('modern-ahocorasick/${entry}')`
+      : `import ${constructors.has(local) ? local : `* as ${local}`} from 'modern-ahocorasick/${entry}'`).join('\n')
+    writeFileSync(path.join(temporary, `extensions.${format}`), `${imports}\nimport type { Matcher, MatcherOptions, Token } from 'modern-ahocorasick'\nimport type { DictionarySnapshot } from 'modern-ahocorasick/dynamic'\n${extensionTypes}`)
+  }
   writeFileSync(path.join(temporary, 'tsconfig.json'), JSON.stringify({
     compilerOptions: { module: 'NodeNext', moduleResolution: 'NodeNext', target: 'ES2022', strict: true, noEmit: true, types: [], skipLibCheck: false },
-    files: ['consumer.mts', 'consumer.cts'],
+    files: ['consumer.mts', 'consumer.cts', 'extensions.mts', 'extensions.cts'],
   }))
   run(process.execPath, [path.join(root, 'node_modules/typescript/bin/tsc'), '-p', path.join(temporary, 'tsconfig.json')])
+  // Node declarations are checked separately so browser consumers remain free
+  // of ambient Node types and built-in imports.
+  symlinkSync(path.join(root, 'node_modules/@types'), path.join(temporary, 'node_modules/@types'), 'dir')
+  for (const format of ['mts', 'cts']) {
+    writeFileSync(path.join(temporary, `node-consumer.${format}`), `import AhoCorasick from 'modern-ahocorasick'\nimport { createReplaceTransform } from 'modern-ahocorasick/stream/node'\nimport type { Duplex } from 'node:stream'\nconst transform: Duplex = createReplaceTransform(new AhoCorasick(['cat']), async () => 'X')\nvoid transform\n`)
+  }
+  writeFileSync(path.join(temporary, 'tsconfig.node.json'), JSON.stringify({
+    compilerOptions: { module: 'NodeNext', moduleResolution: 'NodeNext', target: 'ES2022', strict: true, noEmit: true, types: ['node'], skipLibCheck: false },
+    files: ['node-consumer.mts', 'node-consumer.cts'],
+  }))
+  run(process.execPath, [path.join(root, 'node_modules/typescript/bin/tsc'), '-p', path.join(temporary, 'tsconfig.node.json')])
   console.log('Packed ESM, CommonJS, declarations and package contents passed.')
 }
 finally {

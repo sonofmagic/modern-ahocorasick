@@ -10,7 +10,7 @@ export interface Match<T = unknown> {
   data: T | undefined
 }
 
-export type MatchStrategy = 'all' | 'leftmost-first' | 'leftmost-longest'
+export type MatchStrategy = 'all' | 'leftmost-first' | 'leftmost-longest' | 'longest-first'
 
 export interface BoundaryOptions {
   /** Require starts/ends of word-like Intl.Segmenter segments. */
@@ -40,6 +40,7 @@ export interface DeserializeOptions<T> {
 }
 
 export interface StreamOptions extends SearchOptions {
+  strategy?: Exclude<MatchStrategy, 'longest-first'>
   /** Maximum unsettled UTF-16 tail; defaults to 1,048,576. */
   maxBufferedUnits?: number
 }
@@ -48,4 +49,40 @@ export interface MatchStream<T = unknown> {
   write: (chunk: string) => Match<T>[]
   finish: () => Match<T>[]
   cancel: () => void
+}
+
+export interface BoundaryContext {
+  /** Adjacent original graphemes; undefined denotes the start/end of input. */
+  left: string | undefined
+  right: string | undefined
+  first: string
+  last: string
+  pattern: string
+  patternIndex: number
+}
+export type Boundary = 'none' | 'ascii' | 'ascii-edge' | 'unicode' | 'whitespace' | ((context: BoundaryContext) => boolean)
+export interface MatcherOptions {
+  boundary?: Boundary
+}
+export type Token<T = unknown> = {
+  type: 'text'
+  text: string
+  start: number
+  end: number
+} | {
+  type: 'match'
+  text: string
+  start: number
+  end: number
+  match: Match<T>
+}
+/** The public operations accepted by dynamic dictionaries and stream adapters. */
+export interface Matcher<T = unknown> {
+  search: (text: string, options?: SearchOptions) => Match<T>[]
+  iterate: (text: string, options?: SearchOptions) => IterableIterator<Match<T>>
+  match: (text: string, options?: BoundaryOptions) => boolean
+  count: (text: string, options?: BoundaryOptions) => number
+  countByPattern: (text: string, options?: BoundaryOptions) => number[]
+  replace: (text: string, replacement: Replacement<T>, options?: ReplaceOptions) => string
+  tokenize: (text: string, options?: ReplaceOptions) => Token<T>[]
 }

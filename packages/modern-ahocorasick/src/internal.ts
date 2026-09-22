@@ -178,7 +178,7 @@ export function advance(nodes: AutomatonNode[], state: number, segment: string):
   return next ?? 0
 }
 
-export function buildAutomaton(patterns: readonly { pattern: string }[], segmenter: Intl.Segmenter): {
+export function buildAutomaton(patterns: readonly { pattern: string }[], segmenter: Intl.Segmenter, units?: (segment: string) => string[]): {
   nodes: AutomatonNode[]
   lengths: Uint32Array
   counts: Uint32Array
@@ -192,7 +192,10 @@ export function buildAutomaton(patterns: readonly { pattern: string }[], segment
     const { pattern } = patterns[index]
     let state = 0
     let length = 0
-    for (const segments of graphemeRuns(pattern, segmenter)) {
+    const runs = units
+      ? [Array.from(segmenter.segment(pattern)).flatMap(({ segment }) => units(segment).map(segment => ({ segment })))]
+      : graphemeRuns(pattern, segmenter)
+    for (const segments of runs) {
       for (const { segment } of segments) {
         length++
         let next = nodes[state].next.get(segment)

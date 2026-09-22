@@ -1,5 +1,7 @@
 # modern-ahocorasick
 
+新增原生扩展：动态词典、Unicode 折叠流、边界规则、分词/替换流、Node/Web 适配、过滤、预览和双数组后端，详见[扩展指南](https://aho.icebreaker.top/zh/extensions)。保持零运行时依赖。
+
 用 Aho–Corasick 在 Unicode 文本中匹配多个关键词。字典只需编译一次，即可重复查找、计数或替换；返回的匹配范围可直接用于 JavaScript 的 `slice()`。
 
 [![npm](https://img.shields.io/npm/v/modern-ahocorasick)](https://www.npmjs.com/package/modern-ahocorasick)

@@ -3,11 +3,10 @@ import { Buffer } from 'node:buffer'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
-import { stripTypeScriptTypes } from 'node:module'
 import { cpus } from 'node:os'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { median, time } from './benchmark-utils.mjs'
+import { gitBaseline, implementationDigest, median, time } from './benchmark-utils.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const script = fileURLToPath(import.meta.url)
@@ -158,8 +157,7 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
   }
 }
 else {
-  const source = (ref, path) => stripTypeScriptTypes(execFileSync('git', ['show', `${ref}:${path}`], { cwd: root, encoding: 'utf8' }), { mode: 'transform' })
-  const baseline = `${source(baselineRef, 'packages/modern-ahocorasick/src/internal.ts')}\n${source(baselineRef, 'packages/modern-ahocorasick/src/index.ts').replace(/^import \{[^}]+\} from '\.\/internal\.js';?\s*$/m, '')}`
+  const baseline = await gitBaseline(baselineRef, root)
   const sources = { 'v3-before': baseline, 'v3': '' }
   const results = []
   const selected = process.env.BENCH_SCENARIOS?.split(',') ?? Object.keys(scenarios)
@@ -232,11 +230,11 @@ else {
     unicode: process.versions.unicode,
     corpusSha256: digest(scenarios),
     baselineSourceSha256: createHash('sha256').update(baseline).digest('hex'),
-    implementationSha256: createHash('sha256').update(readFileSync(new URL('../packages/modern-ahocorasick/dist/index.js', import.meta.url))).digest('hex'),
+    implementationSha256: implementationDigest(fileURLToPath(new URL('../packages/modern-ahocorasick/dist', import.meta.url))),
     samples,
     rounds,
     operations: requestedOperations ?? operationNames,
-    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load compares validated restoration against rebuilding the baseline dictionary from patterns; saving is excluded. countByPattern compares state aggregation against baseline iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
+    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
     results,
     memory,
     regressions,

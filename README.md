@@ -1,5 +1,7 @@
 # modern-ahocorasick
 
+Native extensions add dynamic dictionaries, Unicode folding streams, character boundaries, tokenization/replacement streams, Node/Web adapters, filters, previews and a double-array backend. See the [extension guide](https://aho.icebreaker.top/extensions). No runtime dependencies are added.
+
 Match many keywords in Unicode text with Aho–Corasick. Compile a dictionary once,
 then find, count or replace matches using ranges that work with JavaScript's `slice()`.
 

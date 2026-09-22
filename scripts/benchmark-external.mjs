@@ -1,17 +1,20 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { readFileSync } from 'node:fs'
 import { cpus } from 'node:os'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { AhoCorasick as Monyone } from '@monyone/aho-corasick'
+import { AhoCorasick as MonyoneFast } from '@monyone/aho-corasick/fast'
+import { Trie as Tanishiking } from '@tanishiking/aho-corasick'
 import Upstream from 'ahocorasick'
-import { median, time } from './benchmark-utils.mjs'
+import { implementationDigest, median, time } from './benchmark-utils.mjs'
 
 const { default: Modern } = await import('../packages/modern-ahocorasick/dist/index.js')
+const { default: ModernFast } = await import('../packages/modern-ahocorasick/dist/fast.js')
 const rounds = Number(process.env.BENCH_ROUNDS ?? 5)
 assert.ok(Number.isInteger(rounds) && rounds >= 1 && rounds <= 9)
-const variants = ['modern', 'ahocorasick@1.0.2', 'indexOf']
+const variants = ['modern', 'modern-fast', '@monyone/aho-corasick@1.5.10', '@monyone/aho-corasick/fast@1.5.10', '@tanishiking/aho-corasick@0.0.1', 'ahocorasick@1.0.2', 'indexOf']
 const scenarios = {
   'ordinary': { patterns: Array.from({ length: 200 }, (_, i) => `word${i}`), text: Array.from({ length: 2000 }, (_, i) => `word${i % 200}`).join(' ') },
   'sparse': { patterns: Array.from({ length: 500 }, (_, i) => `keyword-${i}`), text: 'ordinary text with no hits. '.repeat(1500) },
@@ -27,6 +30,46 @@ const order = (a, b) => a.end - b.end || b.pattern.length - a.pattern.length || 
 function compile(variant, patterns) {
   if (variant === 'modern') {
     return new Modern(patterns)
+  }
+  if (variant === 'modern-fast') {
+    return new ModernFast(patterns)
+  }
+  if (variant.startsWith('@')) {
+    const tanishiking = variant.startsWith('@tanishiking')
+    const Constructor = tanishiking ? Tanishiking : variant.includes('/fast@') ? MonyoneFast : Monyone
+    const matcher = new Constructor(patterns)
+    const indices = new Map()
+    patterns.forEach((pattern, index) => {
+      if (!indices.has(pattern)) {
+        indices.set(pattern, [])
+      }
+      indices.get(pattern).push(index)
+    })
+    const rawSearch = text => tanishiking ? matcher.parseText(text) : matcher.matchInText(text)
+    const search = (text) => {
+      const matches = []
+      const seen = new Set()
+      for (const hit of rawSearch(text)) {
+        const start = tanishiking ? hit.start : hit.begin
+        const end = tanishiking ? hit.end + 1 : hit.end
+        const pattern = hit.keyword
+        const key = JSON.stringify([start, end, pattern])
+        if (seen.has(key)) {
+          continue
+        }
+        seen.add(key)
+        for (const patternIndex of indices.get(pattern)) {
+          matches.push({ pattern, patternIndex, start, end, data: undefined })
+        }
+      }
+      return matches.sort(order)
+    }
+    return {
+      rawSearch,
+      search,
+      count: text => search(text).length,
+      match: text => tanishiking ? rawSearch(text).length > 0 : matcher.hasKeywordInText(text),
+    }
   }
   if (variant === 'indexOf') {
     const dictionary = [...patterns]
@@ -89,7 +132,21 @@ if (process.argv[2] === '--child') {
   assert.deepEqual(matcher.search(text), expected)
   assert.equal(matcher.count(text), expected.length)
   assert.equal(matcher.match(text), expected.length > 0)
-  const operations = { build: () => compile(variant, patterns), search: () => matcher.search(text), count: () => matcher.count(text), match: () => matcher.match(text) }
+  const operations = {
+    build: () => compile(variant, patterns),
+    search: () => matcher.search(text),
+    count: () => matcher.count(text),
+    match: () => matcher.match(text),
+    firstResult: () => {
+      if (!matcher.iterate) {
+        return matcher.search(text)[0] ?? null
+      }
+      const iterator = matcher.iterate(text)
+      const result = iterator.next().value ?? null
+      iterator.return?.()
+      return result
+    },
+  }
   if (matcher.rawSearch) {
     operations.rawSearch = () => matcher.rawSearch(text)
   }
@@ -107,11 +164,13 @@ if (process.argv[2] === '--child') {
   const result = matcher.search(text)
   globalThis.gc()
   const resultHeapBytes = Math.max(0, process.memoryUsage().heapUsed - resultBefore)
-  console.log(JSON.stringify({ variant, scenario, patterns: patterns.length, utf16Length: text.length, count: result.length, checks: digest(result), metrics, dictionaryHeapBytes, dictionaryBufferBytes, resultHeapBytes }))
+  console.log(JSON.stringify({ variant, scenario, patterns: patterns.length, utf16Length: text.length, count: result.length, checks: digest(result), metrics, dictionaryHeapBytes, dictionaryBufferBytes, resultHeapBytes, processPeakRssBytes: process.resourceUsage().maxRSS * 1024 }))
 }
 else {
   const results = []
-  for (const [scenarioIndex, scenario] of Object.keys(scenarios).entries()) {
+  const selected = process.env.BENCH_SCENARIOS?.split(',') ?? Object.keys(scenarios)
+  assert.ok(selected.every(scenario => scenario in scenarios))
+  for (const [scenarioIndex, scenario] of selected.entries()) {
     const runs = []
     for (let round = 0; round < rounds; round++) {
       // Rotate which implementation runs first, then reverse alternate rounds.
@@ -135,11 +194,11 @@ else {
         const ms = median(roundMediansMs)
         return [operation, { ms, madMs: median(metrics.map(metric => metric.madMs)), betweenRoundsMadMs: median(roundMediansMs.map(value => Math.abs(value - ms))), roundMediansMs }]
       }))
-      for (const key of ['dictionaryHeapBytes', 'dictionaryBufferBytes', 'resultHeapBytes']) {
+      for (const key of ['dictionaryHeapBytes', 'dictionaryBufferBytes', 'resultHeapBytes', 'processPeakRssBytes']) {
         result[key] = median(matching.map(run => run[key]))
       }
       results.push(result)
     }
   }
-  console.log(JSON.stringify({ node: process.version, icu: process.versions.icu, unicode: process.versions.unicode, platform: process.platform, arch: process.arch, cpu: cpus()[0]?.model, rounds, samples: 7, corpusSha256: digest(scenarios), implementationSha256: createHash('sha256').update(readFileSync(new URL('../packages/modern-ahocorasick/dist/index.js', import.meta.url))).digest('hex'), externalVersion: JSON.parse(readFileSync(new URL('../node_modules/ahocorasick/package.json', import.meta.url))).version, note: 'Printable ASCII only; overlaps and input-index duplicates preserved. Search includes conversion to independent UTF-16 range objects and canonical sorting; upstream rawSearch is reported separately and is not equivalent output. Upstream count/match use grouped search (no native count/early-exit API); indexOf rescans per keyword. Build includes adapter preparation. Boolean latency, not nominal full-input throughput, is meaningful for early exits. Retained dictionary heap includes adapters, with buffers separate. No universal ranking.', results }, null, 2))
+  console.log(JSON.stringify({ node: process.version, icu: process.versions.icu, unicode: process.versions.unicode, platform: process.platform, arch: process.arch, cpu: cpus()[0]?.model, rounds, samples: 7, corpusSha256: digest(scenarios), implementationSha256: implementationDigest(fileURLToPath(new URL('../packages/modern-ahocorasick/dist', import.meta.url))), externalVersions: { 'ahocorasick': '1.0.2', '@monyone/aho-corasick': '1.5.10', '@tanishiking/aho-corasick': '0.0.1' }, note: 'Printable ASCII only; overlaps and input-index duplicates preserved. Search includes conversion to independent UTF-16 range objects and canonical sorting; upstream rawSearch is reported separately and is not equivalent output. Upstream count/match use grouped search; monyone/tanishiking count uses normalized search, tanishiking presence uses full search. firstResult is lazy only for modern variants; others materialize complete results. indexOf rescans per keyword. Build includes adapter preparation. Boolean latency, not nominal full-input throughput, is meaningful for early exits. Retained dictionary heap includes adapters, with buffers separate. Process peak RSS includes warmup, verification, repeated builds and results, not isolated dictionary storage. No universal ranking.', results }, null, 2))
 }

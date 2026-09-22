@@ -1,5 +1,7 @@
 # API
 
+新增构造器字符边界、全局 `longest-first`、分词、动态词典和高级流式 API 见[扩展与流式处理](./extensions)。现有 `wholeWord`、序列化、`countByPattern()` 和 `/text` 接口保持兼容。
+
 ## 构造函数
 
 ```text

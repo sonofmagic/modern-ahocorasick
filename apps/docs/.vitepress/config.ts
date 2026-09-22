@@ -6,6 +6,7 @@ const pages = [
   'algorithm',
   'unicode',
   'examples',
+  'extensions',
   'visualization',
 ]
 const en = [
@@ -14,6 +15,7 @@ const en = [
   'How it works',
   'Unicode & indices',
   'Examples',
+  'Extensions & streams',
   'Visualizer',
 ]
 const zh = [
@@ -22,6 +24,7 @@ const zh = [
   '算法原理',
   'Unicode 与索引',
   '使用示例',
+  '扩展与流式处理',
   '交互可视化',
 ]
 function links(prefix: string, labels: string[]) {

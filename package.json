@@ -51,6 +51,8 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
+    "@monyone/aho-corasick": "1.5.10",
+    "@tanishiking/aho-corasick": "0.0.1",
     "@types/node": "^22.20.4",
     "@vitest/coverage-v8": "~5.0.1",
     "ahocorasick": "1.0.2",
