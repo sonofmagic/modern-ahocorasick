@@ -1,3 +1,8 @@
+---
+title: "How it works"
+description: "Aho–Corasick compiles many patterns into a trie and scans text with failure links. This implementation treats each **grapheme cluster** as an edge label."
+---
+
 # How it works
 
 Aho–Corasick compiles many patterns into a trie and scans text with failure links. This implementation treats each **grapheme cluster** as an edge label.
@@ -18,18 +23,12 @@ The visualizer's educational grouping is `[[3, ['she', 'he']], [5, ['hers']]]`. 
 
 ## Reading the workbench
 
-The text tape highlights the grapheme currently being considered. Solid blue edges are goto transitions; dashed orange edges are failure links. The active fallback remains visible even when other failure links are hidden. Double-ring nodes are terminal states. Tables use numeric state order and show inherited outputs without changing compiled state.
-
-Each match event reveals exactly one structured result. A reset clears playback progress; the lab continues to show the complete search. Seeking backward or forward projects the same immutable trace and pauses playback. Select a state to inspect its prefix, failure suffix, own terminals, and inherited-output sources. Changing dictionary/text inputs cancels playback and any stale computation.
+[Read controls, trace interpretation and input limits →](/workbench/guide)
 
 ## Cost and scope
 
-Building uses a node array, Map edges and breadth-first failure construction with a queue cursor. Scanning follows failure/output links; emitting many matches necessarily costs time proportional to the output. The workbench generates a bounded, complete trace in a cancellable Worker, reuses dictionaries for text edits, and only lays out graphs of up to 150 states. Larger dictionaries use paginated state tables. See the [workbench limits and controls](./visualization#input-size-and-responsiveness) and [measured computation/transfer costs](https://github.com/icelib/modern-ahocorasick/blob/main/docs/workbench-performance.md). It remains a teaching tool rather than a large-corpus benchmark.
+The default backend retains interned symbols and sparse numeric arrays. Scanning uses a direct root lookup and binary search for other transitions. For g text graphemes, z matches and maximum transition degree d, enumeration costs O(g log(d + 1) + z), excluding segmentation. The two leftmost strategies use an O(L) candidate window; global `longest-first` collects and sorts candidates. Output arrays and strings need additional storage.
 
-For g input graphemes, z occurrences and a longest keyword of L graphemes, enumeration takes O(g log(d + 1) + z) time. Non-overlapping strategies keep an O(L) candidate window instead of collecting and sorting z matches; result arrays and replacement strings require their own storage. A candidate is settled only after no longer keyword can change the choice. Aggregate state counts let `count()` take O(g log(d + 1)) scan time with O(1) additional scan state and let `match()` stop without constructing results. These costs exclude runtime-dependent Unicode segmentation. Pattern lengths and aggregate counts add dictionary storage; they do not duplicate inherited output lists.
+See [Counting costs](/api/count); see [Measured backend tradeoffs](/extensions/performance).
 
-Read the [measured v2/v3 tradeoffs](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks.md). No blanket speedup is promised.
-
-Reference: Aho and Corasick, _Efficient string matching: an aid to bibliographic search_ (1975). This library is derived from [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick); the workbench reimplements the capabilities of [the original visualization](https://brunorb.github.io/ahocorasick/visualization.html).
-
-The compiled matcher retains interned symbols and sparse numeric arrays. Transitions use a direct root lookup and binary search within other states; d above is the maximum transition degree. Temporary Map nodes are still used during construction and by the teaching adapter. Selected scans ignore duplicate terminals and suffixes dominated by the earliest candidate. `countByPattern()` propagates state visits backwards through failure links in O(g log(d + 1) + s + p) time and O(s + p) temporary space. Whole-word and transformed queries have additional costs described in the [API guide](./api).
+Reference: Aho and Corasick, _Efficient string matching: an aid to bibliographic search_ (1975). Derived from [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick).

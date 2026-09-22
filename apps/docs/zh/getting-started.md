@@ -1,6 +1,11 @@
+---
+title: "快速开始"
+description: "安装 modern-ahocorasick v3.2.0，完成第一次匹配。"
+---
+
 # 快速开始
 
-本站介绍已在 npm 发布的 **v3**。从 v2 升级会改变匹配结果结构，请参阅 [v2 → v3 迁移说明](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md)。
+安装 modern-ahocorasick v3.2.0，完成第一次匹配。
 
 ## 安装
 
@@ -8,7 +13,7 @@
 pnpm add modern-ahocorasick
 ```
 
-以下示例可直接使用已发布的 v3 包运行。
+以下示例可直接使用已发布的 v3.2.0 包运行。
 
 ## ESM 与 CommonJS
 
@@ -31,17 +36,12 @@ const ac = new AhoCorasick(['he'])
 console.log(ac.match('ushers')) // true
 ```
 
-CommonJS 直接返回构造函数。类型声明需要 TypeScript 5.3 或更新版本。运行环境需要 `Intl.Segmenter`；开发工具要求 Node 22.22.1+、24.11+ 或 26+，使用 pnpm 12.5.1。
+## 运行时与类型
+
+CommonJS 直接返回构造函数。类型声明需要 TypeScript 5.3 或更新版本。运行环境需要 `Intl.Segmenter`；运行时目标为 ES2022。仓库开发环境要求见本地开发指南。
 
 ## 本地开发文档站
 
-```sh
-pnpm install --frozen-lockfile
-pnpm docs:dev
-pnpm docs:build
-pnpm docs:preview
-```
+[本地开发文档站 →](/zh/contributing)
 
-开发命令会先构建工作区库包，预览命令在构建后运行。无需后端、账号或部署配置。
-
-继续阅读 [API](./api)，或打开[可视化工作台](./visualization)。
+参见 [能力与入口选择](/zh/guide/choosing)。

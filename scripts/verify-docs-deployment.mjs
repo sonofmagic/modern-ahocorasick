@@ -16,6 +16,10 @@ async function verify() {
     '/zh/',
     '/getting-started',
     '/zh/api',
+    '/api/options',
+    '/zh/api/options',
+    '/stream/sessions',
+    '/zh/stream/sessions',
     '/visualization',
     '/zh/visualization',
   ]) {

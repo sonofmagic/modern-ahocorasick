@@ -1,6 +1,11 @@
+---
+title: "Getting started"
+description: "Install modern-ahocorasick v3.2.0 and find your first matches."
+---
+
 # Getting started
 
-These pages describe **v3**, available on npm. Upgrading from v2 changes the result format; see the [migration guide](https://github.com/icelib/modern-ahocorasick/blob/main/packages/modern-ahocorasick/MIGRATION.md).
+Install modern-ahocorasick v3.2.0 and find your first matches.
 
 ## Install
 
@@ -8,7 +13,7 @@ These pages describe **v3**, available on npm. Upgrading from v2 changes the res
 pnpm add modern-ahocorasick
 ```
 
-The examples below work with the published v3 package.
+The examples below work with published v3.2.0.
 
 ## ESM and CommonJS
 
@@ -31,17 +36,12 @@ const ac = new AhoCorasick(['he'])
 console.log(ac.match('ushers')) // true
 ```
 
-CommonJS returns the constructor directly. TypeScript declarations require TypeScript 5.3 or newer. The runtime requires `Intl.Segmenter`; development tooling requires Node 22.22.1+, 24.11+, or 26+, with pnpm 12.5.1.
+## Runtime and types
+
+CommonJS returns the constructor directly. TypeScript declarations require TypeScript 5.3 or newer. The runtime requires `Intl.Segmenter`; the runtime target is ES2022. Node.js development requirements are listed in the contributor guide.
 
 ## Develop this site
 
-```sh
-pnpm install --frozen-lockfile
-pnpm docs:dev
-pnpm docs:build
-pnpm docs:preview
-```
+[Local documentation development →](/contributing)
 
-The development command builds the workspace library first. Preview serves the static output after a build. No backend, account, or deployment configuration is needed.
-
-Continue with [the API](./api) or [open the visualizer](./visualization).
+See [Choose an API and entry](/guide/choosing).

@@ -1,38 +1,7 @@
 import { defineConfig } from 'vitepress'
 
-const pages = [
-  'getting-started',
-  'api',
-  'algorithm',
-  'unicode',
-  'examples',
-  'extensions',
-  'visualization',
-]
-const en = [
-  'Getting started',
-  'API',
-  'How it works',
-  'Unicode & indices',
-  'Examples',
-  'Extensions & streams',
-  'Visualizer',
-]
-const zh = [
-  '快速开始',
-  'API',
-  '算法原理',
-  'Unicode 与索引',
-  '使用示例',
-  '扩展与流式处理',
-  '交互可视化',
-]
-function links(prefix: string, labels: string[]) {
-  return pages.map((page, index) => ({
-    text: labels[index],
-    link: `${prefix}/${page}`,
-  }))
-}
+import { nav, sidebar } from './navigation.js'
+
 export default defineConfig({
   title: 'modern-ahocorasick',
   description: 'Exact multi-pattern text matching, one grapheme at a time.',
@@ -44,11 +13,8 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
       themeConfig: {
-        nav: [
-          { text: 'Guide', link: '/getting-started' },
-          { text: 'Visualizer', link: '/visualization' },
-        ],
-        sidebar: links('', en),
+        nav: nav('en'),
+        sidebar: sidebar('en'),
       },
     },
     zh: {
@@ -57,12 +23,9 @@ export default defineConfig({
       title: 'modern-ahocorasick',
       description: '逐字素扫描的多模式文本匹配。',
       themeConfig: {
-        nav: [
-          { text: '指南', link: '/zh/getting-started' },
-          { text: '可视化', link: '/zh/visualization' },
-        ],
-        sidebar: links('/zh', zh),
-        outline: { label: '本页内容' },
+        nav: nav('zh'),
+        sidebar: sidebar('zh'),
+        outline: { label: '本页内容', level: [2, 3] },
         docFooter: { prev: '上一页', next: '下一页' },
         darkModeSwitchLabel: '主题',
         sidebarMenuLabel: '目录',
@@ -71,6 +34,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    outline: { level: [2, 3] },
     socialLinks: [
       {
         icon: 'github',

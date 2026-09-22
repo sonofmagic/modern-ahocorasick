@@ -83,5 +83,25 @@ test('optional entries preserve folding and chunked replacement in the browser',
   })
   expect(result).toEqual({ folded: '😀X X', filtered: 'X `cat` https://cat X', transformed: 'X', halfExpansion: false })
   await page.goto('/zh/extensions')
-  await expect(page.getByRole('heading', { name: /^可选文本处理扩展/, level: 1 })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /^扩展能力概览/, level: 1 })).toBeVisible()
 })
+
+for (const prefix of ['', 'zh/']) {
+  test(`documented ${prefix || 'en'} highlighting renders HTML-looking input as text`, async ({ page }) => {
+    const markdown = readFileSync(new URL(`../${prefix}examples/highlighting.md`, import.meta.url), 'utf8')
+    const source = [...markdown.matchAll(/```ts\n([\s\S]*?)\n```/g)][0][1]
+      .replace('from \'modern-ahocorasick\'', 'from \'/__package/index.js\'')
+    await page.route('**/__highlight.js', route => route.fulfill({
+      contentType: 'text/javascript',
+      body: stripTypeScriptTypes(source),
+    }))
+    await page.goto('/')
+    await page.evaluate(async () => {
+      const exampleURL = '/__highlight.js'
+      await import(exampleURL)
+    })
+    await expect(page.locator('body > p')).toHaveText('<img> a cat!')
+    await expect(page.locator('body > p mark')).toHaveText('cat')
+    await expect(page.locator('body > p img')).toHaveCount(0)
+  })
+}

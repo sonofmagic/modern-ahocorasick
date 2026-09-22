@@ -1,3 +1,8 @@
+---
+title: "算法原理"
+description: "Aho–Corasick 将多个关键词编译成 Trie，并借助 failure 链接扫描文本。此实现将每个**字素簇**作为一条边的标签。"
+---
+
 # 算法原理
 
 Aho–Corasick 将多个关键词编译成 Trie，并借助 failure 链接扫描文本。此实现将每个**字素簇**作为一条边的标签。
@@ -18,18 +23,12 @@ Aho–Corasick 将多个关键词编译成 Trie，并借助 failure 链接扫描
 
 ## 阅读工作台
 
-字素带高亮当前考虑的字素。蓝色实线表示 goto，橙色虚线表示 failure。即使隐藏 failure 连线，正在发生的回退也会显示。双圈节点代表终态。状态表按数值排序，展示继承输出，但不修改自动机。
-
-每次命中事件只展示一条新的结构化结果。重置清空播放进度，实验台仍展示完整搜索结果。前后定位读取同一份不可变轨迹，并暂停播放。点击状态可查看前缀、failure 后缀、自身终态和继承输出来源。修改词典或文本会取消播放与过时的计算。
+[查看操作、轨迹解读与输入限制 →](/zh/workbench/guide)
 
 ## 开销与适用范围
 
-构建使用节点数组、Map 转移边以及带队列游标的广度优先 failure 构建。扫描沿 failure 与 output 链接前进；大量命中的输出必然消耗相应时间。工作台在可取消的 Worker 中生成有规模限制的完整轨迹，修改文本时复用词典，仅对不超过 150 个状态的图进行布局；更大的词典使用分页状态表。参阅[工作台限制和操作说明](./visualization#输入规模与响应能力)以及[计算与传输实测](https://github.com/icelib/modern-ahocorasick/blob/main/docs/workbench-performance.md)。工作台用于教学，不用于大型语料性能测试。
+默认后端保存已驻留符号和稀疏数字数组。扫描在根节点直接查找，其他转移使用二分查找。对 g 个文本字素、z 次命中及最大转移分支数 d，不计分段时枚举成本为 O(g log(d + 1) + z)。两种 leftmost 策略使用 O(L) 候选窗口；全局 `longest-first` 收集并排序候选。输出数组与字符串另占存储。
 
-设输入有 g 个字素、z 次命中，最长关键词有 L 个字素，枚举耗时为 O(g log(d + 1) + z)。非重叠策略维护 O(L) 候选窗口，无需收集并排序 z 次命中；结果数组和替换字符串另需存储空间。只有确认后续更长关键词不会改变选择时，候选才会输出。预计算状态命中总数使 `count()` 的扫描耗时为 O(g log(d + 1))、额外扫描状态为 O(1)，也使 `match()` 无需创建结果即可停止。这些复杂度不包含运行时的 Unicode 分段成本。词条字素长度和命中总数增加词典存储，但不复制继承输出列表。
+参见 [计数开销](/zh/api/count)；另见 [后端实测取舍](/zh/extensions/performance)。
 
-参阅[实测 v2/v3 性能取舍](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks.md)，不承诺全面加速。
-
-参考文献：Aho 与 Corasick，_Efficient string matching: an aid to bibliographic search_（1975）。本库源自 [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick)，工作台重写了[原可视化页面](https://brunorb.github.io/ahocorasick/visualization.html)的能力。
-
-编译后的匹配器保存字素编号和稀疏数字数组。根状态直接查表，其余状态在转移区间内二分查找，上述 d 为最大转移分支数。构建时和教学适配器仍使用临时 Map 节点。不重叠扫描会跳过重复词条及被最早候选覆盖的后缀。`countByPattern()` 沿 failure 链反向汇总访问次数，耗时 O(g log(d + 1) + s + p)，临时空间 O(s + p)。完整词与转换查询的额外成本见 [API 指南](./api)。
+参考：Aho 与 Corasick，_Efficient string matching: an aid to bibliographic search_（1975）。本库源自 [BrunoRB/ahocorasick](https://github.com/BrunoRB/ahocorasick).

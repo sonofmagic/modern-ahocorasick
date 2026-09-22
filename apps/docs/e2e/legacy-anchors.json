@@ -1,0 +1,112 @@
+{
+  "/getting-started": [
+    "install",
+    "esm-and-commonjs",
+    "develop-this-site"
+  ],
+  "/api": [
+    "constructor",
+    "search-text-options",
+    "match-text-options",
+    "count-text-options",
+    "countbypattern-text-options",
+    "iterate-text-options",
+    "replace-text-replacement-options",
+    "private-state",
+    "whole-word-matching",
+    "compiled-dictionaries",
+    "createstream-options",
+    "optional-normalization-and-case-folding"
+  ],
+  "/extensions": [
+    "capabilities-and-entry-points",
+    "boundaries-and-selection",
+    "full-unicode-folding",
+    "dynamic-dictionaries-and-replacements",
+    "incremental-sessions-and-iteration",
+    "protected-syntax-and-platform-streams",
+    "performance-and-comparison",
+    "compatibility-with-v3-1",
+    "migrating-the-reference-packages",
+    "ranges-anchoring-and-compile-statistics"
+  ],
+  "/unicode": [
+    "graphemes-are-the-matching-unit",
+    "exact-boundaries-and-spelling",
+    "empty-inputs",
+    "ascii-acceleration-and-runtime-versions"
+  ],
+  "/examples": [
+    "overlapping-and-duplicate-patterns",
+    "metadata-and-replacement",
+    "safe-highlighting",
+    "presence-and-lazy-output"
+  ],
+  "/algorithm": [
+    "three-pieces-of-state",
+    "walk-through-ushers",
+    "reading-the-workbench",
+    "cost-and-scope"
+  ],
+  "/visualization": [
+    "try-a-real-text-processing-task",
+    "read-and-revisit-the-scan",
+    "save-and-share",
+    "input-size-and-responsiveness"
+  ],
+  "/zh/getting-started": [
+    "安装",
+    "esm-与-commonjs",
+    "本地开发文档站"
+  ],
+  "/zh/api": [
+    "构造函数",
+    "search-text-options",
+    "match-text-options",
+    "count-text-options",
+    "countbypattern-text-options",
+    "iterate-text-options",
+    "replace-text-replacement-options",
+    "私有状态",
+    "完整词匹配",
+    "保存与加载编译词库",
+    "createstream-options",
+    "可选归一化与大小写折叠"
+  ],
+  "/zh/extensions": [
+    "能力与入口",
+    "边界与选择策略",
+    "完整-unicode-折叠",
+    "动态词典与替换工具",
+    "增量会话与迭代",
+    "受保护语法与平台流",
+    "性能与对照",
+    "与-v3-1-的兼容性",
+    "从参考包迁移",
+    "范围、锚定与编译统计"
+  ],
+  "/zh/unicode": [
+    "匹配单位是字素簇",
+    "精确边界与字符形式",
+    "空输入",
+    "ascii-加速与运行时版本"
+  ],
+  "/zh/examples": [
+    "重叠与重复关键词",
+    "元数据与替换",
+    "安全高亮",
+    "存在性判断与惰性输出"
+  ],
+  "/zh/algorithm": [
+    "三种状态信息",
+    "逐步扫描-ushers",
+    "阅读工作台",
+    "开销与适用范围"
+  ],
+  "/zh/visualization": [
+    "试验实际文本处理",
+    "阅读和回看过程",
+    "保存与分享",
+    "输入规模与响应能力"
+  ]
+}

@@ -98,6 +98,19 @@ h3,
   border-bottom: 2px solid var(--vp-c-brand-1);
 }
 
+.hero-reading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  margin-top: 28px;
+}
+
+.hero-reading a {
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .hero-demo {
   display: grid;
   grid-template-columns: 1fr 1fr;
