@@ -193,6 +193,12 @@ importers:
       lint-staged:
         specifier: ^17.5.1
         version: 17.5.1
+      modern-ahocorasick-v1:
+        specifier: npm:modern-ahocorasick@1.1.0
+        version: modern-ahocorasick@1.1.0
+      modern-ahocorasick-v2:
+        specifier: npm:modern-ahocorasick@2.0.4
+        version: modern-ahocorasick@2.0.4
       repoctl:
         specifier: 5.5.4
         version: 5.5.4(5fc513821f6e7f25e2062fbeaa6abb67)
@@ -5571,6 +5577,12 @@ packages:
 
   mlly@1.7.4:
     resolution: {integrity: sha512-qmdSIPC4bDJXgZTCR7XosJiNKySV7O215tsPtDN9iEO/7q/76b/ijtgRu/+epFXSJhijtTCCGp3DWS549P3xKw==}
+
+  modern-ahocorasick@1.1.0:
+    resolution: {integrity: sha512-sEKPVl2rM+MNVkGQt3ChdmD8YsigmXdn5NifZn6jiwn9LRJpWm8F3guhaqrJT/JOat6pwpbXEk6kv+b9DMIjsQ==}
+
+  modern-ahocorasick@2.0.4:
+    resolution: {integrity: sha512-EFe312CXjDE8/nXOJk/LpzPUTNXzFTZCWazQ6rntodIByicqKg9wSqjBSQt1alcTdzwEbMyeTPXnvw9BIxyiRg==}
 
   module-replacements@3.3.0:
     resolution: {integrity: sha512-AVZL23uePazQOZlb/QMGwxsUa1oWA62Cfe6ApPzgasUoF4cdCWAiRPVq4KkaQzXbIDAlpLhLG61Jx8Lju4wjTg==}
@@ -13464,6 +13476,10 @@ snapshots:
       pathe: 2.0.2
       pkg-types: 1.3.1
       ufo: 1.5.4
+
+  modern-ahocorasick@1.1.0: {}
+
+  modern-ahocorasick@2.0.4: {}
 
   module-replacements@3.3.0: {}
 

@@ -47,7 +47,9 @@
     "docs:deploy": "pnpm docs:build && pnpm --filter @modern-ahocorasick/docs run deploy",
     "docs:verify-deployment": "node scripts/verify-docs-deployment.mjs",
     "benchmark:external": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-external.mjs",
-    "benchmark:history": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-history.mjs"
+    "benchmark:history": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-history.mjs",
+    "benchmark:versions": "pnpm --filter modern-ahocorasick build >&2 && node --expose-gc scripts/benchmark-versions.mjs",
+    "test:benchmark:versions": "vitest run packages/modern-ahocorasick/test/benchmark-versions.test.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
@@ -59,6 +61,8 @@
     "eslint": "^10.11.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
+    "modern-ahocorasick-v1": "npm:modern-ahocorasick@1.1.0",
+    "modern-ahocorasick-v2": "npm:modern-ahocorasick@2.0.4",
     "repoctl": "5.5.4",
     "stylelint": "^17.15.0",
     "tsd": "^0.33.0",

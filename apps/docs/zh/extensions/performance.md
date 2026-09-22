@@ -33,11 +33,14 @@ matcher.getStats().backend // 'double-array'
 运行 `pnpm benchmark:external` 查看可打印 ASCII 对照，分别报告统一后的独立范围、
 原生结果、构建成本及内存。
 
+三代版本对比使用 `pnpm benchmark:versions`：固定 npm v1.1.0、v2.0.4，与当前本地默认入口比较构建、原生搜索、独立范围转换和保留内存。Unicode 结果不正确的旧版场景不计算速度比。完整数据与复测见 [v1／v2／v3 对比报告](https://github.com/icelib/modern-ahocorasick/blob/main/docs/benchmarks-versions.zh-CN.md)。
+
 ## 复现与解读
 
 ```sh
 pnpm benchmark
 pnpm benchmark:external
+pnpm benchmark:versions
 pnpm benchmark:docs
 ```
 
