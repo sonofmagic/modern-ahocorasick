@@ -1,5 +1,17 @@
 # modern-ahocorasick
 
+## 3.2.0
+
+### Minor Changes
+
+- Add dynamic dictionary snapshots and incremental matching, tokenization and replacement with Unicode chunk parity, cancellation, buffer limits and Node/Web stream adapters.
+
+- Add boundary-aware matching, global longest-first selection, original-range tokenization, optional Unicode 17.0 full case folding, and reusable per-operation replacement helpers.
+
+- Add an optional double-array backend, protected Markdown/URL streaming filters, provisional token previews and development-only comparative benchmarks.
+
+- Add original-grapheme-validated UTF-16 search ranges and anchoring across whole-text queries, cached immutable compilation statistics, and contiguous double-array terminal storage. Keep full-input boundary context and reject offline range options on streams.
+
 ## 3.1.0
 
 ### Minor Changes
