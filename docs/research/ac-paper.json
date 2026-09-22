@@ -1,0 +1,323 @@
+{
+  "url": "https://api.crossref.org/works/10.1145/360825.360855",
+  "data": {
+    "status": "ok",
+    "message-type": "work",
+    "message-version": "1.0.0",
+    "message": {
+      "indexed": {
+        "date-parts": [
+          [
+            2026,
+            9,
+            21
+          ]
+        ],
+        "date-time": "2026-09-21T05:01:02Z",
+        "timestamp": 1789966862682,
+        "version": "4.0.1"
+      },
+      "reference-count": 16,
+      "publisher": "Association for Computing Machinery (ACM)",
+      "issue": "6",
+      "license": [
+        {
+          "start": {
+            "date-parts": [
+              [
+                1975,
+                6,
+                1
+              ]
+            ],
+            "date-time": "1975-06-01T00:00:00Z",
+            "timestamp": 170812800000
+          },
+          "content-version": "vor",
+          "delay-in-days": 0,
+          "URL": "https://www.acm.org/publications/policies/copyright_policy#Background"
+        }
+      ],
+      "content-domain": {
+        "domain": [
+          "dl.acm.org"
+        ],
+        "crossmark-restriction": true
+      },
+      "short-container-title": [
+        "Commun. ACM"
+      ],
+      "published-print": {
+        "date-parts": [
+          [
+            1975,
+            6
+          ]
+        ]
+      },
+      "abstract": "<jats:p>This paper describes a simple, efficient algorithm to locate all occurrences of any of a finite number of keywords in a string of text. The algorithm consists of constructing a finite state pattern matching machine from the keywords and then using the pattern matching machine to process the text string in a single pass. Construction of the pattern matching machine takes time proportional to the sum of the lengths of the keywords. The number of state transitions made by the pattern matching machine in processing the text string is independent of the number of keywords. The algorithm has been used to improve the speed of a library bibliographic search program by a factor of 5 to 10.</jats:p>",
+      "DOI": "10.1145/360825.360855",
+      "type": "journal-article",
+      "created": {
+        "date-parts": [
+          [
+            2002,
+            7,
+            27
+          ]
+        ],
+        "date-time": "2002-07-27T07:37:49Z",
+        "timestamp": 1027755469000
+      },
+      "page": "333-340",
+      "update-policy": "https://doi.org/10.1145/crossmark-policy",
+      "source": "Crossref",
+      "is-referenced-by-count": 2102,
+      "title": [
+        "Efficient string matching"
+      ],
+      "prefix": "10.1145",
+      "volume": "18",
+      "author": [
+        {
+          "given": "Alfred V.",
+          "family": "Aho",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Bell Labs, Murray Hill, NJ"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Margaret J.",
+          "family": "Corasick",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Bell Labs, Murray Hill, NJ"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "member": "320",
+      "published-online": {
+        "date-parts": [
+          [
+            1975,
+            6
+          ]
+        ]
+      },
+      "reference": [
+        {
+          "key": "e_1_2_1_1_2",
+          "volume-title": "the Design and Analysis of Computer Algorithms",
+          "author": "Aho A.V.",
+          "year": "1974",
+          "unstructured": "Aho , A.V. Hopscroft , J,E . and Ullman , D. J. , the Design and Analysis of Computer Algorithms . Addison-Wesley , Reading, Mass ., 1974 . Aho, A.V.Hopscroft, J,E. and Ullman, D. J., the Design and Analysis of Computer Algorithms. Addison-Wesley, Reading, Mass., 1974."
+        },
+        {
+          "key": "e_1_2_1_2_2",
+          "unstructured": "Booth T.U Sequential Machines and Automata Theory. Wiley New York 1967.  Booth T.U Sequential Machines and Automata Theory. Wiley New York 1967."
+        },
+        {
+          "key": "e_1_2_1_3_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1145/321239.321249"
+        },
+        {
+          "key": "e_1_2_1_4_2",
+          "first-page": "479",
+          "volume-title": "Proc. Fall Joint Computer Conference",
+          "author": "Bullen R.H., Jr.",
+          "year": "1972",
+          "unstructured": "Bullen , R.H., Jr. , and Millen , J.K . Microtext - the design of a microprogrammed finite state search machine for full-text retrieval . Proc. Fall Joint Computer Conference , 1972 , pp. 479 - 488 . Bullen, R.H., Jr., and Millen, J.K. Microtext - the design of a microprogrammed finite state search machine for full-text retrieval. Proc. Fall Joint Computer Conference, 1972, pp. 479-488."
+        },
+        {
+          "key": "e_1_2_1_6_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1145/361952.361960"
+        },
+        {
+          "key": "e_1_2_1_7_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1145/362919.362934"
+        },
+        {
+          "key": "e_1_2_1_8_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1145/364175.364185"
+        },
+        {
+          "key": "e_1_2_1_9_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1145/360680.360684"
+        },
+        {
+          "key": "e_1_2_1_10_2",
+          "first-page": "3",
+          "volume-title": "Representation of events in nerve nets",
+          "author": "Kleene S.C.",
+          "year": "1956",
+          "unstructured": "Kleene , S.C. Representation of events in nerve nets . In Automata Studies, C.E. Shannon and J. McCarthy (eds.), Princeton University Press , 1956 , pp. 3 - 40 . Kleene, S.C. Representation of events in nerve nets. In Automata Studies, C.E. Shannon and J. McCarthy (eds.), Princeton University Press, 1956, pp. 3-40."
+        },
+        {
+          "key": "e_1_2_1_11_2",
+          "volume-title": "Fundamental Algorithms",
+          "author": "Knuth D.E.",
+          "year": "1973",
+          "unstructured": "Knuth , D.E. Fundamental Algorithms , second edition, The Art of Computer Programming 1, Addison-Wesley , Reading, Mass., 1973 . Knuth, D.E. Fundamental Algorithms, second edition, The Art of Computer Programming 1, Addison-Wesley, Reading, Mass., 1973."
+        },
+        {
+          "key": "e_1_2_1_12_2",
+          "volume-title": "The Art of Computer Prograining 3",
+          "author": "Knuth D.E.",
+          "year": "1973",
+          "unstructured": "Knuth , D.E. Sorting and Searching , The Art of Computer Prograining 3 , Addison-Wesley , Reading, Mass ., 1973 . Knuth, D.E. Sorting and Searching, The Art of Computer Prograining 3, Addison-Wesley, Reading, Mass., 1973."
+        },
+        {
+          "key": "e_1_2_1_13_2",
+          "volume-title": "Fast pattern matching in strings. TR CS-74-440",
+          "author": "Knuth D.E.",
+          "year": "1974",
+          "unstructured": "Knuth , D.E. , Morris , J.H., Jr. , and Pratt , V.R . Fast pattern matching in strings. TR CS-74-440 , Stanford University , Stanford, California , 1974 . Knuth, D.E., Morris, J.H., Jr., and Pratt, V.R. Fast pattern matching in strings. TR CS-74-440, Stanford University, Stanford, California, 1974."
+        },
+        {
+          "key": "e_1_2_1_14_2",
+          "volume-title": "Switching and Finite Automata Theory",
+          "author": "Kohavi Z.",
+          "year": "1970",
+          "unstructured": "Kohavi , Z. Switching and Finite Automata Theory . McGraw- Hill , New York , 1970 . Kohavi, Z. Switching and Finite Automata Theory. McGraw- Hill, New York, 1970."
+        },
+        {
+          "key": "e_1_2_1_15_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1109/TEC.1960.5221603"
+        },
+        {
+          "key": "e_1_2_1_16_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1147/rd.32.0114"
+        },
+        {
+          "key": "e_1_2_1_17_2",
+          "doi-asserted-by": "publisher",
+          "DOI": "10.1145/363347.363387"
+        }
+      ],
+      "container-title": [
+        "Communications of the ACM"
+      ],
+      "original-title": [],
+      "language": "en",
+      "link": [
+        {
+          "URL": "https://dl.acm.org/doi/10.1145/360825.360855",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://dl.acm.org/doi/pdf/10.1145/360825.360855",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ],
+      "deposited": {
+        "date-parts": [
+          [
+            2025,
+            6,
+            17
+          ]
+        ],
+        "date-time": "2025-06-17T12:46:52Z",
+        "timestamp": 1750164412000
+      },
+      "score": 1,
+      "resource": {
+        "primary": {
+          "URL": "https://dl.acm.org/doi/10.1145/360825.360855"
+        }
+      },
+      "subtitle": [
+        "an aid to bibliographic search"
+      ],
+      "short-title": [],
+      "issued": {
+        "date-parts": [
+          [
+            1975,
+            6
+          ]
+        ]
+      },
+      "references-count": 16,
+      "journal-issue": {
+        "issue": "6",
+        "published-print": {
+          "date-parts": [
+            [
+              1975,
+              6
+            ]
+          ]
+        }
+      },
+      "alternative-id": [
+        "10.1145/360825.360855"
+      ],
+      "URL": "https://doi.org/10.1145/360825.360855",
+      "relation": {},
+      "ISSN": [
+        "0001-0782",
+        "1557-7317"
+      ],
+      "issn-type": [
+        {
+          "value": "0001-0782",
+          "type": "print"
+        },
+        {
+          "value": "1557-7317",
+          "type": "electronic"
+        }
+      ],
+      "subject": [],
+      "published": {
+        "date-parts": [
+          [
+            1975,
+            6
+          ]
+        ]
+      },
+      "assertion": [
+        {
+          "value": "1975-06-01",
+          "order": 2,
+          "name": "published",
+          "label": "Published",
+          "group": {
+            "name": "publication_history",
+            "label": "Publication History"
+          }
+        }
+      ]
+    }
+  }
+}

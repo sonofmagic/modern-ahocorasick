@@ -1,0 +1,2087 @@
+{
+  "url": "https://registry.npmjs.org/-/v1/search?text=aho-corasick&size=40",
+  "data": {
+    "objects": [
+      {
+        "downloads": {
+          "monthly": 1322,
+          "weekly": 303
+        },
+        "dependents": "2",
+        "updated": "2026-09-16T02:51:35.638Z",
+        "searchScore": 1369.9734,
+        "package": {
+          "name": "aho-corasick",
+          "keywords": [
+            "aho-corasick",
+            "trie",
+            "match"
+          ],
+          "version": "0.1.3",
+          "description": "Aho\u2013Corasick string matching algorithm",
+          "sanitized_name": "aho-corasick",
+          "publisher": {
+            "email": "xudejian2008@gmail.com",
+            "username": "hsujian"
+          },
+          "maintainers": [
+            {
+              "email": "xudejian2008@gmail.com",
+              "username": "hsujian"
+            }
+          ],
+          "date": "2013-01-16T03:08:51.113Z",
+          "links": {
+            "homepage": "https://github.com/hsujian/aho-corasick",
+            "repository": "git://github.com/hsujian/aho-corasick.git",
+            "npm": "https://www.npmjs.com/package/aho-corasick"
+          }
+        },
+        "score": {
+          "final": 1369.9734,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 79892,
+          "weekly": 59734
+        },
+        "dependents": "2",
+        "updated": "2026-09-21T07:09:34.856Z",
+        "searchScore": 976.3111,
+        "package": {
+          "name": "@monyone/aho-corasick",
+          "keywords": [
+            "aho-corasick"
+          ],
+          "version": "1.5.10",
+          "description": "Aho Corasick implementation written in TypeScript",
+          "sanitized_name": "@monyone/aho-corasick",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "oidcConfigId": "oidc:1fe1b881-f20e-4391-afd0-a71cd2361569",
+              "id": "github"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "i1shi9ka9wa2+npm@gmail.com",
+              "username": "monyone"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-08-16T08:02:44.740Z",
+          "links": {
+            "homepage": "https://github.com/monyone/aho-corasick#readme",
+            "repository": "git+https://github.com/monyone/aho-corasick.git",
+            "bugs": "https://github.com/monyone/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@monyone/aho-corasick"
+          }
+        },
+        "score": {
+          "final": 976.3111,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 7154300,
+          "weekly": 1491523
+        },
+        "dependents": "7",
+        "updated": "2026-09-22T01:28:55.927Z",
+        "searchScore": 683.24176,
+        "package": {
+          "name": "modern-ahocorasick",
+          "keywords": [
+            "ahocorasick",
+            "aho-corasick",
+            "multi-pattern-matching",
+            "string-matching",
+            "text-search",
+            "unicode",
+            "grapheme",
+            "typescript"
+          ],
+          "version": "3.1.0",
+          "description": "Unicode-aware Aho\u2013Corasick multi-pattern matching with UTF-16 ranges, counting, lazy iteration, and replacement.",
+          "sanitized_name": "modern-ahocorasick",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "oidcConfigId": "oidc:9fc1f7b8-3113-482d-929c-9eb03c87db8f",
+              "id": "github"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "1324318532@qq.com",
+              "username": "icebreaker"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-09-22T01:28:24.660Z",
+          "links": {
+            "homepage": "https://aho.icebreaker.top/",
+            "repository": "git+https://github.com/icelib/modern-ahocorasick.git",
+            "bugs": "https://github.com/icelib/modern-ahocorasick/issues",
+            "npm": "https://www.npmjs.com/package/modern-ahocorasick"
+          }
+        },
+        "score": {
+          "final": 683.24176,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 6638,
+          "weekly": 1055
+        },
+        "dependents": "1",
+        "updated": "2026-09-16T09:51:12.827Z",
+        "searchScore": 655.94586,
+        "package": {
+          "name": "@tanishiking/aho-corasick",
+          "keywords": [
+            "aho-corasick",
+            "trie",
+            "string",
+            "search",
+            "match"
+          ],
+          "version": "0.0.1",
+          "description": "TypeScript implementation of the Aho-Corasick algorithm for efficient string matching",
+          "sanitized_name": "@tanishiking/aho-corasick",
+          "publisher": {
+            "email": "rikiriki1238@gmail.com",
+            "username": "tanishiking"
+          },
+          "maintainers": [
+            {
+              "email": "rikiriki1238@gmail.com",
+              "username": "tanishiking"
+            }
+          ],
+          "license": "Apache-2.0",
+          "date": "2020-05-16T17:50:06.806Z",
+          "links": {
+            "homepage": "https://github.com/tanishiking/aho-corasick-js",
+            "repository": "git+https://github.com/tanishiking/aho-corasick-js.git",
+            "bugs": "https://github.com/tanishiking/aho-corasick-js/issues",
+            "npm": "https://www.npmjs.com/package/@tanishiking/aho-corasick"
+          }
+        },
+        "score": {
+          "final": 655.94586,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 1258,
+          "weekly": 373
+        },
+        "dependents": "1",
+        "updated": "2026-09-15T20:56:12.125Z",
+        "searchScore": 652.5107,
+        "package": {
+          "name": "aho-corasick-node",
+          "keywords": [],
+          "version": "1.0.2",
+          "description": "aho-corasick-node ====",
+          "sanitized_name": "aho-corasick-node",
+          "publisher": {
+            "email": "rookitcn@gmail.com",
+            "username": "guofei"
+          },
+          "maintainers": [
+            {
+              "email": "rookitcn@gmail.com",
+              "username": "guofei"
+            }
+          ],
+          "license": "MIT",
+          "date": "2018-04-25T13:05:36.727Z",
+          "links": {
+            "homepage": "https://github.com/guofei/aho-corasick-node#readme",
+            "repository": "git+https://github.com/guofei/aho-corasick-node.git",
+            "bugs": "https://github.com/guofei/aho-corasick-node/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick-node"
+          }
+        },
+        "score": {
+          "final": 652.5107,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 604,
+          "weekly": 104
+        },
+        "dependents": "6",
+        "updated": "2026-09-17T00:01:15.582Z",
+        "searchScore": 550.72296,
+        "package": {
+          "name": "aho-corasick-automaton",
+          "keywords": [
+            "aho",
+            "corasick",
+            "automata",
+            "stream",
+            "array",
+            "pattern",
+            "match",
+            "multiple",
+            "strings"
+          ],
+          "version": "0.0.0",
+          "description": "Stream Aho-Corasick automata",
+          "sanitized_name": "aho-corasick-automaton",
+          "publisher": {
+            "email": "mikolalysenko@gmail.com",
+            "username": "mikolalysenko"
+          },
+          "maintainers": [
+            {
+              "email": "mikolalysenko@gmail.com",
+              "username": "mikolalysenko"
+            }
+          ],
+          "license": "MIT",
+          "date": "2013-11-06T21:43:32.507Z",
+          "links": {
+            "repository": "git://github.com/mikolalysenko/aho-corasick-automaton.git",
+            "bugs": "https://github.com/mikolalysenko/aho-corasick-automaton/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick-automaton"
+          }
+        },
+        "score": {
+          "final": 550.72296,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 2075,
+          "weekly": 453
+        },
+        "dependents": "3",
+        "updated": "2026-09-16T09:21:18.593Z",
+        "searchScore": 490.19485,
+        "package": {
+          "name": "aho-corasick2",
+          "keywords": [
+            "Aho-Corasick automation",
+            "ac",
+            "ac automation",
+            "aca",
+            "add",
+            "aho",
+            "aho-corasick",
+            "algorithm",
+            "array",
+            "automata",
+            "corasick",
+            "data",
+            "javascript",
+            "match",
+            "multiple",
+            "pattern",
+            "remove",
+            "stream",
+            "strings",
+            "structure",
+            "tree",
+            "tree-structure",
+            "trie",
+            "trie-structure",
+            "words",
+            "create-by-yarn-tool",
+            "create-by-tsdx"
+          ],
+          "version": "2.0.1",
+          "description": "Aho\u2013Corasick string matching algorithm",
+          "sanitized_name": "aho-corasick2",
+          "publisher": {
+            "email": "codelovers@users.sourceforge.net",
+            "username": "bluelovers"
+          },
+          "maintainers": [
+            {
+              "email": "codelovers@users.sourceforge.net",
+              "username": "bluelovers"
+            }
+          ],
+          "license": "ISC",
+          "date": "2022-11-13T10:16:27.080Z",
+          "links": {
+            "homepage": "https://github.com/bluelovers/ws-trie/tree/master/packages/aho-corasick2#readme",
+            "repository": "git+https://github.com/bluelovers/ws-trie.git",
+            "bugs": "https://github.com/bluelovers/ws-trie/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick2"
+          }
+        },
+        "score": {
+          "final": 490.19485,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 1099,
+          "weekly": 622
+        },
+        "dependents": "2",
+        "updated": "2026-09-17T12:36:12.237Z",
+        "searchScore": 466.68253,
+        "package": {
+          "name": "@stll/aho-corasick",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "native",
+            "rust",
+            "string-search"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for Node.js and Bun via Rust's aho-corasick engine exposed through NAPI-RS.",
+          "sanitized_name": "@stll/aho-corasick",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:4d0b00b8-cea3-49c6-af26-683e72d3d68e"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:27:14.553Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick"
+          }
+        },
+        "score": {
+          "final": 466.68253,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 231126,
+          "weekly": 58979
+        },
+        "dependents": "19",
+        "updated": "2026-09-21T07:12:26.857Z",
+        "searchScore": 465.77274,
+        "package": {
+          "name": "ahocorasick",
+          "keywords": [
+            "aho-corasick",
+            "string-search",
+            "algorithm",
+            "string-match"
+          ],
+          "version": "1.0.2",
+          "description": "Implementation of the Aho-Corasick string searching algorithm, as described in the paper \"Efficient string matching: an aid to bibliographic search\".",
+          "sanitized_name": "ahocorasick",
+          "publisher": {
+            "email": "brunorb8@hotmail.com",
+            "username": "brunorb"
+          },
+          "maintainers": [
+            {
+              "email": "brunorb8@hotmail.com",
+              "username": "brunorb"
+            }
+          ],
+          "license": "MIT",
+          "date": "2018-11-12T10:38:33.592Z",
+          "links": {
+            "homepage": "https://brunorb.github.io/ahocorasick",
+            "repository": "git+https://github.com/BrunoRB/ahocorasick.git",
+            "bugs": "https://github.com/BrunoRB/ahocorasick/issues",
+            "npm": "https://www.npmjs.com/package/ahocorasick"
+          }
+        },
+        "score": {
+          "final": 465.77274,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 860,
+          "weekly": 487
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T12:36:12.610Z",
+        "searchScore": 409.49475,
+        "package": {
+          "name": "@stll/aho-corasick-linux-x64-gnu",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "native",
+            "rust",
+            "string-search"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for Node.js and Bun via Rust's aho-corasick engine exposed through NAPI-RS.",
+          "sanitized_name": "@stll/aho-corasick-linux-x64-gnu",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:3e07652e-40d1-4f97-b460-d230f23c402d"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:26:03.431Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick-linux-x64-gnu"
+          }
+        },
+        "score": {
+          "final": 409.49475,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 1741,
+          "weekly": 665
+        },
+        "dependents": "1",
+        "updated": "2026-09-17T12:36:12.999Z",
+        "searchScore": 401.15564,
+        "package": {
+          "name": "@stll/aho-corasick-wasm",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "rust",
+            "string-search",
+            "wasm"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for browsers via WebAssembly. Same API as @stll/aho-corasick.",
+          "sanitized_name": "@stll/aho-corasick-wasm",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:83a374b9-e3ff-40ac-bada-c8ffac8b8f8f"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:27:21.296Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick-wasm"
+          }
+        },
+        "score": {
+          "final": 401.15564,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 4492,
+          "weekly": 838
+        },
+        "dependents": "12",
+        "updated": "2026-09-16T19:51:20.347Z",
+        "searchScore": 390.88177,
+        "package": {
+          "name": "mint-filter",
+          "keywords": [
+            "sensitive word filter",
+            "sensitive",
+            "filter",
+            "\u654f\u611f\u8bcd"
+          ],
+          "version": "4.0.3",
+          "description": "\u57fa\u4e8eAho\u2013Corasick\u7b97\u6cd5\uff0c\u66f4\u8f7b\u5de7\u7684JavaScript\u654f\u611f\u8bcd\u8fc7\u6ee4\u5e93\u3002\ud83d\ude80",
+          "sanitized_name": "mint-filter",
+          "publisher": {
+            "email": "i@zhelin.me",
+            "username": "zhelin"
+          },
+          "maintainers": [
+            {
+              "email": "i@zhelin.me",
+              "username": "zhelin"
+            }
+          ],
+          "license": "MIT",
+          "date": "2023-05-08T10:17:45.065Z",
+          "links": {
+            "homepage": "https://github.com/ZhelinCheng/mint-filter#readme",
+            "repository": "git+https://github.com/ZhelinCheng/mint-filter.git",
+            "bugs": "https://github.com/ZhelinCheng/mint-filter/issues",
+            "npm": "https://www.npmjs.com/package/mint-filter"
+          }
+        },
+        "score": {
+          "final": 390.88177,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 141,
+          "weekly": 32
+        },
+        "dependents": 0,
+        "updated": "2026-09-16T08:01:35.622Z",
+        "searchScore": 365.36182,
+        "package": {
+          "name": "@blackglory/aho-corasick",
+          "keywords": [
+            "aho-corasick",
+            "rust",
+            "native"
+          ],
+          "version": "0.1.27",
+          "description": "A simple Node.js wrapper for Rust's aho-corasick package",
+          "sanitized_name": "@blackglory/aho-corasick",
+          "publisher": {
+            "email": "woshenmedoubuzhidao@blackglory.me",
+            "username": "black_glory"
+          },
+          "maintainers": [
+            {
+              "email": "woshenmedoubuzhidao@blackglory.me",
+              "username": "black_glory"
+            }
+          ],
+          "license": "MIT",
+          "date": "2024-02-27T19:36:43.909Z",
+          "links": {
+            "homepage": "https://github.com/BlackGlory/aho-corasick#readme",
+            "repository": "git+ssh://git@github.com/BlackGlory/aho-corasick.git",
+            "bugs": "https://github.com/BlackGlory/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@blackglory/aho-corasick"
+          }
+        },
+        "score": {
+          "final": 365.36182,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 243,
+          "weekly": 140
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T12:36:08.894Z",
+        "searchScore": 330.1352,
+        "package": {
+          "name": "@stll/aho-corasick-darwin-arm64",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "native",
+            "rust",
+            "string-search"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for Node.js and Bun via Rust's aho-corasick engine exposed through NAPI-RS.",
+          "sanitized_name": "@stll/aho-corasick-darwin-arm64",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:dd8b77d6-3bed-43e7-b1b4-066d55fb4d8a"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:25:37.581Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick-darwin-arm64"
+          }
+        },
+        "score": {
+          "final": 330.1352,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 225,
+          "weekly": 26
+        },
+        "dependents": 0,
+        "updated": "2026-09-21T20:26:15.654Z",
+        "searchScore": 317.2111,
+        "package": {
+          "name": "profanity-engine",
+          "keywords": [
+            "profanity"
+          ],
+          "version": "1.0.3",
+          "description": "Profanity Filter using Aho-Corasick algorithm",
+          "sanitized_name": "profanity-engine",
+          "publisher": {
+            "email": "karnamrohit125@gmail.com",
+            "username": "zinbrox"
+          },
+          "maintainers": [
+            {
+              "email": "karnamrohit125@gmail.com",
+              "username": "zinbrox"
+            }
+          ],
+          "license": "MIT",
+          "date": "2025-11-10T16:42:34.255Z",
+          "links": {
+            "homepage": "https://github.com/zinbrox/profanity-engine#readme",
+            "repository": "git+https://github.com/zinbrox/profanity-engine.git",
+            "bugs": "https://github.com/zinbrox/profanity-engine/issues",
+            "npm": "https://www.npmjs.com/package/profanity-engine"
+          }
+        },
+        "score": {
+          "final": 317.2111,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 113,
+          "weekly": 1
+        },
+        "dependents": 0,
+        "updated": "2026-09-16T04:51:31.493Z",
+        "searchScore": 286.86905,
+        "package": {
+          "name": "aho-corasick-keyword-searcher",
+          "keywords": [
+            "aho-corasick",
+            "aho-corasick-ts",
+            "multi-string-search"
+          ],
+          "version": "1.0.0",
+          "description": "A TypeScript library for efficient multi-keyword string matching using Aho-Corasick algorithm with keyword-ID association",
+          "sanitized_name": "aho-corasick-keyword-searcher",
+          "publisher": {
+            "email": "sagarv1997@gmail.com",
+            "username": "sagarv1997"
+          },
+          "maintainers": [
+            {
+              "email": "sagarv1997@gmail.com",
+              "username": "sagarv1997"
+            }
+          ],
+          "license": "MIT",
+          "date": "2023-08-17T12:09:15.114Z",
+          "links": {
+            "homepage": "https://github.com/sagarv1997/aho-corasick-keyword-searcher#readme",
+            "repository": "git+https://github.com/sagarv1997/aho-corasick-keyword-searcher.git",
+            "bugs": "https://github.com/sagarv1997/aho-corasick-keyword-searcher/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick-keyword-searcher"
+          }
+        },
+        "score": {
+          "final": 286.86905,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 187,
+          "weekly": 30
+        },
+        "dependents": "1",
+        "updated": "2026-09-15T12:46:37.683Z",
+        "searchScore": 268.1638,
+        "package": {
+          "name": "lazy-aho-corasick",
+          "keywords": [
+            "aho-corasick",
+            "string-matching",
+            "lazy",
+            "utility"
+          ],
+          "version": "1.2.2",
+          "description": "A simple Aho-Corasick library using the latest ES6 modules and allowing user-specifiable options. The fastest string-matching algoithm for a fixed number of pre-known substrings.",
+          "sanitized_name": "lazy-aho-corasick",
+          "publisher": {
+            "email": "theLAZYmd.01@gmail.com",
+            "username": "lazycst"
+          },
+          "maintainers": [
+            {
+              "email": "theLAZYmd.01@gmail.com",
+              "username": "lazycst"
+            }
+          ],
+          "license": "MIT",
+          "date": "2020-01-09T04:26:45.215Z",
+          "links": {
+            "homepage": "https://github.com/theLAZYmd/aho-corasick/blob/master/README.md",
+            "repository": "git+https://github.com/theLAZYmd/aho-corasick/.git",
+            "npm": "https://www.npmjs.com/package/lazy-aho-corasick"
+          }
+        },
+        "score": {
+          "final": 268.1638,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 60,
+          "weekly": 11
+        },
+        "dependents": "0",
+        "updated": "2026-09-15T19:41:30.566Z",
+        "searchScore": 261.63284,
+        "package": {
+          "name": "aho-corasick.js",
+          "keywords": [],
+          "version": "0.0.1",
+          "description": "A Javascript implementation of the Aho-Corasick algorithm",
+          "sanitized_name": "aho-corasick-js",
+          "publisher": {
+            "email": "tombooth@gmail.com",
+            "username": "tombooth"
+          },
+          "maintainers": [
+            {
+              "email": "tombooth@gmail.com",
+              "username": "tombooth"
+            }
+          ],
+          "date": "2012-12-28T21:24:24.998Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/aho-corasick.js"
+          }
+        },
+        "score": {
+          "final": 261.63284,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 33,
+          "weekly": 7
+        },
+        "dependents": 0,
+        "updated": "2026-09-15T13:16:22.778Z",
+        "searchScore": 249.01842,
+        "package": {
+          "name": "@jimtkelly/aho-corasick",
+          "keywords": [
+            "Aho-Corasick",
+            "TypeScript",
+            "trie",
+            "string matching",
+            "aho-corasick",
+            "search",
+            "match"
+          ],
+          "version": "1.0.1",
+          "description": "An implementation of the Aho-Corasick algorithm in TypeScript.",
+          "sanitized_name": "@jimtkelly/aho-corasick",
+          "publisher": {
+            "email": "jimkelly.t@outlook.com",
+            "username": "jamestkelly"
+          },
+          "maintainers": [
+            {
+              "email": "jimkelly.t@outlook.com",
+              "username": "jamestkelly"
+            }
+          ],
+          "license": "MIT",
+          "date": "2023-12-13T14:16:56.293Z",
+          "links": {
+            "homepage": "https://github.com/jamestkelly/aho-corasick#readme",
+            "repository": "git+https://github.com/jamestkelly/aho-corasick.git",
+            "bugs": "https://github.com/jamestkelly/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@jimtkelly/aho-corasick"
+          }
+        },
+        "score": {
+          "final": 249.01842,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 443,
+          "weekly": 443
+        },
+        "dependents": "2",
+        "updated": "2026-09-18T18:50:16.638Z",
+        "searchScore": 240.76196,
+        "package": {
+          "name": "@concordance-wiki/nlp",
+          "keywords": [],
+          "version": "0.4.0",
+          "description": "Normalisation, Aho-Corasick, n-grams, C-value, MinHash and the language packs.",
+          "sanitized_name": "@concordance-wiki/nlp",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "approver": {
+              "name": "qnjoly",
+              "email": "qnjoly@gmail.com"
+            },
+            "trustedPublisher": {
+              "oidcConfigId": "oidc:76d154fe-2a5a-4fbb-849d-9eee574c8165",
+              "id": "github"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "qnjoly@gmail.com",
+              "username": "qnjoly"
+            }
+          ],
+          "license": "GPL-3.0-or-later",
+          "date": "2026-09-18T18:49:45.694Z",
+          "links": {
+            "homepage": "https://github.com/concordance-wiki/concordance/tree/main/packages/nlp#readme",
+            "repository": "git+https://github.com/concordance-wiki/concordance.git",
+            "bugs": "https://github.com/concordance-wiki/concordance/issues",
+            "npm": "https://www.npmjs.com/package/@concordance-wiki/nlp"
+          }
+        },
+        "score": {
+          "final": 240.76196,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 42,
+          "weekly": 17
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T12:36:09.445Z",
+        "searchScore": 216.31844,
+        "package": {
+          "name": "@stll/aho-corasick-darwin-x64",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "native",
+            "rust",
+            "string-search"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for Node.js and Bun via Rust's aho-corasick engine exposed through NAPI-RS.",
+          "sanitized_name": "@stll/aho-corasick-darwin-x64",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:517a2b28-81c9-4a5b-b7b3-87bff5538176"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:25:49.076Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick-darwin-x64"
+          }
+        },
+        "score": {
+          "final": 216.31844,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 307,
+          "weekly": 307
+        },
+        "dependents": 0,
+        "updated": "2026-09-21T04:46:07.084Z",
+        "searchScore": 210.97873,
+        "package": {
+          "name": "kirakira-iris",
+          "keywords": [
+            "moderation",
+            "content-safety",
+            "openrouter",
+            "nemotron",
+            "keywords",
+            "typescript",
+            "kirakira"
+          ],
+          "version": "0.3.1",
+          "description": "Chinese-aware Aho-Corasick keyword moderation and queued, rate-limited OpenRouter AI review.",
+          "sanitized_name": "kirakira-iris",
+          "publisher": {
+            "email": "b2567240058@gmail.com",
+            "username": "cfdxkk"
+          },
+          "maintainers": [
+            {
+              "email": "b2567240058@gmail.com",
+              "username": "cfdxkk"
+            }
+          ],
+          "license": "BSD-3-Clause",
+          "date": "2026-09-14T04:42:06.664Z",
+          "links": {
+            "homepage": "https://github.com/KIRAKIRA-DOUGA/KIRAKIRA-Iris#readme",
+            "repository": "git+https://github.com/KIRAKIRA-DOUGA/KIRAKIRA-Iris.git",
+            "bugs": "https://github.com/KIRAKIRA-DOUGA/KIRAKIRA-Iris/issues",
+            "npm": "https://www.npmjs.com/package/kirakira-iris"
+          }
+        },
+        "score": {
+          "final": 210.97873,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 44,
+          "weekly": 7
+        },
+        "dependents": 0,
+        "updated": "2026-09-16T09:51:22.861Z",
+        "searchScore": 207.08069,
+        "package": {
+          "name": "node-ac",
+          "keywords": [
+            "aho",
+            "corasick",
+            "c++"
+          ],
+          "version": "1.0.14",
+          "description": "A nodejs implementation of the aho corasick pattern search algorithm",
+          "sanitized_name": "node-ac",
+          "publisher": {
+            "email": "lv.cg123@gmail.com",
+            "username": "lcg"
+          },
+          "maintainers": [
+            {
+              "email": "dev@ibrainbaby.com",
+              "username": "npm_ibrain"
+            }
+          ],
+          "license": "ISC",
+          "date": "2017-08-23T08:28:05.812Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/node-ac"
+          }
+        },
+        "score": {
+          "final": 207.08069,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 38,
+          "weekly": 15
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T12:36:12.470Z",
+        "searchScore": 203.07036,
+        "package": {
+          "name": "@stll/aho-corasick-linux-arm64-gnu",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "native",
+            "rust",
+            "string-search"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for Node.js and Bun via Rust's aho-corasick engine exposed through NAPI-RS.",
+          "sanitized_name": "@stll/aho-corasick-linux-arm64-gnu",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:cdc55ae2-8d41-4f81-9de5-b17e832dc4fb"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:25:55.320Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick-linux-arm64-gnu"
+          }
+        },
+        "score": {
+          "final": 203.07036,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 15,
+          "weekly": 0
+        },
+        "dependents": 0,
+        "updated": "2026-09-22T07:56:15.175Z",
+        "searchScore": 202.36473,
+        "package": {
+          "name": "aho-corasick-search",
+          "keywords": [
+            "aho-corasick",
+            "string",
+            "matching"
+          ],
+          "version": "1.0.0",
+          "description": "aho-corasick for matching string",
+          "sanitized_name": "aho-corasick-search",
+          "publisher": {
+            "email": "3131508535@qq.com",
+            "username": "mydreamdream"
+          },
+          "maintainers": [
+            {
+              "email": "3131508535@qq.com",
+              "username": "mydreamdream"
+            }
+          ],
+          "license": "ISC",
+          "date": "2019-04-12T03:43:16.150Z",
+          "links": {
+            "homepage": "https://github.com/weijiafu14/aho-corasick-match-string#readme",
+            "repository": "git+https://github.com/weijiafu14/aho-corasick-match-string.git",
+            "bugs": "https://github.com/weijiafu14/aho-corasick-match-string/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick-search"
+          }
+        },
+        "score": {
+          "final": 202.36473,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 34,
+          "weekly": 13
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T12:36:14.762Z",
+        "searchScore": 200.40662,
+        "package": {
+          "name": "@stll/aho-corasick-wasm32-wasi",
+          "keywords": [
+            "aho-corasick",
+            "multi-pattern",
+            "napi-rs",
+            "native",
+            "rust",
+            "string-search"
+          ],
+          "version": "1.0.4",
+          "description": "Exact many-pattern string search for Node.js and Bun via Rust's aho-corasick engine exposed through NAPI-RS.",
+          "sanitized_name": "@stll/aho-corasick-wasm32-wasi",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "id": "github",
+              "oidcConfigId": "oidc:c2999a94-2312-45be-9a4f-8352086e569e"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "npm@stll.app",
+              "username": "jan-kubica"
+            }
+          ],
+          "license": "MIT",
+          "date": "2026-06-11T11:26:13.670Z",
+          "links": {
+            "homepage": "https://github.com/stella/aho-corasick#readme",
+            "repository": "git+https://github.com/stella/aho-corasick.git",
+            "bugs": "https://github.com/stella/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@stll/aho-corasick-wasm32-wasi"
+          }
+        },
+        "score": {
+          "final": 200.40662,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 109,
+          "weekly": 22
+        },
+        "dependents": "1",
+        "updated": "2026-09-19T19:51:10.080Z",
+        "searchScore": 197.90387,
+        "package": {
+          "name": "@q78kg/mint-filter",
+          "keywords": [
+            "sensitive word filter",
+            "sensitive",
+            "filter",
+            "\u654f\u611f\u8bcd"
+          ],
+          "version": "1.0.2",
+          "description": "\u57fa\u4e8eAho\u2013Corasick\u7b97\u6cd5\uff0c\u66f4\u8f7b\u5de7\u7684JavaScript\u654f\u611f\u8bcd\u8fc7\u6ee4\u5e93\u3002\ud83d\ude80",
+          "sanitized_name": "@q78kg/mint-filter",
+          "publisher": {
+            "email": "hoshino-yumetsuki@outlook.com",
+            "username": "q78kg"
+          },
+          "maintainers": [
+            {
+              "email": "hoshino-yumetsuki@outlook.com",
+              "username": "q78kg"
+            }
+          ],
+          "license": "MIT",
+          "date": "2025-02-22T13:01:52.482Z",
+          "links": {
+            "homepage": "https://github.com/Hoshino-Yumetsuki/mint-filter#readme",
+            "repository": "git+https://github.com/Hoshino-Yumetsuki/mint-filter.git",
+            "bugs": "https://github.com/Hoshino-Yumetsuki/mint-filter/issues",
+            "npm": "https://www.npmjs.com/package/@q78kg/mint-filter"
+          }
+        },
+        "score": {
+          "final": 197.90387,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 21,
+          "weekly": 5
+        },
+        "dependents": 0,
+        "updated": "2026-09-18T03:26:08.995Z",
+        "searchScore": 192.35515,
+        "package": {
+          "name": "aho-corasick-cuda-gpu",
+          "keywords": [
+            "aho-corasick",
+            "string-matching",
+            "gpu",
+            "cuda",
+            "pattern-matching"
+          ],
+          "version": "1.0.3",
+          "description": "Aho-Corasick string matching algorithm implementation with GPU acceleration using CUDA",
+          "sanitized_name": "aho-corasick-cuda-gpu",
+          "publisher": {
+            "email": "kp6615856@gmail.com",
+            "username": "krishna.dev1"
+          },
+          "maintainers": [
+            {
+              "email": "kp6615856@gmail.com",
+              "username": "krishna.dev1"
+            }
+          ],
+          "license": "MIT",
+          "date": "2025-05-01T21:11:25.790Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/aho-corasick-cuda-gpu"
+          }
+        },
+        "score": {
+          "final": 192.35515,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 49,
+          "weekly": 3
+        },
+        "dependents": 0,
+        "updated": "2026-09-15T10:16:28.331Z",
+        "searchScore": 186.1438,
+        "package": {
+          "name": "word-match-helper",
+          "keywords": [
+            "Aho-Corasick",
+            "word-matching",
+            "word-filter"
+          ],
+          "version": "2.1.0",
+          "description": "Aho-Corasick based word-matching class. Match & filter words.",
+          "sanitized_name": "word-match-helper",
+          "publisher": {
+            "email": "hanyaonian@outlook.com",
+            "username": "michaelhan"
+          },
+          "maintainers": [
+            {
+              "email": "hanyaonian@outlook.com",
+              "username": "michaelhan"
+            }
+          ],
+          "license": "MIT",
+          "date": "2022-12-29T16:08:52.912Z",
+          "links": {
+            "homepage": "https://github.com/hanyaonian/word-match-helper#readme",
+            "repository": "git+https://github.com/hanyaonian/word-match-helper.git",
+            "bugs": "https://github.com/hanyaonian/word-match-helper/issues",
+            "npm": "https://www.npmjs.com/package/word-match-helper"
+          }
+        },
+        "score": {
+          "final": 186.1438,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 592,
+          "weekly": 178
+        },
+        "dependents": "0",
+        "updated": "2026-09-22T07:11:28.361Z",
+        "searchScore": 174.2654,
+        "package": {
+          "name": "node-aho-corasick",
+          "keywords": [
+            "AhoCorasick",
+            "String match",
+            "algorithm"
+          ],
+          "version": "0.0.2",
+          "description": "simple AhoCorasick",
+          "sanitized_name": "node-aho-corasick",
+          "publisher": {
+            "email": "lucifer4he@gmail.com",
+            "username": "luicfer"
+          },
+          "maintainers": [
+            {
+              "email": "lucifer4he@gmail.com",
+              "username": "luicfer"
+            }
+          ],
+          "license": "MIT",
+          "date": "2015-02-13T09:19:36.355Z",
+          "links": {
+            "homepage": "https://github.com/luicfer/node-AhoCorasick",
+            "repository": "https://github.com/luicfer/node-AhoCorasick.git",
+            "bugs": "https://github.com/luicfer/node-AhoCorasick/issues",
+            "npm": "https://www.npmjs.com/package/node-aho-corasick"
+          }
+        },
+        "score": {
+          "final": 174.2654,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 18,
+          "weekly": 2
+        },
+        "dependents": 0,
+        "updated": "2026-09-21T19:46:32.356Z",
+        "searchScore": 173.80864,
+        "package": {
+          "name": "@drorgl/aho-corasick2",
+          "keywords": [
+            "Aho-Corasick automation",
+            "ac",
+            "ac automation",
+            "aca",
+            "add",
+            "aho",
+            "aho-corasick",
+            "algorithm",
+            "array",
+            "automata",
+            "corasick",
+            "data",
+            "javascript",
+            "match",
+            "multiple",
+            "pattern",
+            "remove",
+            "stream",
+            "strings",
+            "structure",
+            "tree",
+            "tree-structure",
+            "trie",
+            "trie-structure",
+            "words"
+          ],
+          "version": "1.0.3",
+          "description": "Aho\u2013Corasick string matching algorithm",
+          "sanitized_name": "@drorgl/aho-corasick2",
+          "publisher": {
+            "email": "drorgl@yahoo.com",
+            "username": "drorgl"
+          },
+          "maintainers": [
+            {
+              "email": "drorgl@yahoo.com",
+              "username": "drorgl"
+            }
+          ],
+          "license": "ISC",
+          "date": "2020-06-26T10:44:35.942Z",
+          "links": {
+            "homepage": "https://github.com/drorgl/aho-corasick#readme",
+            "repository": "git+https://github.com/drorgl/aho-corasick.git",
+            "bugs": "https://github.com/drorgl/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/@drorgl/aho-corasick2"
+          }
+        },
+        "score": {
+          "final": 173.80864,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 21,
+          "weekly": 5
+        },
+        "dependents": 0,
+        "updated": "2026-09-15T15:56:33.246Z",
+        "searchScore": 170.72072,
+        "package": {
+          "name": "ahoq",
+          "keywords": [
+            "Aho",
+            "Corasick",
+            "pattern",
+            "search",
+            "match",
+            "find",
+            "patterns"
+          ],
+          "version": "1.0.2",
+          "description": "Aho Corasick pattern searching algorithm implementation",
+          "sanitized_name": "ahoq",
+          "publisher": {
+            "email": "web.developer.ukraine@gmail.com",
+            "username": "immortale"
+          },
+          "maintainers": [
+            {
+              "email": "web.developer.ukraine@gmail.com",
+              "username": "immortale"
+            }
+          ],
+          "license": "MIT",
+          "date": "2021-06-09T13:48:27.750Z",
+          "links": {
+            "homepage": "https://github.com/Immortale-dev/ahoq#readme",
+            "repository": "git+https://github.com/Immortale-dev/ahoq.git",
+            "bugs": "https://github.com/Immortale-dev/ahoq/issues",
+            "npm": "https://www.npmjs.com/package/ahoq"
+          }
+        },
+        "score": {
+          "final": 170.72072,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 3059,
+          "weekly": 577
+        },
+        "dependents": 0,
+        "updated": "2026-09-19T12:24:22.948Z",
+        "searchScore": 169.92123,
+        "package": {
+          "name": "dsh-defend",
+          "keywords": [
+            "dsh",
+            "dsh-plugin",
+            "deepseek-harness",
+            "deepseek",
+            "cordis",
+            "security",
+            "prompt-injection",
+            "jailbreak",
+            "secret-scanning",
+            "llm-security"
+          ],
+          "version": "0.3.12",
+          "description": "Prompt-injection, jailbreak, and secret-leak detection with allow/ask/block interception for DeepSeek Harness: an Aho-Corasick pattern engine and heuristics ported from the Prompt-Injection-Payloads, Jailbreak-Detector, and Secret-Key-Leaker-Detect assets",
+          "sanitized_name": "dsh-defend",
+          "publisher": {
+            "email": "npm-oidc-no-reply@github.com",
+            "trustedPublisher": {
+              "oidcConfigId": "oidc:defcba9f-9f1e-46a6-8148-7947b55e23e4",
+              "id": "github"
+            },
+            "username": "GitHub Actions"
+          },
+          "maintainers": [
+            {
+              "email": "novelnexusai@outlook.com",
+              "username": "perrylink"
+            }
+          ],
+          "license": "Apache-2.0",
+          "date": "2026-09-19T12:23:51.730Z",
+          "links": {
+            "homepage": "https://github.com/PerryLink/dsh-defend#readme",
+            "repository": "git+https://github.com/PerryLink/dsh-defend.git",
+            "bugs": "https://github.com/PerryLink/dsh-defend/issues",
+            "npm": "https://www.npmjs.com/package/dsh-defend"
+          }
+        },
+        "score": {
+          "final": 169.92123,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 16,
+          "weekly": 5
+        },
+        "dependents": 0,
+        "updated": "2026-09-15T13:56:19.037Z",
+        "searchScore": 164.13084,
+        "package": {
+          "name": "aho-corasick-rs",
+          "keywords": [
+            "aho-corasick",
+            "rust",
+            "native"
+          ],
+          "version": "1.1.1",
+          "description": "NodeJS wrapper for BurntSushi/aho-corasick",
+          "sanitized_name": "aho-corasick-rs",
+          "publisher": {
+            "email": "khanghuynh0245@gmail.com",
+            "username": "akagiyuu"
+          },
+          "maintainers": [
+            {
+              "email": "khanghuynh0245@gmail.com",
+              "username": "akagiyuu"
+            }
+          ],
+          "license": "ISC",
+          "date": "2023-09-22T12:01:43.339Z",
+          "links": {
+            "homepage": "https://github.com/akagiyuu/aho-corasick#readme",
+            "repository": "git+https://github.com/akagiyuu/aho-corasick.git",
+            "bugs": "https://github.com/akagiyuu/aho-corasick/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick-rs"
+          }
+        },
+        "score": {
+          "final": 164.13084,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 26,
+          "weekly": 4
+        },
+        "dependents": 0,
+        "updated": "2026-09-22T06:26:32.242Z",
+        "searchScore": 160.4462,
+        "package": {
+          "name": "aca",
+          "keywords": [
+            "Aho-Corasick automation",
+            "aca",
+            "ac automation",
+            "ac",
+            "algorithm",
+            "unicode"
+          ],
+          "version": "0.1.12",
+          "description": "Aho-Corasick automation for Node.js, Unicode Supported.",
+          "sanitized_name": "aca",
+          "publisher": {
+            "email": "jsxio@icloud.com",
+            "username": "jsxio"
+          },
+          "maintainers": [
+            {
+              "email": "jsxio@icloud.com",
+              "username": "jsxio"
+            }
+          ],
+          "license": "MIT",
+          "date": "2017-11-13T16:29:08.827Z",
+          "links": {
+            "bugs": "https://github.com/jsxio/aca/issues",
+            "npm": "https://www.npmjs.com/package/aca"
+          }
+        },
+        "score": {
+          "final": 160.4462,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 40,
+          "weekly": 6
+        },
+        "dependents": 0,
+        "updated": "2026-09-16T05:16:25.035Z",
+        "searchScore": 157.11118,
+        "package": {
+          "name": "ac-auto",
+          "keywords": [
+            "ahocorasick",
+            "aho-corasick",
+            "javascript",
+            "typescript",
+            "node"
+          ],
+          "version": "2.0.0",
+          "description": "Aho-Corasick automaton implementation for fast string matching.",
+          "sanitized_name": "ac-auto",
+          "publisher": {
+            "email": "aaronjan@qq.com",
+            "username": "aaronjan"
+          },
+          "maintainers": [
+            {
+              "email": "aaronjan@qq.com",
+              "username": "aaronjan"
+            }
+          ],
+          "license": "Apache-2.0",
+          "date": "2019-11-04T16:22:57.115Z",
+          "links": {
+            "homepage": "https://github.com/aaronjan/ac-auto#readme",
+            "repository": "git+https://github.com/aaronjan/fastscan.git",
+            "bugs": "https://github.com/aaronjan/ac-auto/issues",
+            "npm": "https://www.npmjs.com/package/ac-auto"
+          }
+        },
+        "score": {
+          "final": 157.11118,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 56,
+          "weekly": 7
+        },
+        "dependents": "1",
+        "updated": "2026-09-16T03:56:31.472Z",
+        "searchScore": 153.7052,
+        "package": {
+          "name": "mini-censor",
+          "keywords": [
+            "mini-censor",
+            "censor",
+            "sensitive word filter",
+            "sensitive",
+            "filter"
+          ],
+          "version": "1.0.7",
+          "description": "\u654f\u611f\u8bcd\u8fc7\u6ee4\uff0c\u652f\u6301\u81ea\u5b9a\u4e49\u654f\u611f\u8bcd\u5185\u5bb9, \u57fa\u4e8eAho\u2013Corasick\u7b97\u6cd5\uff0c",
+          "sanitized_name": "mini-censor",
+          "publisher": {
+            "email": "1751826104@qq.com",
+            "username": "harrypoint"
+          },
+          "maintainers": [
+            {
+              "email": "1751826104@qq.com",
+              "username": "harrypoint"
+            }
+          ],
+          "license": "MIT",
+          "date": "2024-06-26T09:03:27.485Z",
+          "links": {
+            "homepage": "https://github.com/HarryPoint/mini-censor#readme",
+            "repository": "git+https://github.com/HarryPoint/mini-censor.git",
+            "bugs": "https://github.com/HarryPoint/mini-censor/issues",
+            "npm": "https://www.npmjs.com/package/mini-censor"
+          }
+        },
+        "score": {
+          "final": 153.7052,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 18,
+          "weekly": 1
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T00:26:34.795Z",
+        "searchScore": 153.20186,
+        "package": {
+          "name": "ac_search",
+          "keywords": [],
+          "version": "0.0.2",
+          "description": "AHO-Corasick Search Tree Implementation.",
+          "sanitized_name": "ac_search",
+          "publisher": {
+            "email": "joe@benden.us",
+            "username": "jbenden"
+          },
+          "maintainers": [
+            {
+              "email": "joe@benden.us",
+              "username": "jbenden"
+            }
+          ],
+          "date": "2014-12-14T15:42:19.188Z",
+          "links": {
+            "homepage": "https://github.com/jbenden/node-ac_search",
+            "repository": "git://github.com/jbenden/node-ac_search.git",
+            "bugs": "https://github.com/jbenden/node-ac_search/issues",
+            "npm": "https://www.npmjs.com/package/ac_search"
+          }
+        },
+        "score": {
+          "final": 153.20186,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 13,
+          "weekly": 2
+        },
+        "dependents": "1",
+        "updated": "2026-09-15T15:06:39.096Z",
+        "searchScore": 150.28941,
+        "package": {
+          "name": "aho-corasick-machine",
+          "keywords": [
+            "Aho-Corasick",
+            "machine",
+            "matching"
+          ],
+          "version": "1.0.1",
+          "description": "Aho-Corasick machine for matching.It can be used to be implemented to match strings",
+          "sanitized_name": "aho-corasick-machine",
+          "publisher": {
+            "email": "3131508535@qq.com",
+            "username": "mydreamdream"
+          },
+          "maintainers": [
+            {
+              "email": "3131508535@qq.com",
+              "username": "mydreamdream"
+            }
+          ],
+          "license": "ISC",
+          "date": "2019-04-12T02:28:11.073Z",
+          "links": {
+            "homepage": "https://github.com/weijiafu14/aho-corasick-machine#readme",
+            "repository": "git+https://github.com/weijiafu14/aho-corasick-machine.git",
+            "bugs": "https://github.com/weijiafu14/aho-corasick-machine/issues",
+            "npm": "https://www.npmjs.com/package/aho-corasick-machine"
+          }
+        },
+        "score": {
+          "final": 150.28941,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      },
+      {
+        "downloads": {
+          "monthly": 20,
+          "weekly": 9
+        },
+        "dependents": 0,
+        "updated": "2026-09-17T22:27:57.939Z",
+        "searchScore": 147.96399,
+        "package": {
+          "name": "fast-text-censor",
+          "keywords": [],
+          "version": "1.1.0",
+          "description": "Fast text censor using Aho-Corasick in Rust",
+          "sanitized_name": "fast-text-censor",
+          "publisher": {
+            "email": "aldinaufalalyyafi@gmail.com",
+            "username": "aldinaufal21"
+          },
+          "maintainers": [
+            {
+              "email": "aldinaufalalyyafi@gmail.com",
+              "username": "aldinaufal21"
+            }
+          ],
+          "date": "2026-06-18T21:24:50.782Z",
+          "links": {
+            "homepage": "https://github.com/aldinaufal21/fast-text-censor#readme",
+            "repository": "git+https://github.com/aldinaufal21/fast-text-censor.git",
+            "bugs": "https://github.com/aldinaufal21/fast-text-censor/issues",
+            "npm": "https://www.npmjs.com/package/fast-text-censor"
+          }
+        },
+        "score": {
+          "final": 147.96399,
+          "detail": {
+            "popularity": 1,
+            "quality": 1,
+            "maintenance": 1
+          }
+        },
+        "flags": {
+          "insecure": 0
+        }
+      }
+    ],
+    "total": 144,
+    "time": "2026-09-22T09:39:54.275Z"
+  }
+}

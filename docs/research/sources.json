@@ -1,0 +1,834 @@
+{
+  "retrievedAt": "2026-09-22T09:41:32.557879+00:00",
+  "baseline": "d50fcbfad26cc2a9b74c7d9f4379404a02b9df72",
+  "repositories": [
+    {
+      "repository": "BurntSushi/aho-corasick",
+      "url": "https://github.com/BurntSushi/aho-corasick",
+      "commit": "6c0abf5681bfc30bb9d8f7f52b68a350b436fffa",
+      "committedAt": "2026-08-10T12:06:53Z",
+      "language": "Rust",
+      "licenseApi": "Unlicense",
+      "archived": false,
+      "fork": false,
+      "description": "A fast implementation of Aho-Corasick in Rust.",
+      "license": "MIT OR Unlicense",
+      "findings": "Input spans, anchoring, memory diagnostics; sparse/contiguous NFA and DFA; byte offsets",
+      "decision": "adopt ranges/stats; defer DFA",
+      "sourceEvidence": [
+        {
+          "path": "src/ahocorasick.rs",
+          "url": "https://github.com/BurntSushi/aho-corasick/blob/6c0abf5681bfc30bb9d8f7f52b68a350b436fffa/src/ahocorasick.rs"
+        },
+        {
+          "path": "src/util/search.rs",
+          "url": "https://github.com/BurntSushi/aho-corasick/blob/6c0abf5681bfc30bb9d8f7f52b68a350b436fffa/src/util/search.rs"
+        },
+        {
+          "path": "src/util/prefilter.rs",
+          "url": "https://github.com/BurntSushi/aho-corasick/blob/6c0abf5681bfc30bb9d8f7f52b68a350b436fffa/src/util/prefilter.rs"
+        }
+      ],
+      "testLocations": [
+        "src/tests.rs",
+        "src/packed/tests.rs"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "daac-tools/daachorse",
+      "url": "https://github.com/daac-tools/daachorse",
+      "commit": "66b6c99d5fb765c8ba3944217984ca839a6a2a96",
+      "committedAt": "2026-08-18T12:12:57Z",
+      "language": "Rust",
+      "licenseApi": "Apache-2.0",
+      "archived": false,
+      "fork": false,
+      "description": "🐎 A fast implementation of the Aho-Corasick algorithm using the compact double-array data structure in Rust.",
+      "license": "MIT OR Apache-2.0",
+      "findings": "Double-array; byte/char scanners; leftmost policies; serialized arrays; SOG 2-gram prefilter",
+      "decision": "adopt layout experiment; prefilter gated",
+      "sourceEvidence": [
+        {
+          "path": "src/bytewise.rs",
+          "url": "https://github.com/daac-tools/daachorse/blob/66b6c99d5fb765c8ba3944217984ca839a6a2a96/src/bytewise.rs"
+        },
+        {
+          "path": "src/bytewise/builder.rs",
+          "url": "https://github.com/daac-tools/daachorse/blob/66b6c99d5fb765c8ba3944217984ca839a6a2a96/src/bytewise/builder.rs"
+        },
+        {
+          "path": "src/prefilter.rs",
+          "url": "https://github.com/daac-tools/daachorse/blob/66b6c99d5fb765c8ba3944217984ca839a6a2a96/src/prefilter.rs"
+        }
+      ],
+      "testLocations": [
+        "tests/prefilter_test.rs",
+        "tests/matchkind_mismatch_charwise_test.rs",
+        "tests/matchkind_mismatch_test.rs",
+        "tests/corpus_test.rs",
+        "tests/aho_corasick_crate_test.rs"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "WojciechMula/pyahocorasick",
+      "url": "https://github.com/WojciechMula/pyahocorasick",
+      "commit": "4e28d29898f1019d9706485b2a06026466814d9d",
+      "committedAt": "2026-04-27T15:55:46Z",
+      "language": "C",
+      "licenseApi": "BSD-3-Clause",
+      "archived": false,
+      "fork": false,
+      "description": "Python module (C extension and plain python) implementing Aho-Corasick algorithm",
+      "license": "BSD-3-Clause",
+      "findings": "C trie, mutable dictionary then compile; Python codepoints/bytes; iter_long; cached statistics; pickle/save",
+      "decision": "adopt stats; snapshots already covered",
+      "sourceEvidence": [
+        {
+          "path": "src/Automaton.c",
+          "url": "https://github.com/WojciechMula/pyahocorasick/blob/4e28d29898f1019d9706485b2a06026466814d9d/src/Automaton.c"
+        },
+        {
+          "path": "src/AutomatonSearchIter.c",
+          "url": "https://github.com/WojciechMula/pyahocorasick/blob/4e28d29898f1019d9706485b2a06026466814d9d/src/AutomatonSearchIter.c"
+        },
+        {
+          "path": "src/AutomatonSearchIterLong.c",
+          "url": "https://github.com/WojciechMula/pyahocorasick/blob/4e28d29898f1019d9706485b2a06026466814d9d/src/AutomatonSearchIterLong.c"
+        }
+      ],
+      "testLocations": [
+        "tests/test_issue_56.py",
+        "tests/test_unpickle.py",
+        "tests/valgrind_check.py",
+        "tests/memdump_check.py",
+        "tests/test_basic.py"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "FrederikP/ahocorapy",
+      "url": "https://github.com/FrederikP/ahocorapy",
+      "commit": "6d833e9606e0bd8f8676ad2536926f19f4e0b47b",
+      "committedAt": "2026-07-21T13:14:16Z",
+      "language": "Python",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "Pure python Aho-Corasick library.",
+      "license": "MIT",
+      "findings": "Python dictionary transitions, expanded suffix transitions/outputs; lower(), regex start-character skipping",
+      "decision": "prefilter experiment; do not copy lower() offset semantics",
+      "sourceEvidence": [
+        {
+          "path": "src/ahocorapy/keywordtree.py",
+          "url": "https://github.com/FrederikP/ahocorapy/blob/6d833e9606e0bd8f8676ad2536926f19f4e0b47b/src/ahocorapy/keywordtree.py"
+        }
+      ],
+      "testLocations": [
+        "tests/ahocorapy_performance_test.py",
+        "tests/ahocorapy_pickle_performance_test.py",
+        "tests/ahocorapy_test.py",
+        "tests/visualizer_test.py"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "G-Research/ahocorasick_rs",
+      "url": "https://github.com/G-Research/ahocorasick_rs",
+      "commit": "1243193befd73792ec936fe66667877f45c2ade3",
+      "committedAt": "2026-07-08T12:08:13Z",
+      "language": "Python",
+      "licenseApi": "Apache-2.0",
+      "archived": false,
+      "fork": false,
+      "description": "Check for multiple patterns in a single string at the same time: a fast Aho-Corasick algorithm for Python",
+      "license": "Apache-2.0",
+      "findings": "PyO3 wrapper over BurntSushi; NFA/DFA choice, bytes and string APIs",
+      "decision": "same Rust family; native bindings excluded",
+      "sourceEvidence": [
+        {
+          "path": "Cargo.toml",
+          "url": "https://github.com/G-Research/ahocorasick_rs/blob/1243193befd73792ec936fe66667877f45c2ade3/Cargo.toml"
+        },
+        {
+          "path": "src/lib.rs",
+          "url": "https://github.com/G-Research/ahocorasick_rs/blob/1243193befd73792ec936fe66667877f45c2ade3/src/lib.rs"
+        }
+      ],
+      "testLocations": [
+        "tests/test_ac_bytes.py",
+        "tests/test_ac.py",
+        "tests/__init__.py",
+        "benchmarks/test_comparison.py"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "robert-bor/aho-corasick",
+      "url": "https://github.com/robert-bor/aho-corasick",
+      "commit": "e68720d0afd51093fbba1232edf154ad71a62ac3",
+      "committedAt": "2022-12-09T04:07:07Z",
+      "language": "Java",
+      "licenseApi": "Apache-2.0",
+      "archived": false,
+      "fork": false,
+      "description": "Java implementation of the Aho-Corasick algorithm for efficient string matching",
+      "license": "Apache-2.0",
+      "findings": "Object trie, UTF-16 char, payloads, word rules, tokens, interval-tree global length priority",
+      "decision": "selection/tokenization already covered",
+      "sourceEvidence": [
+        {
+          "path": "src/main/java/org/ahocorasick/trie/PayloadTrie.java",
+          "url": "https://github.com/robert-bor/aho-corasick/blob/e68720d0afd51093fbba1232edf154ad71a62ac3/src/main/java/org/ahocorasick/trie/PayloadTrie.java"
+        },
+        {
+          "path": "src/main/java/org/ahocorasick/interval/IntervalTree.java",
+          "url": "https://github.com/robert-bor/aho-corasick/blob/e68720d0afd51093fbba1232edf154ad71a62ac3/src/main/java/org/ahocorasick/interval/IntervalTree.java"
+        }
+      ],
+      "testLocations": [
+        "src/test/java/org/ahocorasick/interval/IntervalTest.java",
+        "src/test/java/org/ahocorasick/interval/IntervalTreeTest.java",
+        "src/test/java/org/ahocorasick/interval/IntervalableComparatorByPositionTest.java",
+        "src/test/java/org/ahocorasick/interval/IntervalableComparatorBySizeTest.java",
+        "src/test/java/org/ahocorasick/trie/TestHelper.java"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "hankcs/AhoCorasickDoubleArrayTrie",
+      "url": "https://github.com/hankcs/AhoCorasickDoubleArrayTrie",
+      "commit": "a706e694e091c7d98763083274504a1fe7018c83",
+      "committedAt": "2021-11-24T17:09:04Z",
+      "language": "Java",
+      "licenseApi": null,
+      "archived": false,
+      "fork": false,
+      "description": "An extremely fast implementation of Aho Corasick algorithm based on Double Array Trie.",
+      "license": "Apache-2.0 (pom.xml)",
+      "findings": "Double-array UTF-16 trie built from Map, callbacks, save/load and exact lookup",
+      "decision": "layout inspiration; duplicate contract differs",
+      "sourceEvidence": [
+        {
+          "path": "pom.xml",
+          "url": "https://github.com/hankcs/AhoCorasickDoubleArrayTrie/blob/a706e694e091c7d98763083274504a1fe7018c83/pom.xml"
+        },
+        {
+          "path": "src/main/java/com/hankcs/algorithm/AhoCorasickDoubleArrayTrie.java",
+          "url": "https://github.com/hankcs/AhoCorasickDoubleArrayTrie/blob/a706e694e091c7d98763083274504a1fe7018c83/src/main/java/com/hankcs/algorithm/AhoCorasickDoubleArrayTrie.java"
+        }
+      ],
+      "testLocations": [
+        "src/test/java/TestAhoCorasickDoubleArrayTrie.java"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "QSFT/Mensa",
+      "url": "https://github.com/QSFT/Mensa",
+      "commit": "ce668d44ec9a7de21c7200d242b6af3095a8b120",
+      "committedAt": "2015-07-23T17:05:03Z",
+      "language": "Java",
+      "licenseApi": "Apache-2.0",
+      "archived": true,
+      "fork": false,
+      "description": "Mensa is a generic, flexible, enhanced, and efficient Java implementation of a pattern matching state machine as described by the 1975 paper by Alfred V. Aho and Margaret J. Corasick: Efficient string matching: An aid to bibliographic search.",
+      "license": "Apache-2.0",
+      "findings": "Generic symbols; goto/failure/next-move machines; text classifier and precision/tolerance",
+      "decision": "defer arbitrary symbols/tolerance",
+      "sourceEvidence": [
+        {
+          "path": "mensa/src/main/java/com/dell/mensa/ITextSource.java",
+          "url": "https://github.com/QSFT/Mensa/blob/ce668d44ec9a7de21c7200d242b6af3095a8b120/mensa/src/main/java/com/dell/mensa/ITextSource.java"
+        },
+        {
+          "path": "mensa/src/main/java/com/dell/mensa/ISymbolClassifier.java",
+          "url": "https://github.com/QSFT/Mensa/blob/ce668d44ec9a7de21c7200d242b6af3095a8b120/mensa/src/main/java/com/dell/mensa/ISymbolClassifier.java"
+        }
+      ],
+      "testLocations": [
+        "mensa/src/main/java/com/dell/mensa/testutils/MatchFiles.java",
+        "mensa/src/main/java/com/dell/mensa/testutils/Benchmark.java",
+        "mensa/src/main/java/com/dell/mensa/testutils/HeapUtils.java",
+        "mensa/src/main/java/com/dell/mensa/testutils/GenerateFiles.java",
+        "mensa/src/main/java/com/dell/mensa/testutils/package-info.java"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "cloudflare/ahocorasick",
+      "url": "https://github.com/cloudflare/ahocorasick",
+      "commit": "054963ec939627782012c7c34eefd2942488d4e1",
+      "committedAt": "2024-09-16T14:06:11Z",
+      "language": "Go",
+      "licenseApi": "BSD-3-Clause",
+      "archived": false,
+      "fork": false,
+      "description": "A Golang implementation of the Aho-Corasick string matching algorithm",
+      "license": "BSD-3-Clause",
+      "findings": "Byte trie; unique matched pattern IDs; Contains; pooled thread-safe scratch",
+      "decision": "separate unique-ID benchmark; no mutable result pooling",
+      "sourceEvidence": [
+        {
+          "path": "ahocorasick.go",
+          "url": "https://github.com/cloudflare/ahocorasick/blob/054963ec939627782012c7c34eefd2942488d4e1/ahocorasick.go"
+        }
+      ],
+      "testLocations": [
+        "ahocorasick_test.go"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "anknown/ahocorasick",
+      "url": "https://github.com/anknown/ahocorasick",
+      "commit": "d75dbd5169c01a25cc83bf040d6e056aa69aec18",
+      "committedAt": "2019-09-04T06:38:43Z",
+      "language": "Go",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "A faster and more efficient  Golang implement of Aho-Corasick algorithm using Double Array Trie ",
+      "license": "MIT",
+      "findings": "Rune double-array with godarts dependency; MultiPatternSearch and ExactSearch",
+      "decision": "DAT covered; generic exact dictionary lookup deferred",
+      "sourceEvidence": [
+        {
+          "path": "ahocorasick.go",
+          "url": "https://github.com/anknown/ahocorasick/blob/d75dbd5169c01a25cc83bf040d6e056aa69aec18/ahocorasick.go"
+        }
+      ],
+      "testLocations": [
+        "ahocorasick_test.go"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "BobuSumisu/aho-corasick",
+      "url": "https://github.com/BobuSumisu/aho-corasick",
+      "commit": "b4b5728e36fcc048a77abcea3eb2fcb28c021e2d",
+      "committedAt": "2025-06-11T11:26:25Z",
+      "language": "Go",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "Aho-Corasick string-searching algorithm in Go",
+      "license": "MIT",
+      "findings": "Flattened byte states, failure/dictionary links, Walk callbacks, MatchFirst, pooled Match results",
+      "decision": "flat outputs adopted; result pooling rejected",
+      "sourceEvidence": [
+        {
+          "path": "trie.go",
+          "url": "https://github.com/BobuSumisu/aho-corasick/blob/b4b5728e36fcc048a77abcea3eb2fcb28c021e2d/trie.go"
+        },
+        {
+          "path": "builder.go",
+          "url": "https://github.com/BobuSumisu/aho-corasick/blob/b4b5728e36fcc048a77abcea3eb2fcb28c021e2d/builder.go"
+        }
+      ],
+      "testLocations": [
+        "stream_test.go",
+        "trie_test.go",
+        "builder_test.go"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "petar-dambovaliev/aho-corasick",
+      "url": "https://github.com/petar-dambovaliev/aho-corasick",
+      "commit": "463d218d4745bf13c5de1c65ba10e07139955652",
+      "committedAt": "2025-04-24T16:05:09Z",
+      "language": "Go",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "efficient string matching in Golang via the aho-corasick algorithm.",
+      "license": "MIT",
+      "findings": "Rust-inspired byte automata; standard/leftmost policies, ASCII case folding, prefilter",
+      "decision": "prefilter experiment; leftmost already covered",
+      "sourceEvidence": [
+        {
+          "path": "ahocorasick.go",
+          "url": "https://github.com/petar-dambovaliev/aho-corasick/blob/463d218d4745bf13c5de1c65ba10e07139955652/ahocorasick.go"
+        },
+        {
+          "path": "prefilter.go",
+          "url": "https://github.com/petar-dambovaliev/aho-corasick/blob/463d218d4745bf13c5de1c65ba10e07139955652/prefilter.go"
+        }
+      ],
+      "testLocations": [
+        "ahocorasick_test.go"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "cjgdev/aho_corasick",
+      "url": "https://github.com/cjgdev/aho_corasick",
+      "commit": "b4fb360ef2764bf0cd22daaa62dd4bfd18b8ad0c",
+      "committedAt": "2018-03-15T21:07:54Z",
+      "language": "C++",
+      "licenseApi": null,
+      "archived": false,
+      "fork": false,
+      "description": "A C++ implementation of the aho corasick pattern search algorithm",
+      "license": "MIT (header)",
+      "findings": "C++ templated character trie; overlaps/whole words/case options, interval selection",
+      "decision": "covered; char/wchar_t is not grapheme",
+      "sourceEvidence": [
+        {
+          "path": "src/aho_corasick/aho_corasick.hpp",
+          "url": "https://github.com/cjgdev/aho_corasick/blob/b4fb360ef2764bf0cd22daaa62dd4bfd18b8ad0c/src/aho_corasick/aho_corasick.hpp"
+        }
+      ],
+      "testLocations": [
+        "test/trie_test.cpp",
+        "test/state_test.cpp",
+        "test/emit_test.cpp",
+        "test/interval_test.cpp",
+        "test/interval_tree_test.cpp"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "mischasan/aho-corasick",
+      "url": "https://github.com/mischasan/aho-corasick",
+      "commit": "8d405de3bd55918ae7fdc77c93e7dabba46d6ed9",
+      "committedAt": "2021-01-16T00:31:06Z",
+      "language": "C",
+      "licenseApi": "LGPL-3.0",
+      "archived": false,
+      "fork": false,
+      "description": "A-C implementation in \"C\". Tight-packed (interleaved) state-transition matrix -- as fast as it gets, as small as it gets.",
+      "license": "LGPL-3.0-only (source headers)",
+      "findings": "C byte interleaved state-transition matrix; stateful callbacks and mmap-oriented persistence",
+      "decision": "defer binary persistence; no code reused",
+      "sourceEvidence": [
+        {
+          "path": "acism_create.c",
+          "url": "https://github.com/mischasan/aho-corasick/blob/8d405de3bd55918ae7fdc77c93e7dabba46d6ed9/acism_create.c"
+        },
+        {
+          "path": "acism.c",
+          "url": "https://github.com/mischasan/aho-corasick/blob/8d405de3bd55918ae7fdc77c93e7dabba46d6ed9/acism.c"
+        }
+      ],
+      "testLocations": [],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "mganss/AhoCorasick",
+      "url": "https://github.com/mganss/AhoCorasick",
+      "commit": "fc5c5860e14764a5c5f76754bb1f50f4c87712d2",
+      "committedAt": "2026-09-16T09:05:17Z",
+      "language": "C#",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "Aho-Corasick multi-string search for .NET and SQL Server.",
+      "license": "MIT",
+      "findings": "C# Dictionary<char,Trie>; ordinal/culture comparers, lazy matches",
+      "decision": "defer culture collation; full folding already covered",
+      "sourceEvidence": [
+        {
+          "path": "AhoCorasick/Trie.cs",
+          "url": "https://github.com/mganss/AhoCorasick/blob/fc5c5860e14764a5c5f76754bb1f50f4c87712d2/AhoCorasick/Trie.cs"
+        }
+      ],
+      "testLocations": [
+        "AhoCorasick.Tests/UnitTests.cs",
+        "AhoCorasick.Tests/CharComparerTests.cs"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "pdonald/aho-corasick",
+      "url": "https://github.com/pdonald/aho-corasick",
+      "commit": "091fbf9bb09cdc89ff5ecb00d028914a2403dd3b",
+      "committedAt": "2013-08-12T11:09:44Z",
+      "language": "C#",
+      "licenseApi": null,
+      "archived": false,
+      "fork": false,
+      "description": "Aho–Corasick string matching algorithm in C#",
+      "license": "MIT (header)",
+      "findings": "Generic C# Trie<T,TValue>; Add/Build/Find over symbol sequences",
+      "decision": "defer generic symbols",
+      "sourceEvidence": [
+        {
+          "path": "AhoCorasick.cs",
+          "url": "https://github.com/pdonald/aho-corasick/blob/091fbf9bb09cdc89ff5ecb00d028914a2403dd3b/AhoCorasick.cs"
+        }
+      ],
+      "testLocations": [
+        "AhoCorasick.Tests.cs"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "wikimedia/AhoCorasick",
+      "url": "https://github.com/wikimedia/AhoCorasick",
+      "commit": "891fa97d04ab1ac03cd3816f6aad9f2fe4842f80",
+      "committedAt": "2026-08-06T13:15:13Z",
+      "language": "PHP",
+      "licenseApi": "Apache-2.0",
+      "archived": false,
+      "fork": false,
+      "description": "A PHP implementation of the Aho-Corasick string search algorithm. Mirror from https://gerrit.wikimedia.org/g/AhoCorasick - our actual code is hosted with Gerrit (please see https://www.mediawiki.org/wiki/Developer_access for contributing)",
+      "license": "Apache-2.0",
+      "findings": "PHP byte-indexed transition arrays, failure-transition cache and replacement wrapper",
+      "decision": "replacement covered; immutable tables retained",
+      "sourceEvidence": [
+        {
+          "path": "src/MultiStringMatcher.php",
+          "url": "https://github.com/wikimedia/AhoCorasick/blob/891fa97d04ab1ac03cd3816f6aad9f2fe4842f80/src/MultiStringMatcher.php"
+        },
+        {
+          "path": "src/MultiStringReplacer.php",
+          "url": "https://github.com/wikimedia/AhoCorasick/blob/891fa97d04ab1ac03cd3816f6aad9f2fe4842f80/src/MultiStringReplacer.php"
+        }
+      ],
+      "testLocations": [],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "codeplea/ahocorasickphp",
+      "url": "https://github.com/codeplea/ahocorasickphp",
+      "commit": "64d696b340e06b8883ae1282247c878cf5360b39",
+      "committedAt": "2018-09-19T12:53:05Z",
+      "language": "PHP",
+      "licenseApi": "Zlib",
+      "archived": false,
+      "fork": false,
+      "description": "Aho-Corasick multi-keyword string searching library in PHP.",
+      "license": "Zlib",
+      "findings": "PHP byte trie, finalize merges suffix outputs; all occurrences",
+      "decision": "covered; copied outputs avoided",
+      "sourceEvidence": [
+        {
+          "path": "ahocorasick.php",
+          "url": "https://github.com/codeplea/ahocorasickphp/blob/64d696b340e06b8883ae1282247c878cf5360b39/ahocorasick.php"
+        }
+      ],
+      "testLocations": [],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "channable/alfred-margaret",
+      "url": "https://github.com/channable/alfred-margaret",
+      "commit": "5b644454aeab198e4949aa6dc1d8a2d8053aaa3e",
+      "committedAt": "2026-09-01T11:28:28Z",
+      "language": "Haskell",
+      "licenseApi": "BSD-3-Clause",
+      "archived": false,
+      "fork": false,
+      "description": "Fast Aho-Corasick string searching",
+      "license": "BSD-3-Clause",
+      "findings": "Haskell Text UTF-8 units; compact automaton, searcher/replacer/splitter, replacement priority",
+      "decision": "defer explicit replacement priorities",
+      "sourceEvidence": [
+        {
+          "path": "src/Data/Text/AhoCorasick/Automaton.hs",
+          "url": "https://github.com/channable/alfred-margaret/blob/5b644454aeab198e4949aa6dc1d8a2d8053aaa3e/src/Data/Text/AhoCorasick/Automaton.hs"
+        },
+        {
+          "path": "src/Data/Text/AhoCorasick/Replacer.hs",
+          "url": "https://github.com/channable/alfred-margaret/blob/5b644454aeab198e4949aa6dc1d8a2d8053aaa3e/src/Data/Text/AhoCorasick/Replacer.hs"
+        },
+        {
+          "path": "src/Data/Text/Utf8.hs",
+          "url": "https://github.com/channable/alfred-margaret/blob/5b644454aeab198e4949aa6dc1d8a2d8053aaa3e/src/Data/Text/Utf8.hs"
+        }
+      ],
+      "testLocations": [
+        "tests/Main.hs",
+        "tests/Data/Text/BoyerMooreSpec.hs",
+        "tests/Data/Text/AhoCorasickSpec.hs",
+        "tests/Data/Text/TestInstances.hs",
+        "tests/Data/Text/Utf8Spec.hs"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "cloudflare/lua-aho-corasick",
+      "url": "https://github.com/cloudflare/lua-aho-corasick",
+      "commit": "6e128727f54a3f8ac18dd2bc4d78518f1af53cff",
+      "committedAt": "2024-09-16T14:06:31Z",
+      "language": "C++",
+      "licenseApi": "BSD-3-Clause",
+      "archived": true,
+      "fork": false,
+      "description": null,
+      "license": "BSD-3-Clause",
+      "findings": "Lua binding plus C++ slow-builder/packed fast graph, byte symbols",
+      "decision": "native binding excluded; packed layout reference",
+      "sourceEvidence": [
+        {
+          "path": "ac_fast.hpp",
+          "url": "https://github.com/cloudflare/lua-aho-corasick/blob/6e128727f54a3f8ac18dd2bc4d78518f1af53cff/ac_fast.hpp"
+        },
+        {
+          "path": "ac_slow.hpp",
+          "url": "https://github.com/cloudflare/lua-aho-corasick/blob/6e128727f54a3f8ac18dd2bc4d78518f1af53cff/ac_slow.hpp"
+        }
+      ],
+      "testLocations": [],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "monyone/aho-corasick",
+      "url": "https://github.com/monyone/aho-corasick",
+      "commit": "56e380ec7de80c787a11b34f0abdba5b2979a001",
+      "committedAt": "2026-08-16T08:24:14Z",
+      "language": "TypeScript",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "aho-corasick implementation for TypeScript",
+      "license": "MIT",
+      "findings": "TypeScript trie/DAT, dynamic dictionaries, streams, filters and replacements",
+      "decision": "already covered by public native APIs",
+      "sourceEvidence": [
+        {
+          "path": "src",
+          "url": "https://github.com/monyone/aho-corasick/blob/56e380ec7de80c787a11b34f0abdba5b2979a001/src"
+        }
+      ],
+      "testLocations": [],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "tanishiking/aho-corasick-js",
+      "url": "https://github.com/tanishiking/aho-corasick-js",
+      "commit": "9c863bff25017987532fa6be9e912e0642bdbfe4",
+      "committedAt": "2020-05-17T12:21:19Z",
+      "language": "TypeScript",
+      "licenseApi": "Apache-2.0",
+      "archived": true,
+      "fork": false,
+      "description": "TypeScript implementation of the Aho-Corasick algorithm for efficient string matching",
+      "license": "Apache-2.0",
+      "findings": "TypeScript trie, lowercasing/word rules and global overlap pruning",
+      "decision": "covered; no compatibility defects copied",
+      "sourceEvidence": [
+        {
+          "path": "src",
+          "url": "https://github.com/tanishiking/aho-corasick-js/blob/9c863bff25017987532fa6be9e912e0642bdbfe4/src"
+        }
+      ],
+      "testLocations": [
+        "src/utils.test.ts",
+        "src/state.test.ts",
+        "src/trie.test.ts",
+        "src/interval/interval-tree.test.ts",
+        "src/interval/interval.test.ts"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "BrunoRB/ahocorasick",
+      "url": "https://github.com/BrunoRB/ahocorasick",
+      "commit": "374247f612a189ddb0f1cd7543495540753702fb",
+      "committedAt": "2024-08-08T22:16:36Z",
+      "language": "JavaScript",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "Aho-corasick for javascript.",
+      "license": "MIT",
+      "findings": "JavaScript object transitions and failure/output arrays, UTF-16 scan",
+      "decision": "baseline occurrence search covered",
+      "sourceEvidence": [
+        {
+          "path": "src",
+          "url": "https://github.com/BrunoRB/ahocorasick/blob/374247f612a189ddb0f1cd7543495540753702fb/src"
+        }
+      ],
+      "testLocations": [
+        "test/basic.js"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "ZhelinCheng/word-guard",
+      "url": "https://github.com/ZhelinCheng/word-guard",
+      "commit": "547f819cc5ac6577dae27e97e10d1aca51b15f82",
+      "committedAt": "2023-05-08T10:13:25Z",
+      "language": "TypeScript",
+      "licenseApi": "MIT",
+      "archived": false,
+      "fork": false,
+      "description": "基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库，更好的容错性，适用Node及浏览器环境。🚀",
+      "license": "MIT",
+      "findings": "TypeScript mutable trie with reference counts; tolerant sensitive-word filtering",
+      "decision": "snapshots covered; tolerant moderation deferred",
+      "sourceEvidence": [
+        {
+          "path": "src/index.ts",
+          "url": "https://github.com/ZhelinCheng/word-guard/blob/547f819cc5ac6577dae27e97e10d1aca51b15f82/src/index.ts"
+        },
+        {
+          "path": "src/node.ts",
+          "url": "https://github.com/ZhelinCheng/word-guard/blob/547f819cc5ac6577dae27e97e10d1aca51b15f82/src/node.ts"
+        }
+      ],
+      "testLocations": [
+        "src/index.test.ts"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "pgsty/acdat",
+      "url": "https://github.com/pgsty/acdat",
+      "commit": "12ff4357bda44080f4ce71e96feefec654e030c9",
+      "committedAt": "2026-09-03T05:33:01Z",
+      "language": "C",
+      "licenseApi": "Apache-2.0",
+      "archived": false,
+      "fork": false,
+      "description": "Aho-Corasick Automaton with Double Array Trie (Multi-pattern substitute in go)",
+      "license": "Apache-2.0",
+      "findings": "C double-array compiler and bounded build candidates; versioned binary format/PostgreSQL adapter",
+      "decision": "defer compile budgets/binary format; PostgreSQL excluded",
+      "sourceEvidence": [
+        {
+          "path": "src/acdat_core.c",
+          "url": "https://github.com/pgsty/acdat/blob/12ff4357bda44080f4ce71e96feefec654e030c9/src/acdat_core.c"
+        },
+        {
+          "path": "src/acdat_format.c",
+          "url": "https://github.com/pgsty/acdat/blob/12ff4357bda44080f4ce71e96feefec654e030c9/src/acdat_format.c"
+        }
+      ],
+      "testLocations": [
+        "test/core_test.c",
+        "test/core_bench.c"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "VectorCamp/vectorscan",
+      "url": "https://github.com/VectorCamp/vectorscan",
+      "commit": "f40db5e75f1eb93920f4abbd70f5e6e75d22152e",
+      "committedAt": "2026-09-04T12:20:06Z",
+      "language": "C++",
+      "licenseApi": "NOASSERTION",
+      "archived": false,
+      "fork": true,
+      "description": "A portable fork of the high-performance regular expression matching library",
+      "license": "BSD-3-Clause (LICENSE/COPYING)",
+      "findings": "Portable Hyperscan fork; SIMD literal/regex engines, streaming databases",
+      "decision": "adjacent family; native SIMD excluded",
+      "sourceEvidence": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/VectorCamp/vectorscan/blob/f40db5e75f1eb93920f4abbd70f5e6e75d22152e/LICENSE"
+        },
+        {
+          "path": "src/hs_runtime.h",
+          "url": "https://github.com/VectorCamp/vectorscan/blob/f40db5e75f1eb93920f4abbd70f5e6e75d22152e/src/hs_runtime.h"
+        }
+      ],
+      "testLocations": [
+        "unit/hyperscan/test_util.cpp"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    },
+    {
+      "repository": "intel/hyperscan",
+      "url": "https://github.com/intel/hyperscan",
+      "commit": "5611d13bb0ba722c8a42e51554cd55f96c01caa9",
+      "committedAt": "2026-09-17T06:29:09Z",
+      "language": "C++",
+      "licenseApi": "NOASSERTION",
+      "archived": false,
+      "fork": false,
+      "description": "High-performance regular expression matching library",
+      "license": "BSD-3-Clause (LICENSE/COPYING)",
+      "findings": "Multi-regex/literal engine with streaming and compiled databases; not a single AC implementation",
+      "decision": "adjacent family; no global AC ranking",
+      "sourceEvidence": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/intel/hyperscan/blob/5611d13bb0ba722c8a42e51554cd55f96c01caa9/LICENSE"
+        },
+        {
+          "path": "src/hs_runtime.h",
+          "url": "https://github.com/intel/hyperscan/blob/5611d13bb0ba722c8a42e51554cd55f96c01caa9/src/hs_runtime.h"
+        }
+      ],
+      "testLocations": [
+        "unit/hyperscan/test_util.cpp"
+      ],
+      "evaluation": "source review; runtime results reported separately"
+    }
+  ],
+  "scope": {
+    "githubQueries": [
+      {
+        "query": "aho-corasick in:name,description fork:false",
+        "retrieved": 50
+      },
+      {
+        "query": "AhoCorasick in:name fork:false",
+        "retrieved": 50
+      },
+      {
+        "query": "aho-corasick language:Ruby fork:false",
+        "retrieved": 10
+      },
+      {
+        "query": "aho-corasick language:Swift fork:false",
+        "retrieved": 4
+      }
+    ],
+    "registries": [
+      "npm (40 search hits + 3 extra tarballs)",
+      "crates.io (25 search hits)",
+      "PyPI (3 package records)",
+      "Maven Central (7 search hits)",
+      "NuGet AhoCorasick versions",
+      "Go module proxy Cloudflare latest"
+    ],
+    "gaps": [
+      "Not an exhaustive census; search ranking and name variants can omit implementations.",
+      "Ruby/Swift discovery only; no source review or execution.",
+      "No .NET/PHP/Haskell/Lua runtime measurements in this pass.",
+      "GitHub source pins and registry latest releases are separate observations."
+    ]
+  },
+  "npmAdditional": [
+    {
+      "name": "@blackglory/aho-corasick",
+      "version": "0.1.27",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/BlackGlory/aho-corasick.git"
+      },
+      "integrity": "sha512-JQS6v+UL9QeQHj83VSjqOKyb9ybAL0gO+nT2iCpdJlsThjof3SsonHmFqdjGD4qddC/olyv4zL+Pv5RYjATwYg=="
+    },
+    {
+      "name": "lazy-aho-corasick",
+      "version": "1.2.2",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/theLAZYmd/aho-corasick/.git"
+      },
+      "integrity": "sha512-6eisXkm0pKgmDSNXPseDGAHQ74OgSxuMrp5TYGWxpIMlx4QM0TNS43YYkBAEI2pq8GuA6YYhYkzEDWmIqoUoDg=="
+    },
+    {
+      "name": "aho-corasick2",
+      "version": "2.0.1",
+      "license": "ISC",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bluelovers/ws-trie.git",
+        "directory": "packages/aho-corasick2"
+      },
+      "integrity": "sha512-Dzf/wFxBZscqvDMZUBCvyUOVaWMfV+cIxA/osP/FFneO2VI8REvfkA6KRU1Ol94LePTKc1GeZN2A4JmAT81Ewg=="
+    }
+  ]
+}
