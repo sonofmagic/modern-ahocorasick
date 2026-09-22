@@ -11,3 +11,10 @@ modern-ahocorasick@3.1.0:
   intents:
     - bright-matchers-count
     - spicy-forks-live
+modern-ahocorasick@3.2.0:
+  dir: packages/modern-ahocorasick
+  intents:
+    - dynamic-streams
+    - matching-extensions
+    - optional-backends-filters
+    - ranges-compile-stats
