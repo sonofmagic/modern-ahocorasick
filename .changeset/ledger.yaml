@@ -6,3 +6,8 @@ modern-ahocorasick@3.0.0:
     - icelib-repository-migration
     - mighty-beans-reply
     - wild-ants-juggle
+modern-ahocorasick@3.1.0:
+  dir: packages/modern-ahocorasick
+  intents:
+    - bright-matchers-count
+    - spicy-forks-live
