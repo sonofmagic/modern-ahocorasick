@@ -15,6 +15,9 @@ export default defineConfig({
       themeConfig: {
         nav: nav('en'),
         sidebar: sidebar('en'),
+        darkModeSwitchLabel: 'Appearance',
+        lightModeSwitchTitle: 'Switch to light theme',
+        darkModeSwitchTitle: 'Switch to dark theme',
       },
     },
     zh: {
@@ -28,6 +31,8 @@ export default defineConfig({
         outline: { label: '本页内容', level: [2, 3] },
         docFooter: { prev: '上一页', next: '下一页' },
         darkModeSwitchLabel: '主题',
+        lightModeSwitchTitle: '切换到亮色主题',
+        darkModeSwitchTitle: '切换到暗色主题',
         sidebarMenuLabel: '目录',
         returnToTopLabel: '返回顶部',
       },

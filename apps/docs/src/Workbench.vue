@@ -887,7 +887,7 @@ onBeforeUnmount(() => {
   gap: 6px;
 }
 
-.check {
+.workbench .check {
   display: flex;
   gap: 8px;
   align-items: center;
@@ -895,7 +895,7 @@ onBeforeUnmount(() => {
   font-size: 12px;
 }
 
-.check input {
+.workbench .check input {
   accent-color: var(--work-failure);
 }
 

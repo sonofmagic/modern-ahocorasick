@@ -37,6 +37,76 @@ h3,
   outline-offset: 4px;
 }
 
+/* Keep the appearance control independent from VitePress' scoped switch CSS.
+   The custom component also reconciles the persisted theme after hydration. */
+/* stylelint-disable selector-class-pattern */
+.VPSwitchAppearance {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 1.375rem;
+  padding: 0;
+  background-color: var(--vp-input-switch-bg-color);
+  border: 1px solid var(--vp-input-border-color);
+  border-radius: 0.6875rem;
+  transition: border-color 0.25s;
+}
+
+.VPSwitchAppearance:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.VPSwitchAppearance .check {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  margin: 0;
+  background-color: var(--vp-c-neutral-inverse);
+  border-radius: 50%;
+  box-shadow: var(--vp-shadow-1);
+  transition: transform 0.25s;
+}
+
+.VPSwitchAppearance .icon {
+  position: relative;
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.VPSwitchAppearance .icon [class^='vpi-'] {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  color: var(--vp-c-text-2);
+}
+
+.VPSwitchAppearance .moon {
+  opacity: 0;
+}
+
+.dark .VPSwitchAppearance .check {
+  transform: translateX(1.125rem);
+}
+
+.dark .VPSwitchAppearance .sun {
+  opacity: 0;
+}
+
+.dark .VPSwitchAppearance .moon {
+  color: var(--vp-c-text-1);
+  opacity: 1;
+}
+/* stylelint-enable selector-class-pattern */
+
 .work-page {
   max-width: 1500px;
   padding: 44px 32px 64px;
@@ -133,6 +203,178 @@ h3,
   color: var(--vp-c-text-2);
 }
 
+.home-proof {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: 64px;
+  overflow: hidden;
+  background: var(--vp-c-divider);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+}
+
+.home-proof > div {
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px;
+  background: var(--vp-c-bg);
+}
+
+.home-proof strong {
+  font: 600 18px var(--vp-font-family-mono);
+  color: var(--vp-c-text-1);
+}
+
+.home-proof span,
+.home-section-heading > p:last-child,
+.home-card p,
+.home-path-list span {
+  color: var(--vp-c-text-2);
+}
+
+.home-proof span {
+  font-size: 12px;
+}
+
+.home-section {
+  padding-top: 96px;
+}
+
+.home-section-heading {
+  max-width: 700px;
+}
+
+.home-section-heading h2,
+.home-callout h2 {
+  margin: 10px 0 12px;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+}
+
+.home-section-heading > p:last-child,
+.home-callout p:not(.hero-kicker) {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
+  padding: 24px;
+  color: inherit;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  transition:
+    border-color 160ms ease-out,
+    transform 160ms ease-out,
+    box-shadow 160ms ease-out;
+}
+
+.home-card:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 12px 32px rgb(37 99 235 / 10%);
+  transform: translateY(-2px);
+}
+
+.home-card:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.home-card-label {
+  font: 12px var(--vp-font-family-mono);
+  color: var(--vp-c-brand-1);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.home-card h3 {
+  margin: 13px 0 8px;
+  font-size: 20px;
+}
+
+.home-card p {
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.home-card code {
+  margin-top: auto;
+  color: var(--vp-c-brand-1);
+}
+
+.home-callout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.8fr);
+  gap: 42px;
+  align-items: center;
+  padding: 30px;
+  margin-top: 96px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 16px;
+}
+
+.home-callout pre {
+  margin: 0;
+  overflow: auto;
+  background: var(--vp-c-bg);
+}
+
+.home-inline-link {
+  display: inline-block;
+  margin-top: 22px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.home-path-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.home-path-list a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  padding: 20px;
+  color: inherit;
+  border-top: 1px solid var(--vp-c-divider);
+  transition:
+    border-color 160ms ease-out,
+    color 160ms ease-out;
+}
+
+.home-path-list a:hover {
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+
+.home-path-list span {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.home-path-list b {
+  font-size: 18px;
+  font-weight: 400;
+}
+
 @media (max-width: 640px) {
   .work-page {
     padding: 28px 16px;
@@ -144,6 +386,27 @@ h3,
 
   .hero-demo {
     grid-template-columns: 1fr;
+  }
+
+  .home-proof {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 44px;
+  }
+
+  .home-section {
+    padding-top: 64px;
+  }
+
+  .home-cards,
+  .home-callout,
+  .home-path-list {
+    grid-template-columns: 1fr;
+  }
+
+  .home-callout {
+    gap: 24px;
+    padding: 22px;
+    margin-top: 64px;
   }
 }
 
