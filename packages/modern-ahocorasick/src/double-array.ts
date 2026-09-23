@@ -1,33 +1,34 @@
-import type { AutomatonNode } from './internal.js'
+import type { CompactAutomaton } from './internal.js'
 import type { Backend } from './runtime.js'
 /** Keep temporary placement arrays outside the retained scanner closure scope. */
-function compileDoubleArray(nodes: AutomatonNode[]) {
-  const alphabet = new Map<string, number>()
-  for (const node of nodes) {
-    for (const unit of node.next.keys()) {
-      if (!alphabet.has(unit)) {
-        alphabet.set(unit, alphabet.size + 1)
-      }
-    }
-  }
-  const slots: number[] = [0]
+function compileDoubleArray(table: CompactAutomaton) {
+  const alphabet = table.symbols
+  const slots = new Uint32Array(table.failures.length)
   const check: number[] = [0]
   const base: number[] = [0]
   let free = 1
-  for (let id = 0; id < nodes.length; id++) {
-    const edges = Array.from(nodes[id].next, ([unit, child]) => ({ code: alphabet.get(unit)!, child })).sort((a, b) => a.code - b.code)
-    if (edges.length === 0) {
+  for (let id = 0; id < slots.length; id++) {
+    const start = table.edges[id]
+    const end = table.edges[id + 1]
+    if (start === end) {
       continue
     }
-    let offset = Math.max(0, free - edges[0].code)
-    while (edges.some(edge => check[offset + edge.code] !== undefined)) {
-      offset++
+    let offset = Math.max(0, free - table.labels[start] - 1)
+    let edge = start
+    while (edge < end) {
+      if (check[offset + table.labels[edge] + 1] !== undefined) {
+        offset++
+        edge = start
+      }
+      else {
+        edge++
+      }
     }
     base[slots[id]] = offset
-    for (const { code, child } of edges) {
-      const slot = offset + code
+    for (let edge = start; edge < end; edge++) {
+      const slot = offset + table.labels[edge] + 1
       check[slot] = slots[id]
-      slots[child] = slot
+      slots[table.targets[edge]] = slot
     }
     while (check[free] !== undefined) {
       free++
@@ -38,41 +39,44 @@ function compileDoubleArray(nodes: AutomatonNode[]) {
   const failures = new Int32Array(check.length)
   const outputs = new Int32Array(check.length).fill(-1)
   const terminals = new Uint32Array(check.length + 1)
-  let patternCount = 0
-  for (let id = 0; id < nodes.length; id++) {
-    terminals[slots[id] + 1] = nodes[id].terminals.length
-    patternCount += nodes[id].terminals.length
+  for (let id = 0; id < slots.length; id++) {
+    terminals[slots[id] + 1] = table.terminals[id + 1] - table.terminals[id]
   }
   for (let slot = 1; slot < terminals.length; slot++) {
     terminals[slot] += terminals[slot - 1]
   }
-  const patterns = new Uint32Array(patternCount)
-  for (let id = 0; id < nodes.length; id++) {
+  const patterns = new Uint32Array(table.patterns.length)
+  for (let id = 0; id < slots.length; id++) {
     const slot = slots[id]
-    failures[slot] = slots[nodes[id].failure]
-    outputs[slot] = nodes[id].output === -1 ? -1 : slots[nodes[id].output]
-    patterns.set(nodes[id].terminals, terminals[slot])
+    failures[slot] = slots[table.failures[id]]
+    outputs[slot] = table.outputs[id] === -1 ? -1 : slots[table.outputs[id]]
+    const start = table.terminals[id]
+    const end = table.terminals[id + 1]
+    if (start !== end) {
+      patterns.set(table.patterns.subarray(start, end), terminals[slot])
+    }
   }
   return { alphabet, bases, parents, failures, outputs, terminals, patterns }
 }
 
-/** Compile an explicit double-array trie, then release the Map-based build graph. */
-export function doubleArray(nodes: AutomatonNode[]): Backend {
-  const { alphabet, bases, parents, failures, outputs, terminals, patterns } = compileDoubleArray(nodes)
+/** Compile an explicit double-array trie from the shared compact builder. */
+export function doubleArray(table: CompactAutomaton): Backend {
+  const { alphabet, bases, parents, failures, outputs, terminals, patterns } = compileDoubleArray(table)
   return {
     stats: {
       backend: 'double-array',
-      stateCount: nodes.length,
-      transitionCount: nodes.length - 1,
+      stateCount: table.failures.length,
+      transitionCount: table.targets.length,
       alphabetSize: alphabet.size,
       typedArrayBytes: bases.byteLength + parents.byteLength + failures.byteLength
         + outputs.byteLength + terminals.byteLength + patterns.byteLength,
     },
     advance(state, unit) {
-      const code = alphabet.get(unit)
-      if (code === undefined) {
+      const symbol = alphabet.get(unit)
+      if (symbol === undefined) {
         return 0
       }
+      const code = symbol + 1
       while (true) {
         const next = bases[state] + code
         if (parents[next] === state) {

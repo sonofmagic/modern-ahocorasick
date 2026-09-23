@@ -1,0 +1,1402 @@
+{
+  "startedAt": "2026-09-23T08:20:48.462Z",
+  "revision": "dd97451efdce9586bbe7d3f442a410ed77d07853",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "18cd42aabc95d9d3dfcd94ae9983fdd8d1ad7e2908860f26cc36f38136e28dbf",
+  "implementationSha256": "c7af20de2e8a6a0064b3755ef656d653b0e6d469429ac614a7f0c03d5bc32a6c",
+  "runnerSha256": "05d461798498b3528241cf8dc5e088b4297f93da826d6caeeab01939ba2c7b85",
+  "timingMethod": "Construction is one cold observation per child. Count has at least 250 ms of cumulative warmup, calibrated batches targeting 25 ms up to 1,048,576 iterations, and seven GC-separated samples.",
+  "rounds": 7,
+  "note": "Medians of independent cold processes with alternating variant order. Count uses seven calibrated batched samples after at least 250 ms of cumulative warmup. Retained memory follows three GC/task turns so backing-store disposal can settle; heap excludes preexisting input strings and ArrayBuffer storage is separate. Build peak RSS is captured before those GCs and includes runtime, input, native allocations, temporary builder and final tables. Historical modules use data URLs, so loader storage differs. This is a scale experiment, not a universal ranking.",
+  "results": [
+    {
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 31.9375,
+      "countMs": 0.2946064453124997,
+      "dictionaryHeapBytes": 572648,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66682880,
+      "buildPeakRssBytes": 111460352,
+      "mad": {
+        "buildMs": 0.6406249999999929,
+        "countMs": 0.004958335937499836,
+        "dictionaryHeapBytes": 4072,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 65536,
+        "buildPeakRssBytes": 671744
+      }
+    },
+    {
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 20.737291999999997,
+      "countMs": 0.29050097656249996,
+      "dictionaryHeapBytes": 567752,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 57098240,
+      "buildPeakRssBytes": 75104256,
+      "mad": {
+        "buildMs": 1.1494590000000002,
+        "countMs": 0.0033050078124996496,
+        "dictionaryHeapBytes": 40,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 131072,
+        "buildPeakRssBytes": 475136
+      }
+    },
+    {
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 186.384875,
+      "countMs": 0.3467441406249998,
+      "dictionaryHeapBytes": 3664856,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79691776,
+      "buildPeakRssBytes": 426885120,
+      "mad": {
+        "buildMs": 2.6110840000000053,
+        "countMs": 0.005368484375000371,
+        "dictionaryHeapBytes": 232,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 131072,
+        "buildPeakRssBytes": 655360
+      }
+    },
+    {
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 92.04775000000001,
+      "countMs": 0.3452854765624993,
+      "dictionaryHeapBytes": 3659840,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74481664,
+      "buildPeakRssBytes": 147193856,
+      "mad": {
+        "buildMs": 2.5257079999999803,
+        "countMs": 0.009825843749998953,
+        "dictionaryHeapBytes": 48,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 81920,
+        "buildPeakRssBytes": 229376
+      }
+    },
+    {
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1945.3027499999998,
+      "countMs": 0.4517327421874988,
+      "dictionaryHeapBytes": 35879568,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 227491840,
+      "buildPeakRssBytes": 2411954176,
+      "mad": {
+        "buildMs": 67.3841250000005,
+        "countMs": 0.013846999999998388,
+        "dictionaryHeapBytes": 112,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 2588672,
+        "buildPeakRssBytes": 2572288
+      }
+    },
+    {
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 797.322209,
+      "countMs": 0.40464680468750025,
+      "dictionaryHeapBytes": 35874704,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 218775552,
+      "buildPeakRssBytes": 692224000,
+      "mad": {
+        "buildMs": 20.274958000000083,
+        "countMs": 0.006339843750000185,
+        "dictionaryHeapBytes": 200,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 1015808,
+        "buildPeakRssBytes": 1294336
+      }
+    }
+  ],
+  "rawRuns": [
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 32.57812499999999,
+      "countMs": 0.3081015625000001,
+      "countTiming": {
+        "ms": 0.3081015625000001,
+        "samplesMs": [
+          0.31204849999999995,
+          0.3006705703125001,
+          0.3312210234374997,
+          0.39748405468750025,
+          0.29894368749999956,
+          0.29712337499999997,
+          0.3081015625000001
+        ],
+        "madMs": 0.009157875000000537,
+        "iterations": 128,
+        "warmupMs": 268.20170700000006,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 54803357.25334075
+      },
+      "dictionaryHeapBytes": 568488,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66928640,
+      "buildPeakRssBytes": 118964224,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 23.807209,
+      "countMs": 0.29050097656249996,
+      "countTiming": {
+        "ms": 0.29050097656249996,
+        "samplesMs": [
+          0.2906129531249997,
+          0.288443359375,
+          0.29050097656249996,
+          0.295015625,
+          0.2886656875,
+          0.28915624999999956,
+          0.29358267968749985
+        ],
+        "madMs": 0.0018352890624999674,
+        "iterations": 128,
+        "warmupMs": 275.98866899999996,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 58123728.87623416
+      },
+      "dictionaryHeapBytes": 567408,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 57098240,
+      "buildPeakRssBytes": 75841536,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 23.163625000000003,
+      "countMs": 0.2837522734375,
+      "countTiming": {
+        "ms": 0.2837522734375,
+        "samplesMs": [
+          0.28181738281250013,
+          0.2913434218750002,
+          0.2841826171874997,
+          0.2832451171875001,
+          0.2837522734375,
+          0.27728906249999996,
+          0.2844176484374996
+        ],
+        "madMs": 0.000665374999999635,
+        "iterations": 128,
+        "warmupMs": 256.74129300000004,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 59506131.15957689
+      },
+      "dictionaryHeapBytes": 567408,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56918016,
+      "buildPeakRssBytes": 75612160,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 31.9375,
+      "countMs": 0.28964810937499985,
+      "countTiming": {
+        "ms": 0.28964810937499985,
+        "samplesMs": [
+          0.2974182968750001,
+          0.30220182812499985,
+          0.28964810937499985,
+          0.2877223281250001,
+          0.28087239843749945,
+          0.37428385156250066,
+          0.28637336718750017
+        ],
+        "madMs": 0.007770187500000247,
+        "iterations": 128,
+        "warmupMs": 264.18591900000007,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 58294873.86067978
+      },
+      "dictionaryHeapBytes": 572616,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66682880,
+      "buildPeakRssBytes": 110788608,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 30.634917,
+      "countMs": 0.2997509765624997,
+      "countTiming": {
+        "ms": 0.2997509765624997,
+        "samplesMs": [
+          0.2997509765624997,
+          0.2932727812500002,
+          0.3012617187500002,
+          0.30498730468750024,
+          0.30392838281249945,
+          0.29604850781250036,
+          0.2956337890624994
+        ],
+        "madMs": 0.004117187500000341,
+        "iterations": 128,
+        "warmupMs": 258.7871250000001,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 56330091.7102413
+      },
+      "dictionaryHeapBytes": 576720,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66748416,
+      "buildPeakRssBytes": 111411200,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 19.698,
+      "countMs": 0.2898027343749998,
+      "countTiming": {
+        "ms": 0.2898027343749998,
+        "samplesMs": [
+          0.2898027343749998,
+          0.29602474218749997,
+          0.28911653906250034,
+          0.28989388281250017,
+          0.29116959374999984,
+          0.28523339843749973,
+          0.2880651093750002
+        ],
+        "madMs": 0.001366859375000029,
+        "iterations": 128,
+        "warmupMs": 265.73308499999996,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 58263770.479650125
+      },
+      "dictionaryHeapBytes": 567752,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56967168,
+      "buildPeakRssBytes": 74629120,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 19.587832999999996,
+      "countMs": 0.29289583593750024,
+      "countTiming": {
+        "ms": 0.29289583593750024,
+        "samplesMs": [
+          0.28866601562500005,
+          0.2930198515625002,
+          0.29390071093750025,
+          0.2824967421875,
+          0.29289583593750024,
+          0.2952535781250001,
+          0.28633203124999973
+        ],
+        "madMs": 0.002357742187499845,
+        "iterations": 128,
+        "warmupMs": 262.74016800000004,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 57648480.8872565
+      },
+      "dictionaryHeapBytes": 567792,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 57147392,
+      "buildPeakRssBytes": 74629120,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 31.86575,
+      "countMs": 0.2976204375,
+      "countTiming": {
+        "ms": 0.2976204375,
+        "samplesMs": [
+          0.3005113984375001,
+          0.29792839062499965,
+          0.2884417343750001,
+          0.2995449218749999,
+          0.29235091406250024,
+          0.2976204375,
+          0.2940364609374999
+        ],
+        "madMs": 0.0028909609375000755,
+        "iterations": 128,
+        "warmupMs": 262.172708,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 56733335.05532529
+      },
+      "dictionaryHeapBytes": 572648,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66682880,
+      "buildPeakRssBytes": 111460352,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 32.986083,
+      "countMs": 0.2911425781250001,
+      "countTiming": {
+        "ms": 0.2911425781250001,
+        "samplesMs": [
+          0.2893834609375001,
+          0.2926139375000001,
+          0.2893899765625001,
+          0.2883997421875,
+          0.29223469531250057,
+          0.2911425781250001,
+          0.29356086718749985
+        ],
+        "madMs": 0.0017526015625000113,
+        "iterations": 128,
+        "warmupMs": 274.946331,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 57995639.486130185
+      },
+      "dictionaryHeapBytes": 587368,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66682880,
+      "buildPeakRssBytes": 111017984,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 19.983125,
+      "countMs": 0.2938059843749996,
+      "countTiming": {
+        "ms": 0.2938059843749996,
+        "samplesMs": [
+          0.30046842968749976,
+          0.29088508593750007,
+          0.2917093046875001,
+          0.2928929062500001,
+          0.2938059843749996,
+          0.2970862578125004,
+          0.3063655624999999
+        ],
+        "madMs": 0.0029208984374995417,
+        "iterations": 128,
+        "warmupMs": 280.152543,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 57469898.157175764
+      },
+      "dictionaryHeapBytes": 567792,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 57114624,
+      "buildPeakRssBytes": 75104256,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 20.737291999999997,
+      "countMs": 0.2975201796875,
+      "countTiming": {
+        "ms": 0.2975201796875,
+        "samplesMs": [
+          0.378099609375,
+          0.37608365625000006,
+          0.31813769531250014,
+          0.2975201796875,
+          0.2967015000000002,
+          0.2892646484375003,
+          0.2893063203124999
+        ],
+        "madMs": 0.00825553124999967,
+        "iterations": 128,
+        "warmupMs": 315.76070799999997,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 56752452.95204898
+      },
+      "dictionaryHeapBytes": 567744,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56950784,
+      "buildPeakRssBytes": 74579968,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 34.506583,
+      "countMs": 0.2946064453124997,
+      "countTiming": {
+        "ms": 0.2946064453124997,
+        "samplesMs": [
+          0.290939453125,
+          0.29862044531249987,
+          0.2937897187499998,
+          0.304064125,
+          0.38510676562499935,
+          0.2946064453124997,
+          0.2885071562499997
+        ],
+        "madMs": 0.004014000000000184,
+        "iterations": 128,
+        "warmupMs": 276.74654300000003,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 57313749.47377499
+      },
+      "dictionaryHeapBytes": 587664,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66617344,
+      "buildPeakRssBytes": 114016256,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 31.677125000000004,
+      "countMs": 0.28285742187499974,
+      "countTiming": {
+        "ms": 0.28285742187499974,
+        "samplesMs": [
+          0.3142757187499998,
+          0.281400390625,
+          0.28285742187499974,
+          0.282150390625,
+          0.28775878906249996,
+          0.28169531250000013,
+          0.2886256562499998
+        ],
+        "madMs": 0.0014570312499997407,
+        "iterations": 128,
+        "warmupMs": 269.83341600000006,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 59694385.5603047
+      },
+      "dictionaryHeapBytes": 572616,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66764800,
+      "buildPeakRssBytes": 112951296,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 22.021292000000003,
+      "countMs": 0.2842428359375,
+      "countTiming": {
+        "ms": 0.2842428359375,
+        "samplesMs": [
+          0.2842682343749998,
+          0.2788245390624997,
+          0.2821725234375001,
+          0.2842428359375,
+          0.2898271484374999,
+          0.28446777343750007,
+          0.28220475
+        ],
+        "madMs": 0.0020380859374999893,
+        "iterations": 128,
+        "warmupMs": 267.00237500000003,
+        "warmupIterations": 1023,
+        "utf16UnitsPerSecond": 59403432.0840815
+      },
+      "dictionaryHeapBytes": 568056,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 57245696,
+      "buildPeakRssBytes": 75137024,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 91.919208,
+      "countMs": 0.3452854765624993,
+      "countTiming": {
+        "ms": 0.3452854765624993,
+        "samplesMs": [
+          0.3590162734375002,
+          0.3404215468749996,
+          0.3421751249999998,
+          0.3452854765624993,
+          0.3455136718749996,
+          0.3468203125000002,
+          0.34134960937500036
+        ],
+        "madMs": 0.0031103515624995026,
+        "iterations": 128,
+        "warmupMs": 280.47183500000006,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 51789030.27727905
+      },
+      "dictionaryHeapBytes": 3659840,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74563584,
+      "buildPeakRssBytes": 147423232,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 186.384875,
+      "countMs": 0.3321927109375,
+      "countTiming": {
+        "ms": 0.3321927109375,
+        "samplesMs": [
+          0.3317822265624999,
+          0.33094824218749963,
+          0.33611165624999995,
+          0.32759342187500007,
+          0.333138671875,
+          0.3321927109375,
+          0.3404606171875004
+        ],
+        "madMs": 0.0012444687500003937,
+        "iterations": 128,
+        "warmupMs": 276.156793,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 53830199.79437293
+      },
+      "dictionaryHeapBytes": 3664592,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79560704,
+      "buildPeakRssBytes": 426885120,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 185.969041,
+      "countMs": 0.34587011718750027,
+      "countTiming": {
+        "ms": 0.34587011718750027,
+        "samplesMs": [
+          0.34193913281249966,
+          0.3378251953125,
+          0.34685709374999973,
+          0.34504329687500057,
+          0.3485511093750002,
+          0.3474736328125001,
+          0.34587011718750027
+        ],
+        "madMs": 0.0016035156249998295,
+        "iterations": 128,
+        "warmupMs": 269.964501,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 51701488.82884252
+      },
+      "dictionaryHeapBytes": 3664808,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79822848,
+      "buildPeakRssBytes": 426164224,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 95.63941600000001,
+      "countMs": 0.3800572890625,
+      "countTiming": {
+        "ms": 0.3800572890625,
+        "samplesMs": [
+          0.4504908906249998,
+          0.3800572890625,
+          0.4078356171874997,
+          0.3351650390625007,
+          0.3648297500000002,
+          0.3322249296875004,
+          0.38695637500000046
+        ],
+        "madMs": 0.027778328124999696,
+        "iterations": 128,
+        "warmupMs": 286.5753339999999,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 47050801.32553207
+      },
+      "dictionaryHeapBytes": 3659792,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74334208,
+      "buildPeakRssBytes": 147193856,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 85.093834,
+      "countMs": 0.3434355468749999,
+      "countTiming": {
+        "ms": 0.3434355468749999,
+        "samplesMs": [
+          0.41356185156250014,
+          0.3434355468749999,
+          0.33171223437499986,
+          0.3362067031249998,
+          0.34811491406250017,
+          0.34498177343750047,
+          0.3386699218749998
+        ],
+        "madMs": 0.004765625000000107,
+        "iterations": 128,
+        "warmupMs": 280.8465819999999,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 52067994.017254435
+      },
+      "dictionaryHeapBytes": 3659824,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74432512,
+      "buildPeakRssBytes": 147210240,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 188.995959,
+      "countMs": 0.3467441406249998,
+      "countTiming": {
+        "ms": 0.3467441406249998,
+        "samplesMs": [
+          0.3581907578124994,
+          0.36018261718749933,
+          0.3434899140625003,
+          0.36554264843749973,
+          0.34280891406250014,
+          0.3467441406249998,
+          0.3447574843750001
+        ],
+        "madMs": 0.003935226562499672,
+        "iterations": 128,
+        "warmupMs": 284.083253,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 51571167.050632864
+      },
+      "dictionaryHeapBytes": 3664624,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79740928,
+      "buildPeakRssBytes": 427147264,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 186.93349999999998,
+      "countMs": 0.3521126250000002,
+      "countTiming": {
+        "ms": 0.3521126250000002,
+        "samplesMs": [
+          0.34095573437500004,
+          0.3319479218749999,
+          0.3411481093750002,
+          0.3521126250000002,
+          0.38390689843749914,
+          0.3872835312499996,
+          0.3576500703124994
+        ],
+        "madMs": 0.011156890625000138,
+        "iterations": 128,
+        "warmupMs": 284.2507920000001,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 50784887.36380864
+      },
+      "dictionaryHeapBytes": 3790912,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79675392,
+      "buildPeakRssBytes": 427425792,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 94.57345799999999,
+      "countMs": 0.3556858749999998,
+      "countTiming": {
+        "ms": 0.3556858749999998,
+        "samplesMs": [
+          0.34044986718750003,
+          0.3517024687500001,
+          0.37020507812500014,
+          0.3691904296874995,
+          0.3724283828125001,
+          0.3547063828124992,
+          0.3556858749999998
+        ],
+        "madMs": 0.01350455468749967,
+        "iterations": 128,
+        "warmupMs": 274.300291,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 50274698.14481671
+      },
+      "dictionaryHeapBytes": 3660104,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74596352,
+      "buildPeakRssBytes": 146489344,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 94.148084,
+      "countMs": 0.36865495312499963,
+      "countTiming": {
+        "ms": 0.36865495312499963,
+        "samplesMs": [
+          0.37688085937499993,
+          0.5597219999999998,
+          0.3556624375000004,
+          0.36865495312499963,
+          0.35545214843750017,
+          0.36629492187500023,
+          0.4483544921875007
+        ],
+        "madMs": 0.012992515624999257,
+        "iterations": 128,
+        "warmupMs": 266.457541,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 48506061.9650396
+      },
+      "dictionaryHeapBytes": 3659840,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74481664,
+      "buildPeakRssBytes": 146800640,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 193.585084,
+      "countMs": 0.3770195312500002,
+      "countTiming": {
+        "ms": 0.3770195312500002,
+        "samplesMs": [
+          0.3842028046874999,
+          0.3770195312500002,
+          0.4059847031250001,
+          0.4811865234374997,
+          0.3636546249999997,
+          0.3752464140624996,
+          0.36052278125000026
+        ],
+        "madMs": 0.01336490625000053,
+        "iterations": 128,
+        "warmupMs": 278.9686650000001,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 47429903.54030894
+      },
+      "dictionaryHeapBytes": 3734288,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 80363520,
+      "buildPeakRssBytes": 427540480,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 176.17041600000002,
+      "countMs": 0.3500341796875004,
+      "countTiming": {
+        "ms": 0.3500341796875004,
+        "samplesMs": [
+          0.3500341796875004,
+          0.35385417187500057,
+          0.3546031875000004,
+          0.3501461640624992,
+          0.34803125,
+          0.3372958984375005,
+          0.34056380468750014
+        ],
+        "madMs": 0.0038199921875001763,
+        "iterations": 128,
+        "warmupMs": 279.071998,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 51086439.66130534
+      },
+      "dictionaryHeapBytes": 3664856,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79691776,
+      "buildPeakRssBytes": 422838272,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 92.04775000000001,
+      "countMs": 0.33545963281250035,
+      "countTiming": {
+        "ms": 0.33545963281250035,
+        "samplesMs": [
+          0.32766568750000014,
+          0.3367434921874999,
+          0.33545963281250035,
+          0.34383593750000063,
+          0.3370042343750006,
+          0.3302057343750002,
+          0.33533170312500005
+        ],
+        "madMs": 0.0015446015625002474,
+        "iterations": 128,
+        "warmupMs": 279.05946000000006,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 53305966.65261018
+      },
+      "dictionaryHeapBytes": 3660152,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74760192,
+      "buildPeakRssBytes": 146800640,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 86.964709,
+      "countMs": 0.3407952500000002,
+      "countTiming": {
+        "ms": 0.3407952500000002,
+        "samplesMs": [
+          0.3667939453125002,
+          0.3600488281249996,
+          0.37491503906250045,
+          0.3368587265624994,
+          0.33631607812499986,
+          0.3399153593749995,
+          0.3407952500000002
+        ],
+        "madMs": 0.004479171875000354,
+        "iterations": 128,
+        "warmupMs": 283.70645800000005,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 52471388.61237059
+      },
+      "dictionaryHeapBytes": 3660168,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 74448896,
+      "buildPeakRssBytes": 147193856,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 179.079,
+      "countMs": 0.3298479843749993,
+      "countTiming": {
+        "ms": 0.3298479843749993,
+        "samplesMs": [
+          0.3307359999999999,
+          0.3362421874999999,
+          0.3274251328124995,
+          0.32752994531249957,
+          0.35074511718749957,
+          0.3286578750000002,
+          0.3298479843749993
+        ],
+        "madMs": 0.0023180390624997216,
+        "iterations": 128,
+        "warmupMs": 269.503084,
+        "warmupIterations": 895,
+        "utf16UnitsPerSecond": 54212852.12302592
+      },
+      "dictionaryHeapBytes": 3664856,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79429632,
+      "buildPeakRssBytes": 424525824,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1909.4087499999998,
+      "countMs": 0.4517327421874988,
+      "countTiming": {
+        "ms": 0.4517327421874988,
+        "samplesMs": [
+          0.47612955468749973,
+          0.4818248671874983,
+          0.4517327421874988,
+          0.4616770781249997,
+          0.4245924453124985,
+          0.4407509765625015,
+          0.42677897656249897
+        ],
+        "madMs": 0.02439681250000092,
+        "iterations": 128,
+        "warmupMs": 258.2020000000007,
+        "warmupIterations": 639,
+        "utf16UnitsPerSecond": 41799051.15702843
+      },
+      "dictionaryHeapBytes": 35879456,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 225394688,
+      "buildPeakRssBytes": 2409381888,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 792.3429160000001,
+      "countMs": 0.4146725312499999,
+      "countTiming": {
+        "ms": 0.4146725312499999,
+        "samplesMs": [
+          0.43230208593750064,
+          0.4146725312499999,
+          0.40917317187500046,
+          0.40997200781250065,
+          0.4508782578124997,
+          0.4376809921874987,
+          0.40275228124999884
+        ],
+        "madMs": 0.011920250000001076,
+        "iterations": 128,
+        "warmupMs": 297.4791690000002,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 45534725.782490574
+      },
+      "dictionaryHeapBytes": 35875000,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 219791360,
+      "buildPeakRssBytes": 690290688,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 773.557834,
+      "countMs": 0.40464680468750025,
+      "countTiming": {
+        "ms": 0.40464680468750025,
+        "samplesMs": [
+          0.41088704687500055,
+          0.4003470078124991,
+          0.41324349218749923,
+          0.3802470703124996,
+          0.4131178359375003,
+          0.4002871093750002,
+          0.40464680468750025
+        ],
+        "madMs": 0.0062402421875003,
+        "iterations": 128,
+        "warmupMs": 277.32724899999994,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 46662916.35388583
+      },
+      "dictionaryHeapBytes": 35874704,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 218775552,
+      "buildPeakRssBytes": 694272000,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1945.3027499999998,
+      "countMs": 0.45450814062499845,
+      "countTiming": {
+        "ms": 0.45450814062499845,
+        "samplesMs": [
+          0.5180556640624978,
+          0.49728840625000004,
+          0.45450814062499845,
+          0.45809277343749955,
+          0.4449082031250029,
+          0.4351471406249985,
+          0.4302845078125017
+        ],
+        "madMs": 0.01936099999999996,
+        "iterations": 128,
+        "warmupMs": 284.3104160000007,
+        "warmupIterations": 515,
+        "utf16UnitsPerSecond": 41543810.357357256
+      },
+      "dictionaryHeapBytes": 35879568,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 223444992,
+      "buildPeakRssBytes": 2411954176,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1974.400208,
+      "countMs": 0.4845175781250006,
+      "countTiming": {
+        "ms": 0.4845175781250006,
+        "samplesMs": [
+          0.47463020312499893,
+          0.4726350937500001,
+          0.514854164062502,
+          0.5601360703124989,
+          0.45472460937499903,
+          0.5591923828125012,
+          0.4845175781250006
+        ],
+        "madMs": 0.02979296875000159,
+        "iterations": 128,
+        "warmupMs": 295.29279100000076,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 38970722.327701874
+      },
+      "dictionaryHeapBytes": 35879568,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 228737024,
+      "buildPeakRssBytes": 2413428736,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 797.322209,
+      "countMs": 0.42452506250000255,
+      "countTiming": {
+        "ms": 0.42452506250000255,
+        "samplesMs": [
+          0.4309127656250009,
+          0.42099609375000036,
+          0.4276311796875003,
+          0.42267838281249936,
+          0.4343623046874985,
+          0.42452506250000255,
+          0.4222718125
+        ],
+        "madMs": 0.003106117187497759,
+        "iterations": 128,
+        "warmupMs": 288.63433299999974,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 44477939.391387254
+      },
+      "dictionaryHeapBytes": 35874544,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 217874432,
+      "buildPeakRssBytes": 691978240,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 817.5971670000001,
+      "countMs": 0.39950781250000134,
+      "countTiming": {
+        "ms": 0.39950781250000134,
+        "samplesMs": [
+          0.39859211718749954,
+          0.4019088593750002,
+          0.39603125000000006,
+          0.4012812499999985,
+          0.4009583359374993,
+          0.3869202421875002,
+          0.39950781250000134
+        ],
+        "madMs": 0.0017734374999971436,
+        "iterations": 128,
+        "warmupMs": 267.25258399999984,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 47263155.83628277
+      },
+      "dictionaryHeapBytes": 35874944,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 218316800,
+      "buildPeakRssBytes": 693518336,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 2012.6868750000003,
+      "countMs": 0.42288574218749986,
+      "countTiming": {
+        "ms": 0.42288574218749986,
+        "samplesMs": [
+          0.46570279687500005,
+          0.44022363281250065,
+          0.4374394531250019,
+          0.41186392968749885,
+          0.42288574218749986,
+          0.3886142578124989,
+          0.41650162499999865
+        ],
+        "madMs": 0.014553710937502018,
+        "iterations": 128,
+        "warmupMs": 268.6303340000004,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 44650358.5160553
+      },
+      "dictionaryHeapBytes": 35879456,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 227491840,
+      "buildPeakRssBytes": 2409185280,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1810.690959,
+      "countMs": 0.4378857421875004,
+      "countTiming": {
+        "ms": 0.4378857421875004,
+        "samplesMs": [
+          0.46218652343749866,
+          0.4571829453124998,
+          0.4491839218750009,
+          0.43129003906249963,
+          0.4240732421875002,
+          0.41572819531250005,
+          0.4378857421875004
+        ],
+        "madMs": 0.013812500000000227,
+        "iterations": 128,
+        "warmupMs": 279.94274999999925,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 43120837.654300295
+      },
+      "dictionaryHeapBytes": 35887352,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 222576640,
+      "buildPeakRssBytes": 2417164288,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 825.972667,
+      "countMs": 0.4127929687500007,
+      "countTiming": {
+        "ms": 0.4127929687500007,
+        "samplesMs": [
+          0.4042044296874998,
+          0.414040039062499,
+          0.4103795546875002,
+          0.4127929687500007,
+          0.41582064062500024,
+          0.41318261718750016,
+          0.40422103124999964
+        ],
+        "madMs": 0.0024134140625005074,
+        "iterations": 128,
+        "warmupMs": 288.4046659999999,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 45742058.197302975
+      },
+      "dictionaryHeapBytes": 35874504,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 216645632,
+      "buildPeakRssBytes": 692224000,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 804.3749590000001,
+      "countMs": 0.39830696093750007,
+      "countTiming": {
+        "ms": 0.39830696093750007,
+        "samplesMs": [
+          0.40194335937500014,
+          0.39733235937499956,
+          0.4030911406249995,
+          0.4147350312500002,
+          0.39830696093750007,
+          0.3925963515624993,
+          0.3913255234374997
+        ],
+        "madMs": 0.004784179687499446,
+        "iterations": 128,
+        "warmupMs": 277.09633500000064,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 47405649.03901554
+      },
+      "dictionaryHeapBytes": 35874704,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 222937088,
+      "buildPeakRssBytes": 693583872,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 2055.731458,
+      "countMs": 0.45293326562499914,
+      "countTiming": {
+        "ms": 0.45293326562499914,
+        "samplesMs": [
+          0.46880240624999914,
+          0.475703124999999,
+          0.4536243515624996,
+          0.44304264843749763,
+          0.43464746093749795,
+          0.45293326562499914,
+          0.4217369765624994
+        ],
+        "madMs": 0.015869140625,
+        "iterations": 128,
+        "warmupMs": 250.18420900000092,
+        "warmupIterations": 639,
+        "utf16UnitsPerSecond": 41688260.573982954
+      },
+      "dictionaryHeapBytes": 35879456,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 231636992,
+      "buildPeakRssBytes": 2411462656,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1847.358291,
+      "countMs": 0.41020051562500015,
+      "countTiming": {
+        "ms": 0.41020051562500015,
+        "samplesMs": [
+          0.4448632812499973,
+          0.43353808593750287,
+          0.4234189453125019,
+          0.40816601562499955,
+          0.41020051562500015,
+          0.3910126953125008,
+          0.3822695312499995
+        ],
+        "madMs": 0.019187820312499326,
+        "iterations": 128,
+        "warmupMs": 267.669499000001,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 46031146.429034896
+      },
+      "dictionaryHeapBytes": 35887392,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 230080512,
+      "buildPeakRssBytes": 2419408896,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 775.5108749999999,
+      "countMs": 0.40054199218750064,
+      "countTiming": {
+        "ms": 0.40054199218750064,
+        "samplesMs": [
+          0.40054199218750064,
+          0.4190205078125011,
+          0.3951764296875009,
+          0.4101227187499994,
+          0.40456347656249925,
+          0.38969238281250007,
+          0.39438704687499815
+        ],
+        "madMs": 0.006154945312502491,
+        "iterations": 128,
+        "warmupMs": 281.4583720000003,
+        "warmupIterations": 767,
+        "utf16UnitsPerSecond": 47141124.69676091
+      },
+      "dictionaryHeapBytes": 35874488,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 221691904,
+      "buildPeakRssBytes": 692060160,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    }
+  ]
+}

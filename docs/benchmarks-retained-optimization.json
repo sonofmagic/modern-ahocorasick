@@ -1,0 +1,761 @@
+{
+  "startedAt": "2026-09-23T08:13:54.285Z",
+  "revision": "0d10f03bade9609faf6bbe086b0dd4666452c4e0",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "68cd0ffc3df077980b83ce045256e4627b9c006a0d086f334c32492bb13ffb18",
+  "implementationSha256": "6716d18808b34e066dc30eaaaa8b90d773adc567feda47150f18e51b0283296c",
+  "corpusSha256": "4afa3eee0768ace1840771227bd94753d446ab82a09bbaf11d2acf1834462c5e",
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "samples": 7,
+  "rounds": 7,
+  "operations": [],
+  "note": "v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained-memory samples follow three GC/task turns to settle backing-store disposal. JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. BENCH_TIMINGS=0 measures retained storage and correctness without timing operations. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "ascii-tiny",
+      "variant": "v3-before",
+      "keywords": 3,
+      "utf16Length": 2,
+      "count": 3,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3929.904,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 19432,
+      "checks": {
+        "search": "2e4fd53a7378495e1d5ab9134bbb9aa762d53b18529d4cb02e6bbffdc099d2a8",
+        "frequencies": "9e07ab64261fb6803c6572f7b5c3098ea68fb45873128af820d42a2262eb900b",
+        "first": "4f8d791b24bd15ae72b0df156b0425f5aaf07418843a59e806b9dfe928cf5838",
+        "longest": "8f2bd3c41773b3e02f9eca783af9e1f7be7de38daf524a6f2657028aa0b262c3",
+        "replaceFirst": "40752678f959ca492cfbb685f0130362d79848d4d8318811285077d53a921ae6",
+        "replaceLongest": "de9e4020d0fe7c98642db490864cd47513a4ed41689f505166c541ec5bba3a9f"
+      }
+    },
+    {
+      "scenario": "ascii-tiny",
+      "variant": "v3",
+      "keywords": 3,
+      "utf16Length": 2,
+      "count": 3,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3902.088,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 19736,
+      "checks": {
+        "search": "2e4fd53a7378495e1d5ab9134bbb9aa762d53b18529d4cb02e6bbffdc099d2a8",
+        "frequencies": "9e07ab64261fb6803c6572f7b5c3098ea68fb45873128af820d42a2262eb900b",
+        "first": "4f8d791b24bd15ae72b0df156b0425f5aaf07418843a59e806b9dfe928cf5838",
+        "longest": "8f2bd3c41773b3e02f9eca783af9e1f7be7de38daf524a6f2657028aa0b262c3",
+        "replaceFirst": "40752678f959ca492cfbb685f0130362d79848d4d8318811285077d53a921ae6",
+        "replaceLongest": "de9e4020d0fe7c98642db490864cd47513a4ed41689f505166c541ec5bba3a9f"
+      }
+    },
+    {
+      "scenario": "crlf",
+      "variant": "v3-before",
+      "keywords": 5,
+      "utf16Length": 40000,
+      "count": 24000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4366.952,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1891184,
+      "checks": {
+        "search": "34cbe6f3f74c70af6a80bf41ef0e2dd789f7d157df3fe540327f58b8dba149d5",
+        "frequencies": "7cb5a132eec75c864033e776fb9637c5eaa90af7d69b19448af0380933b95620",
+        "first": "e09964c19500d4d08ee6ba1ef449bf63a39fd16728bd7dc9f8cc6fd4effbcbe6",
+        "longest": "bda4f20dad17ead60054be0aa68edf433c5cff48dfac0813593bb0c6d700b85e",
+        "replaceFirst": "ece311afca2134495daedb507f5d00541c32ecd9c51cc8eb712235203df50f6c",
+        "replaceLongest": "dbab9b2382d4c162f151c032ec941788b9c7696926dfca20f2a02852ded0527c"
+      }
+    },
+    {
+      "scenario": "crlf",
+      "variant": "v3",
+      "keywords": 5,
+      "utf16Length": 40000,
+      "count": 24000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4368.912,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1897624,
+      "checks": {
+        "search": "34cbe6f3f74c70af6a80bf41ef0e2dd789f7d157df3fe540327f58b8dba149d5",
+        "frequencies": "7cb5a132eec75c864033e776fb9637c5eaa90af7d69b19448af0380933b95620",
+        "first": "e09964c19500d4d08ee6ba1ef449bf63a39fd16728bd7dc9f8cc6fd4effbcbe6",
+        "longest": "bda4f20dad17ead60054be0aa68edf433c5cff48dfac0813593bb0c6d700b85e",
+        "replaceFirst": "ece311afca2134495daedb507f5d00541c32ecd9c51cc8eb712235203df50f6c",
+        "replaceLongest": "dbab9b2382d4c162f151c032ec941788b9c7696926dfca20f2a02852ded0527c"
+      }
+    },
+    {
+      "scenario": "ascii-combining",
+      "variant": "v3-before",
+      "keywords": 4,
+      "utf16Length": 44000,
+      "count": 16000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4192.584,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1335256,
+      "checks": {
+        "search": "d392b07d218c89ce3de9e1f5c16195a125083673293921b8935fb6b3f0f09fa8",
+        "frequencies": "50d35577fabbc4e51407b150644d8d33207d1e51ce1b597374a2325acf086264",
+        "first": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "longest": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "replaceFirst": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c",
+        "replaceLongest": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c"
+      }
+    },
+    {
+      "scenario": "ascii-combining",
+      "variant": "v3",
+      "keywords": 4,
+      "utf16Length": 44000,
+      "count": 16000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4191.728,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1343120,
+      "checks": {
+        "search": "d392b07d218c89ce3de9e1f5c16195a125083673293921b8935fb6b3f0f09fa8",
+        "frequencies": "50d35577fabbc4e51407b150644d8d33207d1e51ce1b597374a2325acf086264",
+        "first": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "longest": "7f84c46b0753ce1d8ed7fec17fcf2033264e7b13ebe96cb76b0eac7c7f725e0a",
+        "replaceFirst": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c",
+        "replaceLongest": "5400d64115303b4ecb85a1ac6c6e287f43ceec2cf5ab6af3a828d6697182f69c"
+      }
+    },
+    {
+      "scenario": "unicode-start",
+      "variant": "v3-before",
+      "keywords": 3,
+      "utf16Length": 40000,
+      "count": 15000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4148.256,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1208576,
+      "checks": {
+        "search": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "frequencies": "d1fbcacc087815e5abdbb9119dbce31d766d7fd656d0cf22f664895773545492",
+        "first": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "longest": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "replaceFirst": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861",
+        "replaceLongest": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861"
+      }
+    },
+    {
+      "scenario": "unicode-start",
+      "variant": "v3",
+      "keywords": 3,
+      "utf16Length": 40000,
+      "count": 15000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4146.648,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 1211360,
+      "checks": {
+        "search": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "frequencies": "d1fbcacc087815e5abdbb9119dbce31d766d7fd656d0cf22f664895773545492",
+        "first": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "longest": "068c8a43660c571a7b2c51e0ca22257d9033d04020e38d97d0bb1767e916ed11",
+        "replaceFirst": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861",
+        "replaceLongest": "0eacf0271815d2b1e95bb14b6ffb2f5dedb4a0a79dbbea83251d8a74c2c6c861"
+      }
+    },
+    {
+      "scenario": "ascii-prefix",
+      "variant": "v3-before",
+      "keywords": 2,
+      "utf16Length": 56007,
+      "count": 2,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4081.648,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 138672,
+      "checks": {
+        "search": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "frequencies": "e61b9f584dbe27741cef6e9ee440831d7d94470c0871b0871541f0308916efea",
+        "first": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "longest": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "replaceFirst": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3",
+        "replaceLongest": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3"
+      }
+    },
+    {
+      "scenario": "ascii-prefix",
+      "variant": "v3",
+      "keywords": 2,
+      "utf16Length": 56007,
+      "count": 2,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4066.56,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 146184,
+      "checks": {
+        "search": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "frequencies": "e61b9f584dbe27741cef6e9ee440831d7d94470c0871b0871541f0308916efea",
+        "first": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "longest": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "replaceFirst": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3",
+        "replaceLongest": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3"
+      }
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3907.472,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 227128,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3900.928,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 233600,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 32899,
+      "count": 4900,
+      "metrics": {},
+      "dictionaryCopies": 500,
+      "dictionaryHeapBytes": 13854.672,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 404120,
+      "checks": {
+        "search": "93064955d980a1edbc548be7a7068d159c341c4ab5d3e808fca69da6d631adca",
+        "frequencies": "584420f693440e23d163f4e074345a00a6b710c0dcda57f41e5d9fd2d069a3b2",
+        "first": "0f58040334188573e31242045bfb7750c08b608506db249f90d907112949d27f",
+        "longest": "7fcd5c49561e60549f1dab41f9090c6b8bbb63639fa1b5c645fa94291d597d83",
+        "replaceFirst": "d30418c5b9cbd55553b8a545481d43661a590893ce38fcaf80bb25df8299c5c1",
+        "replaceLongest": "6608677c8b31b1bcc132f4b06709d229eb70b0a289b8dc350134a03c0697867e"
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 32899,
+      "count": 4900,
+      "metrics": {},
+      "dictionaryCopies": 500,
+      "dictionaryHeapBytes": 13817.168,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 416152,
+      "checks": {
+        "search": "93064955d980a1edbc548be7a7068d159c341c4ab5d3e808fca69da6d631adca",
+        "frequencies": "584420f693440e23d163f4e074345a00a6b710c0dcda57f41e5d9fd2d069a3b2",
+        "first": "0f58040334188573e31242045bfb7750c08b608506db249f90d907112949d27f",
+        "longest": "7fcd5c49561e60549f1dab41f9090c6b8bbb63639fa1b5c645fa94291d597d83",
+        "replaceFirst": "d30418c5b9cbd55553b8a545481d43661a590893ce38fcaf80bb25df8299c5c1",
+        "replaceLongest": "6608677c8b31b1bcc132f4b06709d229eb70b0a289b8dc350134a03c0697867e"
+      }
+    },
+    {
+      "scenario": "sparse",
+      "variant": "v3-before",
+      "keywords": 500,
+      "utf16Length": 46800,
+      "count": 0,
+      "metrics": {},
+      "dictionaryCopies": 200,
+      "dictionaryHeapBytes": 29062.84,
+      "dictionaryBufferBytes": 20356,
+      "resultHeapBytes": 74152,
+      "checks": {
+        "search": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "frequencies": "542d11a225c70e17d74216db497ee5de94ab37263fe8e8649ddfa991f70f06c9",
+        "first": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "longest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "replaceFirst": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f",
+        "replaceLongest": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f"
+      }
+    },
+    {
+      "scenario": "sparse",
+      "variant": "v3",
+      "keywords": 500,
+      "utf16Length": 46800,
+      "count": 0,
+      "metrics": {},
+      "dictionaryCopies": 200,
+      "dictionaryHeapBytes": 29109.44,
+      "dictionaryBufferBytes": 20356,
+      "resultHeapBytes": 80552,
+      "checks": {
+        "search": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "frequencies": "542d11a225c70e17d74216db497ee5de94ab37263fe8e8649ddfa991f70f06c9",
+        "first": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "longest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "replaceFirst": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f",
+        "replaceLongest": "65c59deb8c2cbdd166aa037852de492a31d6f3083a205a02b77f2ed68532320f"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 9098.68,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 184688,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 9102.552,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193376,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3-before",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {},
+      "dictionaryCopies": 100,
+      "dictionaryHeapBytes": 55875.84,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 111328,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {},
+      "dictionaryCopies": 100,
+      "dictionaryHeapBytes": 55757.2,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 120752,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "dense-suffix",
+      "variant": "v3-before",
+      "keywords": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 8500.048,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6799416,
+      "checks": {
+        "search": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+        "frequencies": "5aa956efc4b9519a4c8d311a686757f433b11436266510328032f93b1d529b59",
+        "first": "60871d4ca1167dc3fa76a1e8cc5e16f7f9693ec7f9c4577d7c02b6dbae9461cd",
+        "longest": "e217d123343140c3386b4181d50945a0d5249f73be9a2ad9a95857e3cde2607e",
+        "replaceFirst": "3685cba09912705fc3989b10ad31b8b1c4efe2f0a8a0e6bb1472cab9c5d601d1",
+        "replaceLongest": "0be67507e8a5618ea566654b99a00b9a174421c4f313fdb9690187c70f65dc3b"
+      }
+    },
+    {
+      "scenario": "dense-suffix",
+      "variant": "v3",
+      "keywords": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 8497.984,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6807056,
+      "checks": {
+        "search": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+        "frequencies": "5aa956efc4b9519a4c8d311a686757f433b11436266510328032f93b1d529b59",
+        "first": "60871d4ca1167dc3fa76a1e8cc5e16f7f9693ec7f9c4577d7c02b6dbae9461cd",
+        "longest": "e217d123343140c3386b4181d50945a0d5249f73be9a2ad9a95857e3cde2607e",
+        "replaceFirst": "3685cba09912705fc3989b10ad31b8b1c4efe2f0a8a0e6bb1472cab9c5d601d1",
+        "replaceLongest": "0be67507e8a5618ea566654b99a00b9a174421c4f313fdb9690187c70f65dc3b"
+      }
+    },
+    {
+      "scenario": "output-heavy-miss",
+      "variant": "v3-before",
+      "keywords": 41,
+      "utf16Length": 100000,
+      "count": 0,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 5992.08,
+      "dictionaryBufferBytes": 328,
+      "resultHeapBytes": 113272,
+      "checks": {
+        "search": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "frequencies": "81461e2a5cfdba5a7858e382b569788678a49c9181673ef4b70af73b02b2b1ef",
+        "first": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "longest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "replaceFirst": "55bb3c98333f4f20aa23ec49458f604541b9b5413cdf3b90ad17ceae5653b036",
+        "replaceLongest": "55bb3c98333f4f20aa23ec49458f604541b9b5413cdf3b90ad17ceae5653b036"
+      }
+    },
+    {
+      "scenario": "output-heavy-miss",
+      "variant": "v3",
+      "keywords": 41,
+      "utf16Length": 100000,
+      "count": 0,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 6041.376,
+      "dictionaryBufferBytes": 328,
+      "resultHeapBytes": 56240,
+      "checks": {
+        "search": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "frequencies": "81461e2a5cfdba5a7858e382b569788678a49c9181673ef4b70af73b02b2b1ef",
+        "first": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "longest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "replaceFirst": "55bb3c98333f4f20aa23ec49458f604541b9b5413cdf3b90ad17ceae5653b036",
+        "replaceLongest": "55bb3c98333f4f20aa23ec49458f604541b9b5413cdf3b90ad17ceae5653b036"
+      }
+    },
+    {
+      "scenario": "output-heavy-sparse",
+      "variant": "v3-before",
+      "keywords": 41,
+      "utf16Length": 100006,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 5992.08,
+      "dictionaryBufferBytes": 328,
+      "resultHeapBytes": 112984,
+      "checks": {
+        "search": "5582ab56d673106c5e08650f28127169841aaf66cad54193ec02852f3e4578e2",
+        "frequencies": "7c2011892fac1e4faa84dcf1c0ec882da4e1877de1d1120445e964cf8614a9cb",
+        "first": "5582ab56d673106c5e08650f28127169841aaf66cad54193ec02852f3e4578e2",
+        "longest": "5582ab56d673106c5e08650f28127169841aaf66cad54193ec02852f3e4578e2",
+        "replaceFirst": "903453befe965250ab37f872cb975e7cce404cede9d60770b817f6e3d8f71988",
+        "replaceLongest": "903453befe965250ab37f872cb975e7cce404cede9d60770b817f6e3d8f71988"
+      }
+    },
+    {
+      "scenario": "output-heavy-sparse",
+      "variant": "v3",
+      "keywords": 41,
+      "utf16Length": 100006,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 6041.392,
+      "dictionaryBufferBytes": 328,
+      "resultHeapBytes": 55944,
+      "checks": {
+        "search": "5582ab56d673106c5e08650f28127169841aaf66cad54193ec02852f3e4578e2",
+        "frequencies": "7c2011892fac1e4faa84dcf1c0ec882da4e1877de1d1120445e964cf8614a9cb",
+        "first": "5582ab56d673106c5e08650f28127169841aaf66cad54193ec02852f3e4578e2",
+        "longest": "5582ab56d673106c5e08650f28127169841aaf66cad54193ec02852f3e4578e2",
+        "replaceFirst": "903453befe965250ab37f872cb975e7cce404cede9d60770b817f6e3d8f71988",
+        "replaceLongest": "903453befe965250ab37f872cb975e7cce404cede9d60770b817f6e3d8f71988"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {},
+      "dictionaryCopies": 500,
+      "dictionaryHeapBytes": 14492.592,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4506808,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {},
+      "dictionaryCopies": 500,
+      "dictionaryHeapBytes": 14432.592,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4517784,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "early-hit",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3907.472,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 168000,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a",
+        "replaceLongest": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a"
+      }
+    },
+    {
+      "scenario": "early-hit",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3900.928,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 173920,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a",
+        "replaceLongest": "b6a58a37971c31e5f46d564bbde89b8425cfd62e20df37fee0654f14172eb27a"
+      }
+    },
+    {
+      "scenario": "late-hit",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3907.472,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 166336,
+      "checks": {
+        "search": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "longest": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "replaceFirst": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75",
+        "replaceLongest": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75"
+      }
+    },
+    {
+      "scenario": "late-hit",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 140006,
+      "count": 1,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 3900.928,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 172448,
+      "checks": {
+        "search": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "longest": "6cfb4bfe6b679efa3909ef83f48c282d5fa33cf8699b2eedcf4e38a4d598cc06",
+        "replaceFirst": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75",
+        "replaceLongest": "3d8e73e6cb528b8a68a31c010663d25375b53961d6883ad91d799b80f0642a75"
+      }
+    },
+    {
+      "scenario": "large-dictionary",
+      "variant": "v3-before",
+      "keywords": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "metrics": {},
+      "dictionaryCopies": 10,
+      "dictionaryHeapBytes": 498346.4,
+      "dictionaryBufferBytes": 1680360,
+      "resultHeapBytes": 188208,
+      "checks": {
+        "search": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "frequencies": "9969647aad3672ba90f3a4255ce8c3252d24f891f67de877cf2b6bed6a2833fb",
+        "first": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "longest": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "replaceFirst": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58",
+        "replaceLongest": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58"
+      }
+    },
+    {
+      "scenario": "large-dictionary",
+      "variant": "v3",
+      "keywords": 10000,
+      "utf16Length": 33681,
+      "count": 2000,
+      "metrics": {},
+      "dictionaryCopies": 10,
+      "dictionaryHeapBytes": 496666.4,
+      "dictionaryBufferBytes": 1680360,
+      "resultHeapBytes": 201336,
+      "checks": {
+        "search": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "frequencies": "9969647aad3672ba90f3a4255ce8c3252d24f891f67de877cf2b6bed6a2833fb",
+        "first": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "longest": "3a88299f850efda45994a09900f2f852a7ea8c985edc6ddc0899987ff7289b74",
+        "replaceFirst": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58",
+        "replaceLongest": "9f7defddaffb5c887f2621dac36fc0aa99e184b3d52a6bde6ecc9a08a4871c58"
+      }
+    },
+    {
+      "scenario": "long-text",
+      "variant": "v3-before",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4845.152,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 10132672,
+      "checks": {
+        "search": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "frequencies": "a2f7bb6705f6060d24f38fd3a078f21481103e5c2832e501588146877d57f5ec",
+        "first": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "longest": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "replaceFirst": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7",
+        "replaceLongest": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7"
+      }
+    },
+    {
+      "scenario": "long-text",
+      "variant": "v3",
+      "keywords": 6,
+      "utf16Length": 520000,
+      "count": 120000,
+      "metrics": {},
+      "dictionaryCopies": 1000,
+      "dictionaryHeapBytes": 4823.632,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 10140368,
+      "checks": {
+        "search": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "frequencies": "a2f7bb6705f6060d24f38fd3a078f21481103e5c2832e501588146877d57f5ec",
+        "first": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "longest": "872f6f4867028a58dbabf92d5aa415afb97e6b042b23bc8fca9675df597f1253",
+        "replaceFirst": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7",
+        "replaceLongest": "07ead441a5476895c3a5f1b304e5625d62adb5a06dc099f6689d94f5631475e7"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": []
+}

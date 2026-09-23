@@ -2,7 +2,7 @@ import type { CompactAutomaton } from './internal.js'
 import type { Boundary as WordBoundary } from './options.js'
 import type { Backend, Profile } from './runtime.js'
 import type { Boundary, CompileStats, DeserializeOptions, Match, MatcherOptions, MatchStrategy, MatchStream, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, StreamOptions, Token } from './types.js'
-import { advanceCompact, asciiPrefix, buildAutomaton, compactAutomaton, graphemeRuns } from './internal.js'
+import { advanceCompact, asciiPrefix, buildAutomaton, graphemeRuns } from './internal.js'
 import { createStream } from './legacy-stream.js'
 import { assertStreamRange, assertText, resolveBoundary, resolveQuery, resolveStrategy } from './options.js'
 import { deserialize, serialize } from './persistence.js'
@@ -24,6 +24,16 @@ interface Pattern<T> {
   data: T | undefined
 }
 
+function hasDenseOutputs(counts: Uint32Array): boolean {
+  // An indexed pass avoids a callback per state during validated restoration.
+  for (let state = 0; state < counts.length; state++) {
+    if (counts[state] >= 32) {
+      return true
+    }
+  }
+  return false
+}
+
 /** An immutable compiled dictionary for exact grapheme-cluster matching. */
 export default class AhoCorasick<T = unknown> {
   readonly #boundary: Boundary
@@ -37,6 +47,9 @@ export default class AhoCorasick<T = unknown> {
   /** Pattern lengths in graphemes; string.length and public ranges use UTF-16. */
   #lengths: Uint32Array
   #counts: Uint32Array
+  // At 32+ outputs per state, yielding dominates segmentation. A smaller native
+  // generator avoids retaining handoff controls across every emitted match.
+  #denseOutputs: boolean
   #order: Uint32Array
   readonly #segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
 
@@ -61,11 +74,12 @@ export default class AhoCorasick<T = unknown> {
       }
       return { pattern, data: typeof input === 'string' ? undefined : input.data }
     })
-    const { nodes, lengths, counts, order, maxLength } = buildAutomaton(this.#patterns, this.#segmenter, this.#profile.units)
-    this.#nodes = compactAutomaton(this.#profile.backend ? [{ next: new Map(), failure: 0, output: -1, terminals: [] }] : nodes, this.#profile.backend ? 0 : this.#patterns.length)
-    this.#backend = this.#profile.backend ? this.#profile.backend(nodes) : compactBackend(this.#nodes)
+    const { compact, lengths, counts, order, maxLength } = buildAutomaton(this.#patterns, this.#segmenter, this.#profile.units)
+    this.#nodes = this.#profile.backend ? buildAutomaton([], this.#segmenter).compact : compact
+    this.#backend = this.#profile.backend ? this.#profile.backend(compact) : compactBackend(this.#nodes)
     this.#lengths = lengths
     this.#counts = counts
+    this.#denseOutputs = hasDenseOutputs(counts)
     this.#order = order
     this.#maxLength = maxLength
     this.#stats = this.#compileStats()
@@ -170,6 +184,7 @@ export default class AhoCorasick<T = unknown> {
     matcher.#patterns = restored.patterns
     matcher.#lengths = restored.lengths
     matcher.#counts = restored.counts
+    matcher.#denseOutputs = hasDenseOutputs(restored.counts)
     matcher.#order = restored.order
     matcher.#maxLength = restored.maxLength
     matcher.#stats = matcher.#compileStats()
@@ -441,7 +456,64 @@ export default class AhoCorasick<T = unknown> {
     return tokens
   }
 
-  * #scan(text: string, boundary?: WordBoundary): Generator<Match<T>> {
+  #scan(text: string, boundary?: WordBoundary): IterableIterator<Match<T>> {
+    return this.#denseOutputs ? this.#scanNative(text, boundary) : this.#scanAscii(text, boundary)
+  }
+
+  * #scanAscii(text: string, boundary?: WordBoundary): Generator<Match<T>> {
+    if (this.#patterns.length === 0) {
+      return
+    }
+    let state = 0
+    let ascii = asciiPrefix(text)
+    let native = ascii === undefined ? this.#segmenter.segment(text)[Symbol.iterator]() : undefined
+    let offset = 0
+    while (true) {
+      let segment: string
+      let end: number
+      // Separate next() call sites keep native and reusable ASCII iterators
+      // monomorphic without wrapping or allocating another value per grapheme.
+      if (ascii !== undefined) {
+        const next = ascii.next()
+        if (next.done) {
+          offset = ascii.position
+          if (offset === text.length) {
+            break
+          }
+          native = this.#segmenter.segment(text.slice(offset))[Symbol.iterator]()
+          ascii = undefined
+          continue
+        }
+        segment = next.value.segment
+        end = next.value.index + segment.length
+      }
+      else {
+        const next = native!.next()
+        if (next.done) {
+          break
+        }
+        segment = next.value.segment
+        end = offset + next.value.index + segment.length
+      }
+      state = advanceCompact(this.#nodes, state, segment)
+      if (this.#counts[state] === 0) {
+        continue
+      }
+      // Own terminals are longest, followed by progressively shorter suffixes.
+      for (let output = state; output !== -1; output = this.#nodes.outputs[output]) {
+        for (let terminal = this.#nodes.terminals[output]; terminal < this.#nodes.terminals[output + 1]; terminal++) {
+          const patternIndex = this.#nodes.patterns[terminal]
+          const { pattern, data } = this.#patterns[patternIndex]
+          const start = end - pattern.length
+          if (!boundary || boundary(start, end)) {
+            yield { pattern, patternIndex, start, end, data }
+          }
+        }
+      }
+    }
+  }
+
+  * #scanNative(text: string, boundary?: WordBoundary): Generator<Match<T>> {
     if (this.#patterns.length === 0) {
       return
     }
@@ -482,7 +554,36 @@ export default class AhoCorasick<T = unknown> {
     let lastCandidateStart = -1
     let earliest = -1
     let earliestEnd = -1
-    for (const { segment, index } of this.#segmenter.segment(text)) {
+    let ascii = asciiPrefix(text)
+    let native = ascii === undefined ? this.#segmenter.segment(text)[Symbol.iterator]() : undefined
+    let offset = 0
+    while (true) {
+      let segment: string
+      let end: number
+      // Carry the automaton and candidate window across this one-way switch.
+      // ICU starts at the last settled original-text grapheme boundary.
+      if (ascii !== undefined) {
+        const next = ascii.next()
+        if (next.done) {
+          offset = ascii.position
+          if (offset === text.length) {
+            break
+          }
+          native = this.#segmenter.segment(text.slice(offset))[Symbol.iterator]()
+          ascii = undefined
+          continue
+        }
+        segment = next.value.segment
+        end = next.value.index + segment.length
+      }
+      else {
+        const next = native!.next()
+        if (next.done) {
+          break
+        }
+        segment = next.value.segment
+        end = offset + next.value.index + segment.length
+      }
       state = advanceCompact(this.#nodes, state, segment)
       position++
       if (this.#counts[state] === 0 && cursor > lastCandidateStart) {
@@ -492,7 +593,6 @@ export default class AhoCorasick<T = unknown> {
         // Defer empty-window advancement until a candidate actually arrives.
         cursor = Math.max(cursor, position - capacity)
       }
-      const end = index + segment.length
       for (let output = this.#counts[state] === 0 ? -1 : state; output !== -1; output = this.#nodes.outputs[output]) {
         const terminal = this.#nodes.terminals[output]
         if (terminal === this.#nodes.terminals[output + 1]) {

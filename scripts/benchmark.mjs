@@ -2,11 +2,11 @@ import assert from 'node:assert/strict'
 import { Buffer } from 'node:buffer'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { appendFileSync } from 'node:fs'
+import { appendFileSync, readFileSync } from 'node:fs'
 import { cpus } from 'node:os'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { gitBaseline, implementationDigest, median, readBenchmarkInput, time } from './benchmark-utils.mjs'
+import { benchmarkHashSeed, benchmarkJournal, collectGarbage, gitBaseline, implementationDigest, median, readBenchmarkInput, retainedDictionaryCopies, time } from './benchmark-utils.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const script = fileURLToPath(import.meta.url)
@@ -15,7 +15,7 @@ const samples = 7
 const rounds = Number(process.env.BENCH_ROUNDS ?? 5)
 assert.ok(Number.isInteger(rounds) && rounds >= 1 && rounds <= 9, 'BENCH_ROUNDS must be between 1 and 9')
 const strategies = ['all', 'leftmost-first', 'leftmost-longest']
-const requestedOperations = process.env.BENCH_OPERATIONS?.split(',')
+const requestedOperations = process.env.BENCH_TIMINGS === '0' ? [] : process.env.BENCH_OPERATIONS?.split(',')
 const operationNames = ['build', 'load', 'search', 'match', 'count', 'countByPattern', ...strategies.map(strategy => `iterate:${strategy}`), ...strategies.slice(1).flatMap(strategy => [`search:${strategy}`, `replace:${strategy}`])]
 assert.ok(requestedOperations === undefined || requestedOperations.every(operation => operationNames.includes(operation)), 'Unknown BENCH_OPERATIONS entry')
 const scenarios = {
@@ -44,6 +44,14 @@ const scenarios = {
   'dense-suffix': {
     patterns: Array.from({ length: 96 }, (_, i) => 'a'.repeat(i + 1)),
     text: 'a'.repeat(1000),
+  },
+  'output-heavy-miss': {
+    patterns: [...Array.from({ length: 40 }).fill('a'), 'needle'],
+    text: 'x'.repeat(100000),
+  },
+  'output-heavy-sparse': {
+    patterns: [...Array.from({ length: 40 }).fill('a'), 'needle'],
+    text: `${'x'.repeat(100000)}needle`,
   },
   'duplicates': {
     patterns: Array.from({ length: 200 }, (_, i) => `word${i % 10}`),
@@ -115,29 +123,30 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
   if (mode === '--memory') {
     // Separate process per operation. OS high-water RSS includes startup, ICU,
     // input and dictionary; it is not an operation-only JavaScript heap delta.
-    globalThis.gc()
+    await collectGarbage()
     const beforeRssBytes = process.memoryUsage().rss
     sink = ops[memoryOperation]()
     assert.notEqual(sink, undefined)
     const afterHeapBytes = process.memoryUsage().heapUsed
     const peakRssBytes = process.resourceUsage().maxRSS * 1024
-    globalThis.gc()
+    await collectGarbage()
     console.log(JSON.stringify({ variant, scenario, operation: memoryOperation, scale: Number(scale), utf16Length: text.length, beforeRssBytes, peakRssBytes, afterHeapBytes, retainedHeapBytes: process.memoryUsage().heapUsed }))
   }
   else {
     const metrics = Object.fromEntries(Object.entries(ops).filter(([name]) => requestedOperations === undefined || requestedOperations.includes(name)).map(([name, operation]) => [name, time(operation, name === 'build' ? patterns.reduce((sum, pattern) => sum + pattern.length, 0) : text.length)]))
-    globalThis.gc()
+    await collectGarbage()
     const beforeDictionary = process.memoryUsage()
-    const dictionaries = Array.from({ length: 10 }, () => new Constructor(patterns))
-    globalThis.gc()
+    const dictionaryCopies = retainedDictionaryCopies(patterns.length)
+    const dictionaries = Array.from({ length: dictionaryCopies }, () => new Constructor(patterns))
+    await collectGarbage()
     const afterDictionary = process.memoryUsage()
     const dictionaryHeapBytes = Math.max(0, afterDictionary.heapUsed - beforeDictionary.heapUsed) / dictionaries.length
     const dictionaryBufferBytes = Math.max(0, afterDictionary.arrayBuffers - beforeDictionary.arrayBuffers) / dictionaries.length
     dictionaries.length = 0
-    globalThis.gc()
+    await collectGarbage()
     const beforeResults = process.memoryUsage().heapUsed
     const result = ac.search(text)
-    globalThis.gc()
+    await collectGarbage()
     const resultHeapBytes = Math.max(0, process.memoryUsage().heapUsed - beforeResults)
     const count = result.length
     const checks = {
@@ -153,11 +162,22 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
     for (const strategy of strategies) {
       assert.equal(digest([...ac.iterate(text, { strategy })]), digest(ac.search(text, { strategy })))
     }
-    console.log(JSON.stringify({ scenario, variant, keywords: patterns.length, utf16Length: text.length, count, metrics, dictionaryHeapBytes, dictionaryBufferBytes, resultHeapBytes, checks }))
+    console.log(JSON.stringify({ scenario, variant, keywords: patterns.length, utf16Length: text.length, count, metrics, dictionaryCopies, dictionaryHeapBytes, dictionaryBufferBytes, resultHeapBytes, checks }))
   }
 }
 else {
   const baseline = await gitBaseline(baselineRef, root)
+  const journal = benchmarkJournal(root, 'scanner', {
+    baselineRef,
+    hashSeeds: Array.from({ length: rounds }, (_, round) => benchmarkHashSeed(round)),
+    baselineBundling: 'public-multi-entry',
+    baselineSourceSha256: createHash('sha256').update(baseline).digest('hex'),
+    implementationSha256: implementationDigest(fileURLToPath(new URL('../packages/modern-ahocorasick/dist', import.meta.url))),
+    runnerSha256: digest(['benchmark.mjs', 'benchmark-utils.mjs'].map(file => [file, readFileSync(new URL(file, import.meta.url), 'utf8')])),
+    corpusSha256: digest(scenarios),
+    timingMethod: 'When enabled, each operation has at least 250 ms of cumulative warmup, calibrated batches targeting 25 ms up to 1,048,576 iterations, and seven GC-separated samples.',
+    dictionaryMemoryMethod: 'Post-GC deltas use 10–1000 retained dictionaries with the same pattern-count-based dictionaryCopies divisor for both variants; each measurement follows three GC/task turns.',
+  })
   const sources = { 'v3-before': baseline, 'v3': '' }
   const results = []
   const selected = process.env.BENCH_SCENARIOS?.split(',') ?? Object.keys(scenarios)
@@ -166,11 +186,13 @@ else {
     const runs = []
     const measure = (variant, round) => {
       process.stderr.write(`Benchmark ${scenario} / ${variant} / round ${round + 1}\n`)
-      const output = execFileSync(process.execPath, ['--expose-gc', script, '--child', variant, scenario], { cwd: root, input: sources[variant], encoding: 'utf8' })
+      const hashSeed = benchmarkHashSeed(round)
+      const output = execFileSync(process.execPath, [`--hash-seed=${hashSeed}`, '--expose-gc', script, '--child', variant, scenario], { cwd: root, input: sources[variant], encoding: 'utf8' })
       const result = JSON.parse(output)
+      journal.record('timing', { round: round + 1, hashSeed, ...result })
       runs.push(result)
       if (process.env.BENCH_RAW_FILE) {
-        appendFileSync(process.env.BENCH_RAW_FILE, `${JSON.stringify({ round: round + 1, ...result })}\n`)
+        appendFileSync(process.env.BENCH_RAW_FILE, `${JSON.stringify({ round: round + 1, hashSeed, ...result })}\n`)
       }
       return result
     }
@@ -208,8 +230,11 @@ else {
     for (const variant of ['v3-before', 'v3']) {
       for (const operation of ['count', 'iterate:leftmost-longest', 'replace:leftmost-longest']) {
         process.stderr.write(`Memory dense-suffix x${scale} / ${variant} / ${operation}\n`)
-        const output = execFileSync(process.execPath, ['--expose-gc', script, '--memory', variant, 'dense-suffix', operation, String(scale)], { cwd: root, input: sources[variant], encoding: 'utf8' })
-        memory.push(JSON.parse(output))
+        const hashSeed = benchmarkHashSeed(0)
+        const output = execFileSync(process.execPath, [`--hash-seed=${hashSeed}`, '--expose-gc', script, '--memory', variant, 'dense-suffix', operation, String(scale)], { cwd: root, input: sources[variant], encoding: 'utf8' })
+        const result = { hashSeed, ...JSON.parse(output) }
+        journal.record('memory', result)
+        memory.push(result)
       }
     }
   }
@@ -224,21 +249,17 @@ else {
     }
   }
   console.log(JSON.stringify({
+    ...journal.metadata,
     node: process.version,
     platform: process.platform,
     arch: process.arch,
     cpu: cpus()[0]?.model,
-    baselineRef,
-    baselineBundling: 'public-multi-entry',
     icu: process.versions.icu,
     unicode: process.versions.unicode,
-    corpusSha256: digest(scenarios),
-    baselineSourceSha256: createHash('sha256').update(baseline).digest('hex'),
-    implementationSha256: implementationDigest(fileURLToPath(new URL('../packages/modern-ahocorasick/dist', import.meta.url))),
     samples,
     rounds,
     operations: requestedOperations ?? operationNames,
-    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
+    note: 'v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained-memory samples follow three GC/task turns to settle backing-store disposal. JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. BENCH_TIMINGS=0 measures retained storage and correctness without timing operations. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.',
     results,
     memory,
     regressions,

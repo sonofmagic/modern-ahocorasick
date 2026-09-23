@@ -1,0 +1,118 @@
+{
+  "startedAt": "2026-09-23T08:20:14.774Z",
+  "revision": "dd97451efdce9586bbe7d3f442a410ed77d07853",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "3fc0b1a2891ab6fbc993d76904205615631e871dc262d41d3dac990d13b34725",
+  "implementationSha256": "c7af20de2e8a6a0064b3755ef656d653b0e6d469429ac614a7f0c03d5bc32a6c",
+  "runnerSha256": "f45aeb0a9c3eda6c4b9fd27056167d3888c22f8a8c66f616ab829ea901243c55",
+  "corpusSha256": "4afa3eee0768ace1840771227bd94753d446ab82a09bbaf11d2acf1834462c5e",
+  "timingMethod": "When enabled, each operation has at least 250 ms of cumulative warmup, calibrated batches targeting 25 ms up to 1,048,576 iterations, and seven GC-separated samples.",
+  "dictionaryMemoryMethod": "Post-GC deltas use 10–1000 retained dictionaries with the same pattern-count-based dictionaryCopies divisor for both variants; each measurement follows three GC/task turns.",
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "samples": 7,
+  "rounds": 7,
+  "operations": [
+    "match"
+  ],
+  "note": "v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained-memory samples follow three GC/task turns to settle backing-store disposal. JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. BENCH_TIMINGS=0 measures retained storage and correctness without timing operations. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3-before",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "match": {
+          "ms": 0.0002951027526855469,
+          "madMs": 0.0000030174255371095797,
+          "betweenRoundsMadMs": 0.000013225234985351445,
+          "roundMediansMs": [
+            0.00030883344268798794,
+            0.0002904262542724606,
+            0.0003086198196411132,
+            0.0002951027526855469,
+            0.00028187751770019547,
+            0.00031516011810302745,
+            0.00029308223724365274
+          ],
+          "utf16UnitsPerSecond": 84340114666.84286
+        }
+      },
+      "dictionaryCopies": 100,
+      "dictionaryHeapBytes": 56038.96,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 106472,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "match": {
+          "ms": 0.0003040793762207031,
+          "madMs": 0.0000033124237060547235,
+          "betweenRoundsMadMs": 0.000004858009338379408,
+          "roundMediansMs": [
+            0.0003214858398437499,
+            0.00030538845062255855,
+            0.0003027149810791016,
+            0.00028668308258056633,
+            0.0002855885772705077,
+            0.0003089373855590825,
+            0.0003040793762207031
+          ],
+          "utf16UnitsPerSecond": 81850338912.61134
+        }
+      },
+      "dictionaryCopies": 100,
+      "dictionaryHeapBytes": 55890.08,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 116048,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": []
+}

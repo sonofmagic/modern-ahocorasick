@@ -44,11 +44,38 @@ selected strategies use original ranges and the existing tie rules.
 
 The adapter provides `search`, `iterate`, `match`, `count`, `countByPattern`, `replace` and `tokenize`, with the same query options and argument validation. It processes a
 complete string and builds an offset map before scanning; selected iteration
-materializes and sorts valid candidates. createStream() applies the same
-per-grapheme transformation to chunks and maps matches back to original UTF-16
-ranges. createTokenStream() and createReplaceStream() provide the matching
-stream variants; token sessions retain the undecided source until end() so
-their output is exact. serialize() and TextMatcher.deserialize() persist the
+materializes and sorts valid candidates. `createStream()` applies the same
+per-grapheme transformation to chunks, segments the combined transformed text,
+and maps matches back to original UTF-16 ranges. Partial transformation expansions
+are rejected before selecting non-overlapping results. `createTokenStream()` and
+`createReplaceStream()` use the same incremental stream core. Stable results are
+emitted before EOF: consume every `write()` result as well as `finish()` (matching)
+or `end()` (tokens and replacement).
+
+```ts
+const stream = matcher.createReplaceStream('X')
+const output = [
+  ...stream.write('Stra'),
+  ...stream.write('ße!'),
+  ...stream.end(),
+].join('') // 'X!'
+```
+
+Streams discard committed source and obsolete offset mappings. The maximum
+undecided original-text tail is `maxBufferLength ?? maxBufferedUnits ?? 1_048_576`
+UTF-16 units; `Infinity` explicitly disables this limit. It includes unfinished
+graphemes, transformation tails, pending selections, word context and protected
+syntax. A large input chunk is processed incrementally and is not itself a tail
+overflow. This is a tail limit, not a cap on total process memory or returned
+results. Exceeding it throws `RangeError` and closes the stream. Whole-word
+matching may wait for a newline or EOF to settle its original word context.
+
+Filters classify original text before transformation. Token `preview()` describes
+the undecided original suffix using absolute offsets, without advancing the live
+scanner; its tokens remain provisional. Cancelling, finishing or failing releases
+the stream's retained scanning state. Keep separate streams for interleaved input.
+
+`serialize()` and `TextMatcher.deserialize()` persist the
 transformation profile, original patterns and compiled transformed dictionary.
 These optional conversions carry extra memory and scanning costs and do not
 perform fuzzy matching, transliteration or locale-specific collation.

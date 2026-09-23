@@ -1,4 +1,4 @@
-import type { AutomatonNode, CompactAutomaton } from './internal.js'
+import type { CompactAutomaton } from './internal.js'
 import type { Boundary, BoundaryContext, CompileStats, Match, Matcher, MatcherOptions, MatchStrategy } from './types.js'
 import { advanceCompact } from './internal.js'
 // Private interoperability across independently bundled optional entries. Neither
@@ -22,13 +22,16 @@ export interface Backend {
 }
 export interface Profile {
   units?: (grapheme: string) => string[]
-  backend?: (nodes: AutomatonNode[]) => Backend
+  backend?: (compact: CompactAutomaton) => Backend
 }
 export interface ScanSession<T> {
   readonly safeOffset: number
+  /** Earliest original boundary still needed by a future match or candidate. */
+  readonly retainOffset: number
   readonly maxLength: number
   feed: (segment: string, start: number, right: string | undefined, protectedText?: boolean) => Match<T>[]
   end: () => Match<T>[]
+  destroy?: () => void
 }
 export function defineProfile(target: object, profile: Profile): void {
   Object.defineProperty(target, profileKey, { value: Object.freeze(profile) })
@@ -150,6 +153,9 @@ export function createScanner<T>(backend: Backend, patterns: readonly {
     maxLength,
     get safeOffset() {
       return safeOffset
+    },
+    get retainOffset() {
+      return Math.min(safeOffset, offsets[Math.max(0, position - maxLength) % capacity] ?? 0)
     },
     feed(segment, start, right, protectedText = false) {
       end = start + segment.length

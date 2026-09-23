@@ -5,8 +5,15 @@ vi.mock('../src/internal', async (importOriginal) => {
     ...original,
     buildAutomaton: (...args: Parameters<typeof original.buildAutomaton>) => {
       const compiled = original.buildAutomaton(...args)
+      const state = compiled.compact.roots[compiled.compact.symbols.get('a')!]
       compiled.counts = new Proxy(compiled.counts, {
-        get: (target, key) => key === '1' ? Number.MAX_SAFE_INTEGER : Reflect.get(target, key),
+        get: (target, key) => {
+          if (key === String(state)) {
+            return Number.MAX_SAFE_INTEGER
+          }
+          const value = Reflect.get(target, key)
+          return typeof value === 'function' ? value.bind(target) : value
+        },
       })
       return compiled
     },

@@ -8,6 +8,7 @@ import { createMatchStream, createReplaceStream, createTokenStream, iterateChunk
 import { markdown, protectedText, urls } from '../src/stream/filters'
 import { createReplaceTransform as nodeReplace } from '../src/stream/node'
 import { createReplaceTransform as webReplace } from '../src/stream/web'
+import TextMatcher from '../src/text'
 import UnicodeAhoCorasick from '../src/unicode'
 
 async function collect<T>(source: AsyncIterable<T>): Promise<T[]> {
@@ -318,4 +319,40 @@ it('applies the pending buffer limit to unresolved syntax and permits an explici
   const text = `a${'\u0301'.repeat(1100000)}`
   expect(unlimited.write(text)).toEqual([])
   expect(unlimited.end().map(token => token.text).join('')).toBe(text)
+})
+
+it('previews whole words at a newly released line boundary without advancing live state', () => {
+  for (const matcher of [new AhoCorasick(['a', 'x']), new TextMatcher(['a', 'x'], { caseFold: true })]) {
+    const stream = createTokenStream(matcher, { wholeWord: true })
+    const confirmed = stream.write('x\n')
+    confirmed.push(...stream.write('a'))
+    const preview = stream.preview()
+    expect(preview.tokens.filter(token => token.type === 'match').map(token => token.text)).toContain('a')
+    expect(stream.preview()).toEqual(preview)
+    confirmed.push(...stream.end())
+    expect(confirmed.filter(token => token.type === 'match').map(token => token.text)).toEqual(['x', 'a'])
+  }
+})
+
+it('shares mapped text scanning with Node byte streams and asynchronous Web replacements', async () => {
+  const matcher = new TextMatcher(['STRASSE', 'fi'], { normalization: 'NFKC', caseFold: true })
+  const text = '😀Straße ﬁ'
+  const expected = matcher.replace(text, 'X')
+  const output: string[] = []
+  const bytes = Buffer.from(text)
+  await pipeline(Readable.from(Array.from(bytes, byte => Buffer.from([byte]))), nodeReplace(matcher, async () => 'X'), new Writable({
+    write(chunk, _encoding, done) {
+      output.push(String(chunk))
+      done()
+    },
+  }))
+  expect(output.join('')).toBe(expected)
+  const input = new ReadableStream<string>({ start(controller) {
+    for (const chunk of text.split('')) {
+      controller.enqueue(chunk)
+    }
+    controller.close()
+  } })
+  const transformed = input.pipeThrough(webReplace(matcher, async () => 'X'))
+  expect((await collect(transformed as unknown as AsyncIterable<string>)).join('')).toBe(expected)
 })

@@ -1,0 +1,651 @@
+{
+  "startedAt": "2026-09-23T08:05:52.679Z",
+  "diagnostic": "Native Unicode presence query with real historical module files",
+  "baselineRef": "b01c9f22b2566b3a6058b41b05564b214899c8d7",
+  "baselineSourceSha256": "c4ec1b88ae10d05334fefc51d63543014c509164a1f7727dbd4c35a0c56728fd",
+  "baselineFileGraphSha256": "b898d0027627ab005f402c648013a6a5fe17a4d644d2f7a0ec9d4879c6a13a5b",
+  "baselineModuleCount": 4,
+  "implementationSha256": "3b9119908bfda141b7ebba8f291ebba40f285cb04bbde0caadb87781cade0e36",
+  "currentSourceSha256": "b5a3ba4e8175f2544e760694392dc0cce4aad60722e3c209649c3261147ff2ac",
+  "revision": "0d10f03bade9609faf6bbe086b0dd4666452c4e0",
+  "benchmarkSourceSha256": "f62f29c0984c5b6b8a5f2555c060d8e9cbec5032804dbb0ecf452b0d0199009e",
+  "benchmarkUtilitiesSha256": "effa26d9ec32dbcab050e7b09c9f8f8bb5fd482840d2dca3714e5424c2d84b56",
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "scenario": "unicode",
+  "patterns": "Array.from({ length: 100 }, (_, i) => `词${i}😀`)",
+  "text": "Array.from({ length: 2000 }, (_, i) => `👨‍👩‍👧‍👦词${i % 100}😀`).join(\" \")",
+  "operation": "match",
+  "rounds": 7,
+  "samplesPerProcess": 7,
+  "extraWarmupIterations": 65536,
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "methodology": "One isolated process per variant and seed; order alternates. Before timing, execute exactly 65,536 additional match() warmup calls. Then use a frozen copy of current benchmark.mjs child and unchanged time(), including adaptive >=25ms calibration and seven GC-separated samples. Historical public multi-entry graph is decoded once into real files, with identical dependencies sharing the same file URL. Only a thin export wrapper remains a data URL; full current implementation uses existing real dist files. Correctness checks run after timing. Paired ratios and ratio of medians are both reported; >5% is an investigation threshold, not a significance test. Initial diagnostic without extra warmup remains in benchmarks-native-presence-diagnostic.json.",
+  "temporaryDirectory": "/var/folders/nc/lnt357c50gdcwqlvymm9jn040000gn/T/aho-native-presence-WtFHh9",
+  "completedAt": "2026-09-23T08:06:07.788Z",
+  "status": "complete",
+  "summary": {
+    "baselineMedianMs": 0.003618591308593752,
+    "currentMedianMs": 0.0035915374755859375,
+    "ratioOfMedians": 0.9925236561134813,
+    "medianPairedRatio": 0.987994023359408,
+    "pairedRatioMin": 0.9472297979737505,
+    "pairedRatioMax": 1.045367516403473,
+    "pairsAboveFivePercent": 0,
+    "baselineBetweenRoundMadMs": 0.000029103515625003573,
+    "currentBetweenRoundMadMs": 0.00007785546874999882
+  },
+  "pairs": [
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "baselineMs": 0.0036446483154296827,
+      "currentMs": 0.0035583698730468766,
+      "ratio": 0.9763273614034186,
+      "baselineWithinMadMs": 0.000045293334960935794,
+      "currentWithinMadMs": 0.000047276733398438076
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "baselineMs": 0.003618591308593752,
+      "currentMs": 0.0036397094726562523,
+      "ratio": 1.0058360180140673,
+      "baselineWithinMadMs": 0.00004182946777343821,
+      "currentWithinMadMs": 0.00003579711914061812
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "baselineMs": 0.0035894877929687485,
+      "currentMs": 0.003461985351562502,
+      "ratio": 0.9644789316024409,
+      "baselineWithinMadMs": 0.000044011352539063964,
+      "currentWithinMadMs": 0.000019953491210936147
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "baselineMs": 0.0034701385498046855,
+      "currentMs": 0.0035915374755859375,
+      "ratio": 1.0349838843720187,
+      "baselineWithinMadMs": 0.000029927612304692097,
+      "currentWithinMadMs": 0.000033935546874988565
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "baselineMs": 0.003553548339843754,
+      "currentMs": 0.0035108845214843754,
+      "ratio": 0.987994023359408,
+      "baselineWithinMadMs": 0.00009255981445310812,
+      "currentWithinMadMs": 0.00003423046874997948
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "baselineMs": 0.003626841064453129,
+      "currentMs": 0.0037913818359374962,
+      "ratio": 1.045367516403473,
+      "baselineWithinMadMs": 0.00008258032226562961,
+      "currentWithinMadMs": 0.00009310913085938677
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "baselineMs": 0.003873814941406248,
+      "currentMs": 0.0036693929443359363,
+      "ratio": 0.9472297979737505,
+      "baselineWithinMadMs": 0.00014314270019531727,
+      "currentWithinMadMs": 0.0002043559570312492
+    }
+  ],
+  "runs": [
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0036446483154296827,
+          "samplesMs": [
+            0.003717234375000003,
+            0.003699330566406242,
+            0.004018254516601552,
+            0.0036349945068359507,
+            0.003607411743164063,
+            0.0036446483154296827,
+            0.003599354980468747
+          ],
+          "madMs": 0.000045293334960935794,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9273597086.695948
+        }
+      },
+      "dictionaryHeapBytes": 19566.4,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0035583698730468766,
+          "samplesMs": [
+            0.0035583698730468766,
+            0.003525024414062508,
+            0.0036306661376953042,
+            0.0035352020263671874,
+            0.0035110931396484385,
+            0.0036654104003906174,
+            0.0037743581542968863
+          ],
+          "madMs": 0.000047276733398438076,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9498450471.94585
+        }
+      },
+      "dictionaryHeapBytes": 17884.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0036397094726562523,
+          "samplesMs": [
+            0.003604512573242194,
+            0.0036487528076171866,
+            0.0035923461914062482,
+            0.0036755065917968704,
+            0.003815745117187491,
+            0.0036397094726562523,
+            0.0035702819824218746
+          ],
+          "madMs": 0.00003579711914061812,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9286180738.852642
+        }
+      },
+      "dictionaryHeapBytes": 17883.2,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.003618591308593752,
+          "samplesMs": [
+            0.003618591308593752,
+            0.004569193481445313,
+            0.004028701782226557,
+            0.0036350505371093716,
+            0.0035059814453125004,
+            0.003576761840820314,
+            0.003591517089843746
+          ],
+          "madMs": 0.00004182946777343821,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9340375056.926472
+        }
+      },
+      "dictionaryHeapBytes": 19560.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0035894877929687485,
+          "samplesMs": [
+            0.0036334991455078125,
+            0.003543696166992183,
+            0.0036273803710937524,
+            0.0035894877929687485,
+            0.0035402679443359564,
+            0.003574081420898434,
+            0.003672749877929704
+          ],
+          "madMs": 0.000044011352539063964,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9416106684.136665
+        }
+      },
+      "dictionaryHeapBytes": 19205.6,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.003461985351562502,
+          "samplesMs": [
+            0.0034916433105468686,
+            0.003442031860351566,
+            0.003461985351562502,
+            0.003457417846679689,
+            0.0034483032226562405,
+            0.003523936035156258,
+            0.0035614929199218742
+          ],
+          "madMs": 0.000019953491210936147,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9762895150.53709
+        }
+      },
+      "dictionaryHeapBytes": 17884.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0035915374755859375,
+          "samplesMs": [
+            0.004080718994140628,
+            0.004706044555664063,
+            0.004010187866210935,
+            0.0035675201416015545,
+            0.0035915374755859375,
+            0.003557601928710949,
+            0.0035838673095703183
+          ],
+          "madMs": 0.000033935546874988565,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9410732932.554434
+        }
+      },
+      "dictionaryHeapBytes": 17884.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0034701385498046855,
+          "samplesMs": [
+            0.0035000661621093776,
+            0.003500676513671877,
+            0.003435368896484367,
+            0.0034701385498046855,
+            0.0034483896484374943,
+            0.003461441040039065,
+            0.0053423156738281186
+          ],
+          "madMs": 0.000029927612304692097,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9739956925.322868
+        }
+      },
+      "dictionaryHeapBytes": 19565.6,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.003553548339843754,
+          "samplesMs": [
+            0.010547485351562524,
+            0.003977681396484384,
+            0.003553548339843754,
+            0.0034900512695312524,
+            0.0034581298828125218,
+            0.003460988525390646,
+            0.003636047363281242
+          ],
+          "madMs": 0.00009255981445310812,
+          "iterations": 4096,
+          "utf16UnitsPerSecond": 9511338180.216259
+        }
+      },
+      "dictionaryHeapBytes": 19708.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0035108845214843754,
+          "samplesMs": [
+            0.003573710205078129,
+            0.003454569580078115,
+            0.0034479267578124972,
+            0.0035108845214843754,
+            0.003476654052734396,
+            0.0035172932128906265,
+            0.00351597070312501
+          ],
+          "madMs": 0.00003423046874997948,
+          "iterations": 4096,
+          "utf16UnitsPerSecond": 9626918741.750595
+        }
+      },
+      "dictionaryHeapBytes": 17884.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0037913818359374962,
+          "samplesMs": [
+            0.010839721679687497,
+            0.0037913818359374962,
+            0.0035764362792968796,
+            0.0038803305664062426,
+            0.005103108642578125,
+            0.0036982727050781095,
+            0.00376851416015625
+          ],
+          "madMs": 0.00009310913085938677,
+          "iterations": 4096,
+          "utf16UnitsPerSecond": 8914691651.373201
+        }
+      },
+      "dictionaryHeapBytes": 17884.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.003626841064453129,
+          "samplesMs": [
+            0.010917643066406246,
+            0.004112233398437498,
+            0.0036747844238281258,
+            0.0034891254882812583,
+            0.0035442607421874994,
+            0.003626841064453129,
+            0.0035624492187499857
+          ],
+          "madMs": 0.00008258032226562961,
+          "iterations": 4096,
+          "utf16UnitsPerSecond": 9319129071.09878
+        }
+      },
+      "dictionaryHeapBytes": 19566.4,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "orderInPair": 1,
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.003873814941406248,
+          "samplesMs": [
+            0.005964390991210947,
+            0.00772512817382813,
+            0.0046972554931640625,
+            0.0037306722412109306,
+            0.003860895751953114,
+            0.0037471008300781206,
+            0.003873814941406248
+          ],
+          "madMs": 0.00014314270019531727,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 8724990871.07411
+        }
+      },
+      "dictionaryHeapBytes": 19565.6,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 193912,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "orderInPair": 2,
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "match": {
+          "ms": 0.0036693929443359363,
+          "samplesMs": [
+            0.0036693929443359363,
+            0.0036253356933593772,
+            0.007494074462890618,
+            0.006255895019531249,
+            0.004362111450195313,
+            0.0036263784179687425,
+            0.003465036987304687
+          ],
+          "madMs": 0.0002043559570312492,
+          "iterations": 8192,
+          "utf16UnitsPerSecond": 9211060388.659664
+        }
+      },
+      "dictionaryHeapBytes": 17884.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 199696,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    }
+  ]
+}

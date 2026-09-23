@@ -1,10 +1,11 @@
+import type { ScanSession } from './runtime.js'
 import type { StreamHandle, StreamOptions, TokenStreamHandle, TokenStreamOptions } from './stream.js'
 import type { DeserializeOptions, Match, MatchStream, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, SerializeOptions, Token } from './types.js'
 import { caseFold } from './case-folding.js'
 import AhoCorasick from './index.js'
 import { assertText, resolveQuery, resolveStrategy } from './options.js'
-import { operationReplacement, selectLongest } from './runtime.js'
-import { createMatchStream } from './stream.js'
+import { operationReplacement, registerScanner, scanner, selectLongest } from './runtime.js'
+import { createMatchStream, createReplaceStream, createTokenStream } from './stream.js'
 
 export type { AsyncReplacement, StreamOptions, TokenStreamHandle, TokenStreamOptions } from './stream.js'
 export type { BoundaryOptions, Match, PatternInput, QueryOptions, Replacement, ReplaceOptions, SearchOptions, Token } from './types.js'
@@ -36,167 +37,158 @@ function assertJson(value: unknown, seen = new Set<object>()): void {
   seen.delete(value)
 }
 
-interface TextStreamState<T> {
-  readonly stream: StreamHandle<Match<T>>
-  readonly offsets: Map<number, number>
-  readonly patterns: readonly { pattern: string, data: T | undefined }[]
-  readonly segmenter: Intl.Segmenter
-  readonly transform: (source: string) => string
-  readonly strategy: Exclude<NonNullable<StreamOptions['strategy']>, 'longest-first'>
-  readonly deferSelection: boolean
-  readonly matches: Match<T>[]
-  pending: string
-  raw: string
-  originalOffset: number
-  transformedOffset: number
-  closed: boolean
-}
-
-function createTextStreamState<T>(
+/** Map a transformed scanner without retaining already-consumed original text. */
+function mappedScanner<T>(
   matcher: AhoCorasick<unknown>,
   patterns: readonly { pattern: string, data: T | undefined }[],
-  transform: (source: string) => string,
-  strategy: Exclude<NonNullable<StreamOptions['strategy']>, 'longest-first'>,
-  options?: StreamOptions,
-): TextStreamState<T> {
-  const state: TextStreamState<T> = {
-    // Always retain all transformed candidates. A leftmost strategy can select
-    // half of an expansion such as `ß` -> `ss` before the complete grapheme is
-    // mapped back to an original range.
-    stream: createMatchStream<T>(matcher as AhoCorasick<T>, { ...options, strategy: 'all', wholeWord: false }),
-    offsets: new Map([[0, 0]]),
-    patterns,
-    segmenter: new Intl.Segmenter(undefined, { granularity: 'grapheme' }),
-    transform,
-    strategy,
-    deferSelection: strategy !== 'all' || options?.wholeWord === true,
-    matches: [],
-    pending: '',
-    raw: '',
-    originalOffset: 0,
-    transformedOffset: 0,
-    closed: false,
+  transform: (grapheme: string) => string,
+  strategy: NonNullable<SearchOptions['strategy']>,
+  acceptsRange?: (start: number, end: number) => boolean,
+): ScanSession<T> {
+  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+  const offsets = new Map<number, number>()
+  let boundaries: number[] = []
+  let head = 0
+  let protectedRanges: { start: number, end: number }[] = []
+  let pending = ''
+  let pendingBase = 0
+  let transformedEnd = 0
+  let originalEnd = 0
+  let safeOffset = 0
+  let retainOffset = 0
+  let initialized = false
+  let inner: ScanSession<unknown> | undefined = scanner(matcher, strategy, (start, end) => {
+    const from = offsets.get(start)
+    const to = offsets.get(end)
+    // Reject partial expansions before the inner scanner selects overlaps.
+    return from !== undefined && to !== undefined && (!acceptsRange || acceptsRange(from, to))
+  })
+  const maxLength = inner.maxLength
+  function boundary(transformed: number, original: number) {
+    offsets.set(transformed, original)
+    boundaries.push(transformed)
   }
-  return state
-}
-
-function mapTextMatches<T>(state: TextStreamState<T>, hits: Match<unknown>[]): Match<T>[] {
-  const output: Match<T>[] = []
-  for (const hit of hits) {
-    const start = state.offsets.get(hit.start)
-    const end = state.offsets.get(hit.end)
-    // Expanded case-folding and normalization must match complete original
-    // graphemes. An unmapped transformed boundary is therefore discarded.
-    if (start === undefined || end === undefined) {
-      continue
-    }
-    const original = state.patterns[hit.patternIndex]
-    if (!original) {
-      continue
-    }
-    output.push({
-      pattern: original.pattern,
-      patternIndex: hit.patternIndex,
-      start,
-      end,
-      data: original.data,
-    })
-  }
-  return output
-}
-
-function feedTextStream<T>(state: TextStreamState<T>, chunk: string, final: boolean): Match<T>[] {
-  state.pending += chunk
-  const segments = Array.from(state.segmenter.segment(state.pending))
-  const count = final ? segments.length : Math.max(0, segments.length - 3)
-  let consumed = 0
-  let transformed = ''
-  for (let index = 0; index < count; index++) {
-    const part = segments[index]
-    const value = state.transform(part.segment)
-    transformed += value
-    state.transformedOffset += value.length
-    state.offsets.set(state.transformedOffset, state.originalOffset + part.index + part.segment.length)
-    consumed = part.index + part.segment.length
-  }
-  state.originalOffset += consumed
-  state.pending = state.pending.slice(consumed)
-  const hits = transformed.length ? state.stream.write(transformed) : []
-  return mapTextMatches(state, hits)
-}
-
-function createMappedTextStream<T>(
-  matcher: AhoCorasick<unknown>,
-  patterns: readonly { pattern: string, data: T | undefined }[],
-  transform: (source: string) => string,
-  options?: StreamOptions,
-  strategy?: Exclude<NonNullable<StreamOptions['strategy']>, 'longest-first'>,
-): MatchStream<T> {
-  const resolvedStrategy = strategy ?? 'all'
-  const state = createTextStreamState(matcher, patterns, transform, resolvedStrategy, options)
-  const select = (): Match<T>[] => {
-    const boundary = resolveQuery(state.raw, options, state.segmenter)
-    const candidates = state.matches.filter(hit => boundary === undefined || boundary(hit.start, hit.end))
-    if (state.strategy === 'all') {
-      return candidates
-    }
-    candidates.sort((a, b) => a.start - b.start
-      || (state.strategy === 'leftmost-longest' ? b.end - a.end : 0)
-      || a.patternIndex - b.patternIndex)
-    const selected: Match<T>[] = []
-    let cursor = 0
-    for (const hit of candidates) {
-      if (hit.start >= cursor) {
-        selected.push(hit)
-        cursor = hit.end
+  function floor(transformed: number): number {
+    let low = head
+    let high = boundaries.length - 1
+    while (low < high) {
+      const middle = Math.ceil((low + high) / 2)
+      if (boundaries[middle] <= transformed) {
+        low = middle
+      }
+      else {
+        high = middle - 1
       }
     }
-    return selected
+    return offsets.get(boundaries[low]) ?? originalEnd
   }
-  const append = (chunk: Match<T>[]): Match<T>[] => {
-    if (state.deferSelection) {
-      state.matches.push(...chunk)
-      return []
+  function map(hits: Match<unknown>[], output: Match<T>[]) {
+    for (const hit of hits) {
+      const { pattern, data } = patterns[hit.patternIndex]
+      output.push({ pattern, patternIndex: hit.patternIndex, data, start: offsets.get(hit.start)!, end: offsets.get(hit.end)! })
     }
-    return chunk
+  }
+  function advance(final: boolean): Match<T>[] {
+    const output: Match<T>[] = []
+    const segments = Array.from(segmenter.segment(pending))
+    // Transformations can join adjacent source graphemes (e.g. compatibility
+    // Hangul jamo). Segment the concatenated transformed tail a second time.
+    const count = final ? segments.length : Math.max(0, segments.length - 3)
+    let consumed = 0
+    let protectedIndex = 0
+    for (let index = 0; index < count; index++) {
+      const part = segments[index]
+      const start = pendingBase + part.index
+      const end = start + part.segment.length
+      while (protectedIndex < protectedRanges.length && protectedRanges[protectedIndex].end <= start) {
+        protectedIndex++
+      }
+      const protectedText = protectedIndex < protectedRanges.length && protectedRanges[protectedIndex].start < end
+      map(inner!.feed(part.segment, start, segments[index + 1]?.segment, protectedText), output)
+      consumed = part.index + part.segment.length
+    }
+    pending = pending.slice(consumed)
+    pendingBase += consumed
+    protectedRanges = protectedRanges.filter(range => range.end > pendingBase)
+    if (final) {
+      map(inner!.end(), output)
+    }
+    safeOffset = final ? originalEnd : floor(inner!.safeOffset)
+    retainOffset = floor(Math.min(inner!.retainOffset, pendingBase))
+    // Preserve the floor boundary as well as every still-relevant exact map.
+    const cutoff = Math.min(inner!.safeOffset, inner!.retainOffset, pendingBase)
+    while (head + 1 < boundaries.length && boundaries[head + 1] <= cutoff) {
+      offsets.delete(boundaries[head++])
+    }
+    if (head >= 256 && head * 2 >= boundaries.length) {
+      boundaries = boundaries.slice(head)
+      head = 0
+    }
+    return output
+  }
+  return {
+    maxLength,
+    get safeOffset() { return safeOffset },
+    get retainOffset() { return retainOffset },
+    feed(segment, start, _right, protectedText = false) {
+      if (!initialized) {
+        initialized = true
+        originalEnd = safeOffset = retainOffset = start
+        boundary(0, start)
+      }
+      const value = transform(segment)
+      const end = transformedEnd + value.length
+      if (!Number.isSafeInteger(end)) {
+        throw new RangeError('transformed stream offset exceeds Number.MAX_SAFE_INTEGER')
+      }
+      if (protectedText) {
+        const previous = protectedRanges.at(-1)
+        if (previous?.end === transformedEnd) {
+          previous.end = end
+        }
+        else {
+          protectedRanges.push({ start: transformedEnd, end })
+        }
+      }
+      transformedEnd = end
+      originalEnd = start + segment.length
+      boundary(transformedEnd, originalEnd)
+      pending += value
+      return advance(false)
+    },
+    end: () => advance(true),
+    destroy() {
+      inner?.destroy?.()
+      inner = undefined
+      pending = ''
+      offsets.clear()
+      boundaries = []
+      protectedRanges = []
+    },
+  }
+}
+
+/** Preserve the text entry's strict close contract over shared stream handles. */
+function strictStream<T>(handle: StreamHandle<T>): StreamHandle<T> {
+  let closed = false
+  function assertOpen() {
+    if (closed) {
+      throw new Error('Stream is finished or cancelled')
+    }
   }
   return {
     write(chunk) {
-      if (state.closed) {
-        throw new Error('Stream is finished or cancelled')
-      }
-      assertText(chunk)
-      try {
-        state.raw += chunk
-        return append(feedTextStream(state, chunk, false))
-      }
-      catch (error) {
-        state.closed = true
-        state.stream.destroy()
-        throw error
-      }
+      assertOpen()
+      return handle.write(chunk)
     },
-    finish() {
-      if (state.closed) {
-        throw new Error('Stream is finished or cancelled')
-      }
-      state.closed = true
-      try {
-        const final = [...feedTextStream(state, '', true), ...mapTextMatches(state, state.stream.end())]
-        if (state.deferSelection) {
-          state.matches.push(...final)
-          return select()
-        }
-        return final
-      }
-      catch (error) {
-        state.stream.destroy()
-        throw error
-      }
+    end() {
+      assertOpen()
+      closed = true
+      return handle.end()
     },
-    cancel() {
-      state.closed = true
-      state.stream.destroy()
+    destroy() {
+      closed = true
+      handle.destroy()
     },
   }
 }
@@ -235,6 +227,15 @@ export default class TextMatcher<T = unknown> {
       return { pattern, data: typeof input === 'string' ? undefined : input.data }
     })
     this.#matcher = new AhoCorasick(this.#patterns.map(({ pattern, data }) => ({ pattern: this.#transform(pattern).text, data })))
+    registerScanner(this, (strategy, range) => mappedScanner(this.#matcher, this.#patterns, segment => this.#transformGrapheme(segment), strategy, range))
+  }
+
+  #transformGrapheme(segment: string): string {
+    let value = this.#normalization ? segment.normalize(this.#normalization) : segment
+    if (this.#fold) {
+      value = caseFold(value, this.#fold === 'turkic')
+    }
+    return this.#normalization ? value.normalize(this.#normalization) : value
   }
 
   #transform(source: string): { text: string, offsets: Map<number, number> } {
@@ -242,13 +243,7 @@ export default class TextMatcher<T = unknown> {
     const offsets = new Map([[0, 0]])
     let length = 0
     for (const { segment, index } of this.#segmenter.segment(source)) {
-      let value = this.#normalization ? segment.normalize(this.#normalization) : segment
-      if (this.#fold) {
-        value = caseFold(value, this.#fold === 'turkic')
-      }
-      if (this.#normalization) {
-        value = value.normalize(this.#normalization)
-      }
+      const value = this.#transformGrapheme(segment)
       parts.push(value)
       length += value.length
       offsets.set(length, index + segment.length)
@@ -406,87 +401,31 @@ export default class TextMatcher<T = unknown> {
 
   /** Incremental matching with transformed text mapped back to original ranges. */
   createStream(options?: StreamOptions): MatchStream<T> {
-    const strategy = resolveStrategy(options, 'all')
-    if (strategy === 'longest-first') {
-      throw new TypeError('longest-first requires complete input')
-    }
-    const transformed = this.#patterns.map(({ pattern, data }) => ({ pattern: this.#transform(pattern).text, data }))
-    const matcher = new AhoCorasick<unknown>(transformed)
-    return createMappedTextStream(matcher, this.#patterns, source => this.#transform(source).text, options, strategy)
+    const handle = strictStream(createMatchStream(this, options))
+    return { write: handle.write, finish: handle.end, cancel: handle.destroy }
   }
 
-  /** Token stream variant; text is retained until end so every token is exact. */
+  /** Tokenize incrementally with original-text filtering and bounded lookahead. */
   createTokenStream(options?: TokenStreamOptions): TokenStreamHandle<T> {
-    const strategy = resolveStrategy(options, 'leftmost-longest')
-    if (strategy === 'all' || strategy === 'longest-first') {
-      throw new TypeError('strategy is not supported by a token stream')
-    }
-    const matchStream = this.createStream(options)
-    let raw = ''
+    const handle = createTokenStream(this, options)
+    const strict = strictStream(handle)
     let closed = false
     return {
-      write: (chunk) => {
-        if (closed) {
-          throw new Error('Stream is finished or cancelled')
-        }
-        assertText(chunk)
-        raw += chunk
-        matchStream.write(chunk)
-        return []
-      },
-      end: () => {
-        if (closed) {
-          throw new Error('Stream is finished or cancelled')
-        }
+      write: strict.write,
+      end() {
         closed = true
-        const matches = matchStream.finish()
-        const tokens: Token<T>[] = []
-        let cursor = 0
-        for (const match of matches) {
-          if (cursor < match.start) {
-            tokens.push({ type: 'text', text: raw.slice(cursor, match.start), start: cursor, end: match.start })
-          }
-          tokens.push({ type: 'match', text: raw.slice(match.start, match.end), start: match.start, end: match.end, match })
-          cursor = match.end
-        }
-        if (cursor < raw.length) {
-          tokens.push({ type: 'text', text: raw.slice(cursor), start: cursor, end: raw.length })
-        }
-        raw = ''
-        return tokens
+        return strict.end()
       },
-      destroy: () => {
+      destroy() {
         closed = true
-        raw = ''
-        matchStream.cancel()
+        strict.destroy()
       },
-      preview: () => ({ start: 0, text: raw, tokens: this.tokenize(raw, { strategy }) }),
+      preview: () => closed ? { start: 0, text: '', tokens: [] } : handle.preview(),
     }
   }
 
   createReplaceStream(replacement: Replacement<T>, options?: TokenStreamOptions): StreamHandle<string> {
-    const tokens = this.createTokenStream(options)
-    replacement = operationReplacement(replacement)
-    if (typeof replacement !== 'string' && typeof replacement !== 'function') {
-      throw new TypeError('replacement must be a string or function')
-    }
-    const replace = (items: Token<T>[]) => items.map((token) => {
-      const value = token.type === 'text'
-        ? token.text
-        : typeof replacement === 'string' ? replacement : replacement(token.match, token.text)
-      if (typeof value !== 'string') {
-        throw new TypeError('replacement callback must return a string')
-      }
-      return value
-    })
-    return {
-      write: (chunk) => {
-        tokens.write(chunk)
-        return []
-      },
-      end: () => replace(tokens.end()),
-      destroy: () => tokens.destroy(),
-    }
+    return strictStream(createReplaceStream(this, replacement, options))
   }
 
   replace(text: string, replacement: Replacement<T>, options?: ReplaceOptions): string {

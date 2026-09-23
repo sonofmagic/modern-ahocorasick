@@ -1,5 +1,6 @@
 # Repository development
 
+- Write all GitHub issue and pull request titles, bodies, and comments in English when creating or updating them.
 - Use pnpm 12.5.1 and Node.js 22.22.1+, 24.11+, or 26+ (matching the root engines range). The root is private; the only publishable package is `packages/modern-ahocorasick`.
 - Keep repository tooling options in `repoctl.config.ts` and use the `repoctl/tooling` entrypoints.
 - Preserve the default constructor export, direct CommonJS `require()` contract, existing dist paths, and exact grapheme-cluster matching. Match ranges use original-text UTF-16 offsets with an exclusive end.

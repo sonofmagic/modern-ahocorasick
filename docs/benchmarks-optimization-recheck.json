@@ -1,0 +1,587 @@
+{
+  "startedAt": "2026-09-23T07:50:21.300Z",
+  "revision": "0d10f03bade9609faf6bbe086b0dd4666452c4e0",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "b6d995a840e4962a368f3f098a3e2c013a05f294ec8860efcd549ce9a5ff16a3",
+  "implementationSha256": "3b9119908bfda141b7ebba8f291ebba40f285cb04bbde0caadb87781cade0e36",
+  "corpusSha256": "4afa3eee0768ace1840771227bd94753d446ab82a09bbaf11d2acf1834462c5e",
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "samples": 7,
+  "rounds": 7,
+  "operations": [
+    "match",
+    "load",
+    "build"
+  ],
+  "note": "v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained-memory samples follow three GC/task turns to settle backing-store disposal. JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. BENCH_TIMINGS=0 measures retained storage and correctness without timing operations. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "load": {
+          "ms": 0.0075361835937499955,
+          "madMs": 0.0002024331054687467,
+          "betweenRoundsMadMs": 0.00004663085937499367,
+          "roundMediansMs": [
+            0.0075361835937499955,
+            0.007493784423828129,
+            0.007489552734375002,
+            0.007727447509765617,
+            0.007537058593750007,
+            0.007628509521484375,
+            0.007438293457031252
+          ],
+          "utf16UnitsPerSecond": 13270377340.984623
+        },
+        "build": {
+          "ms": 0.006296193481445306,
+          "madMs": 0.00004649865722655688,
+          "betweenRoundsMadMs": 0.00008237207031250304,
+          "roundMediansMs": [
+            0.0062822418212890585,
+            0.006296193481445306,
+            0.0061431121826171775,
+            0.006588856933593762,
+            0.006551849365234369,
+            0.006378565551757809,
+            0.006232935668945304
+          ],
+          "utf16UnitsPerSecond": 952956.7376990273
+        },
+        "match": {
+          "ms": 0.00010346603393554662,
+          "madMs": 8.389129638672332e-7,
+          "betweenRoundsMadMs": 0.0000036489181518555187,
+          "roundMediansMs": [
+            0.00010258404159545903,
+            0.00009926978683471666,
+            0.00010711495208740214,
+            0.00010346603393554662,
+            0.00010408290100097622,
+            0.00009444038009643555,
+            0.00011353826522827104
+          ],
+          "utf16UnitsPerSecond": 966578075876.5647
+        }
+      },
+      "dictionaryHeapBytes": 4670.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 18768,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "load": {
+          "ms": 0.007769520996093751,
+          "madMs": 0.000126220703124999,
+          "betweenRoundsMadMs": 0.00003788232421875204,
+          "roundMediansMs": [
+            0.007560384033203124,
+            0.0076993408203124974,
+            0.007826619384765615,
+            0.007769520996093751,
+            0.007773112060546872,
+            0.007798044677734373,
+            0.007731638671874999
+          ],
+          "utf16UnitsPerSecond": 12871835992.24207
+        },
+        "build": {
+          "ms": 0.006096399902343751,
+          "madMs": 0.00004427087402343599,
+          "betweenRoundsMadMs": 0.00004862976074217901,
+          "roundMediansMs": [
+            0.006047770141601572,
+            0.006184061523437506,
+            0.006222732543945314,
+            0.006110585449218747,
+            0.006034016845703122,
+            0.006096399902343751,
+            0.006094070434570317
+          ],
+          "utf16UnitsPerSecond": 984187.4050442966
+        },
+        "match": {
+          "ms": 0.00010065245628356921,
+          "madMs": 9.452514648439821e-7,
+          "betweenRoundsMadMs": 0.000003678720474243214,
+          "roundMediansMs": [
+            0.000096973735809326,
+            0.00010241420936584465,
+            0.00010872077941894527,
+            0.00009743118286132811,
+            0.00010065245628356921,
+            0.00009471782112121553,
+            0.00011059697723388683
+          ],
+          "utf16UnitsPerSecond": 993597212553.3273
+        }
+      },
+      "dictionaryHeapBytes": 5480,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 26976,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "load": {
+          "ms": 0.16137385937500004,
+          "madMs": 0.0024213867187499183,
+          "betweenRoundsMadMs": 0.001249347656249844,
+          "roundMediansMs": [
+            0.16137385937500004,
+            0.15904638671874993,
+            0.16022558593749991,
+            0.16160498046874983,
+            0.15859765625,
+            0.16567041015625006,
+            0.16262320703124988
+          ],
+          "utf16UnitsPerSecond": 209445322.37689126
+        },
+        "build": {
+          "ms": 0.16298844531250012,
+          "madMs": 0.001462242187499907,
+          "betweenRoundsMadMs": 0.0015691757812499318,
+          "roundMediansMs": [
+            0.16535693359374992,
+            0.16856494140625022,
+            0.1614192695312502,
+            0.1649348945312501,
+            0.16235774999999997,
+            0.16178939062500008,
+            0.16298844531250012
+          ],
+          "utf16UnitsPerSecond": 3006348.0822859304
+        },
+        "match": {
+          "ms": 0.003720204589843734,
+          "madMs": 0.00010309863281249276,
+          "betweenRoundsMadMs": 0.00016010522460935261,
+          "roundMediansMs": [
+            0.00359562158203125,
+            0.003720204589843734,
+            0.0048524985351562355,
+            0.0035600993652343815,
+            0.0034925129394531296,
+            0.003921641113281249,
+            0.0037964987792968863
+          ],
+          "utf16UnitsPerSecond": 9085253024.060087
+        }
+      },
+      "dictionaryHeapBytes": 9176.8,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 191200,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "load": {
+          "ms": 0.16072558593749997,
+          "madMs": 0.0018691406250000986,
+          "betweenRoundsMadMs": 0.002076007812499836,
+          "roundMediansMs": [
+            0.16546923828125015,
+            0.16031721874999993,
+            0.16814094921875,
+            0.16072558593749997,
+            0.1565512695312501,
+            0.16101660156249986,
+            0.15864957812500013
+          ],
+          "utf16UnitsPerSecond": 210290102.86603114
+        },
+        "build": {
+          "ms": 0.1549405937499997,
+          "madMs": 0.0010205078125005151,
+          "betweenRoundsMadMs": 0.0006819687499999283,
+          "roundMediansMs": [
+            0.16055549999999963,
+            0.1549405937499997,
+            0.15981217578125007,
+            0.15560888671874995,
+            0.1543940429687498,
+            0.15397509765625017,
+            0.15425862499999976
+          ],
+          "utf16UnitsPerSecond": 3162502.4026345643
+        },
+        "match": {
+          "ms": 0.004195180419921896,
+          "madMs": 0.0005151267089844036,
+          "betweenRoundsMadMs": 0.0002737021484375268,
+          "roundMediansMs": [
+            0.004195180419921896,
+            0.004773732421874954,
+            0.003944813964843752,
+            0.0035999045410156083,
+            0.003921478271484369,
+            0.004524831298828136,
+            0.004311553955078096
+          ],
+          "utf16UnitsPerSecond": 8056626084.4221945
+        }
+      },
+      "dictionaryHeapBytes": 9986.4,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 191936,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3-before",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "load": {
+          "ms": 1.0197786562500002,
+          "madMs": 0.0381874687499999,
+          "betweenRoundsMadMs": 0.01930859375000038,
+          "roundMediansMs": [
+            1.0477942812499998,
+            1.0197786562500002,
+            1.0225572812499997,
+            1.0007382812499999,
+            0.9963385312499997,
+            1.05747396875,
+            1.0004700624999998
+          ],
+          "utf16UnitsPerSecond": 24406276.64391755
+        },
+        "build": {
+          "ms": 1.3144479375000024,
+          "madMs": 0.01940756250000142,
+          "betweenRoundsMadMs": 0.023204406249998755,
+          "roundMediansMs": [
+            1.3376523437500012,
+            1.2357083124999981,
+            1.3195664062500008,
+            1.2360416562500003,
+            1.3146171874999997,
+            1.3144479375000024,
+            1.2264726562499995
+          ],
+          "utf16UnitsPerSecond": 18174930.56852239
+        },
+        "match": {
+          "ms": 0.0003006655426025396,
+          "madMs": 0.0000018886032104505762,
+          "betweenRoundsMadMs": 0.000009721115112304099,
+          "roundMediansMs": [
+            0.0003188695907592777,
+            0.000299994155883789,
+            0.0003103866577148437,
+            0.0002915248870849615,
+            0.0002891426086425782,
+            0.00031604640197753844,
+            0.0003006655426025396
+          ],
+          "utf16UnitsPerSecond": 82779688635.29416
+        }
+      },
+      "dictionaryHeapBytes": 55840.8,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 93832,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "load": {
+          "ms": 1.0764518437500001,
+          "madMs": 0.037391937499999806,
+          "betweenRoundsMadMs": 0.02785418750000046,
+          "roundMediansMs": [
+            1.0907539062500002,
+            1.0859856875,
+            1.0764518437500001,
+            1.0242109375,
+            1.0314231562500003,
+            1.1247656250000002,
+            1.0485976562499997
+          ],
+          "utf16UnitsPerSecond": 23121331.571410574
+        },
+        "build": {
+          "ms": 0.8491035156250009,
+          "madMs": 0.008429687499999616,
+          "betweenRoundsMadMs": 0.030935546874998998,
+          "roundMediansMs": [
+            0.8879889374999994,
+            0.8466262968749998,
+            0.8800390624999999,
+            0.8491035156250009,
+            0.7736699218749994,
+            0.8580982968749993,
+            0.8077135312500001
+          ],
+          "utf16UnitsPerSecond": 28135556.572763987
+        },
+        "match": {
+          "ms": 0.00031007862091064417,
+          "madMs": 0.0000011838226318360012,
+          "betweenRoundsMadMs": 0.000011545822143554582,
+          "roundMediansMs": [
+            0.00032440185546874986,
+            0.00031007862091064417,
+            0.0003127304687500004,
+            0.00029608345031738315,
+            0.00029676277923583894,
+            0.00032162444305419875,
+            0.00030290571594238265
+          ],
+          "utf16UnitsPerSecond": 80266739857.47731
+        }
+      },
+      "dictionaryHeapBytes": 57874.4,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 105480,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "load": {
+          "ms": 0.05690421484374997,
+          "madMs": 0.0019107265625000203,
+          "betweenRoundsMadMs": 0.0003433437500000025,
+          "roundMediansMs": [
+            0.056624187500000034,
+            0.05623274804687495,
+            0.05493343164062503,
+            0.05701407812499992,
+            0.05748291015625001,
+            0.05690421484374997,
+            0.05724755859374997
+          ],
+          "utf16UnitsPerSecond": 316321032.6234212
+        },
+        "build": {
+          "ms": 0.036539265624999984,
+          "madMs": 0.0003538007812499133,
+          "betweenRoundsMadMs": 0.00028230761718750497,
+          "roundMediansMs": [
+            0.03682157324218749,
+            0.03591516113281251,
+            0.03524572753906252,
+            0.036599325195312504,
+            0.03662841796874999,
+            0.036539265624999984,
+            0.03476867675781248
+          ],
+          "utf16UnitsPerSecond": 27367818.78056698
+        },
+        "match": {
+          "ms": 0.00009635043144226065,
+          "madMs": 7.308330535890032e-7,
+          "betweenRoundsMadMs": 0.0000018873996734619734,
+          "roundMediansMs": [
+            0.00009816893005371095,
+            0.00009284202194213874,
+            0.00009635043144226065,
+            0.00010035061836242672,
+            0.00009586127471923828,
+            0.00010592412948608404,
+            0.00009446303176879867
+          ],
+          "utf16UnitsPerSecond": 186818052919.53214
+        }
+      },
+      "dictionaryHeapBytes": 14552.8,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4471400,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "load": {
+          "ms": 0.05734643554687502,
+          "madMs": 0.0021236152343750425,
+          "betweenRoundsMadMs": 0.0014278144531250092,
+          "roundMediansMs": [
+            0.05779760742187498,
+            0.0556171875,
+            0.05028857421874999,
+            0.059005453124999996,
+            0.05877425000000003,
+            0.05681079101562503,
+            0.05734643554687502
+          ],
+          "utf16UnitsPerSecond": 313881757.92175937
+        },
+        "build": {
+          "ms": 0.045132162109374985,
+          "madMs": 0.0001805429687500859,
+          "betweenRoundsMadMs": 0.0010154628906249297,
+          "roundMediansMs": [
+            0.04597981738281248,
+            0.044116699218750055,
+            0.045132162109374985,
+            0.046198689453125,
+            0.049939291015625,
+            0.04451965332031255,
+            0.04365669824218743
+          ],
+          "utf16UnitsPerSecond": 22157148.101537045
+        },
+        "match": {
+          "ms": 0.00009601338577270484,
+          "madMs": 0.00000125090217590316,
+          "betweenRoundsMadMs": 0.000003813264846801471,
+          "roundMediansMs": [
+            0.00009601338577270484,
+            0.00009220012092590337,
+            0.00010240840911865303,
+            0.00010587278747558595,
+            0.00009481525421142583,
+            0.00010428301620483407,
+            0.0000941774845123291
+          ],
+          "utf16UnitsPerSecond": 187473859557.5819
+        }
+      },
+      "dictionaryHeapBytes": 15362.4,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4483048,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": [
+    {
+      "scenario": "unicode",
+      "operation": "match",
+      "percent": 12.76746529948538,
+      "beforeMadMs": 0.00010309863281249276,
+      "afterMadMs": 0.0005151267089844036
+    },
+    {
+      "scenario": "shared-prefix",
+      "operation": "load",
+      "percent": 5.5574008293527655,
+      "beforeMadMs": 0.0381874687499999,
+      "afterMadMs": 0.037391937499999806
+    },
+    {
+      "scenario": "duplicates",
+      "operation": "build",
+      "percent": 23.51688337845461,
+      "beforeMadMs": 0.0003538007812499133,
+      "afterMadMs": 0.0001805429687500859
+    }
+  ]
+}

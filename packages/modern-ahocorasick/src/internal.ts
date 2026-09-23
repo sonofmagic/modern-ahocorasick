@@ -1,11 +1,4 @@
 // Repository-internal builder shared with the docs. Bundled into the library; not an npm entry.
-export interface AutomatonNode {
-  next: Map<string, number>
-  failure: number
-  output: number
-  terminals: number[]
-}
-
 /** Retained scan tables: interned graphemes and contiguous sparse transitions. */
 export interface CompactAutomaton {
   symbols: Map<string, number>
@@ -19,63 +12,10 @@ export interface CompactAutomaton {
   patterns: Uint32Array
 }
 
-export function compactAutomaton(nodes: AutomatonNode[], patternCount: number): CompactAutomaton {
-  const symbols = new Map<string, number>()
-  const edges = new Uint32Array(nodes.length + 1)
-  const labels = new Uint32Array(nodes.length - 1)
-  const targets = new Uint32Array(nodes.length - 1)
-  const failures = new Uint32Array(nodes.length)
-  const outputs = new Int32Array(nodes.length)
-  const terminals = new Uint32Array(nodes.length + 1)
-  const patterns = new Uint32Array(patternCount)
-  let edge = 0
-  let terminal = 0
-  const intern = (segment: string): number => {
-    let symbol = symbols.get(segment)
-    if (symbol === undefined) {
-      symbol = symbols.size
-      symbols.set(segment, symbol)
-    }
-    return symbol
-  }
-  for (let state = 0; state < nodes.length; state++) {
-    const node = nodes[state]
-    edges[state] = edge
-    if (node.next.size <= 1) {
-      for (const [segment, target] of node.next) {
-        labels[edge] = intern(segment)
-        targets[edge++] = target
-      }
-    }
-    else {
-      const children = Array.from(node.next, ([segment, target]) => ({ symbol: intern(segment), target }))
-        .sort((a, b) => a.symbol - b.symbol)
-      for (const { symbol, target } of children) {
-        labels[edge] = symbol
-        targets[edge++] = target
-      }
-    }
-    failures[state] = node.failure
-    outputs[state] = node.output
-    terminals[state] = terminal
-    for (const patternIndex of node.terminals) {
-      patterns[terminal++] = patternIndex
-    }
-  }
-  edges[nodes.length] = edge
-  terminals[nodes.length] = terminal
-  const roots = new Uint32Array(symbols.size)
-  for (let index = edges[0]; index < edges[1]; index++) {
-    roots[labels[index]] = targets[index]
-  }
-  return { symbols, roots, edges, labels, targets, failures, outputs, terminals, patterns }
-}
-
-export function advanceCompact(table: CompactAutomaton, state: number, segment: string): number {
-  const symbol = table.symbols.get(segment)
-  if (symbol === undefined) {
-    return 0
-  }
+// Building failure links and scanning text exercise different state profiles.
+// Keep this loop separate from advanceCompact so construction does not train
+// the scanner's JIT feedback toward root-only transitions.
+function advanceBuildSymbol(table: CompactAutomaton, state: number, symbol: number): number {
   while (state !== 0) {
     let low = table.edges[state]
     let high = table.edges[state + 1] - 1
@@ -97,8 +37,31 @@ export function advanceCompact(table: CompactAutomaton, state: number, segment: 
   return table.roots[symbol]
 }
 
-function createNode(): AutomatonNode {
-  return { next: new Map(), failure: 0, output: -1, terminals: [] }
+export function advanceCompact(table: CompactAutomaton, state: number, segment: string): number {
+  const symbol = table.symbols.get(segment)
+  if (symbol === undefined) {
+    return 0
+  }
+  // Intentionally independent of the construction-only numeric transition.
+  while (state !== 0) {
+    let low = table.edges[state]
+    let high = table.edges[state + 1] - 1
+    while (low <= high) {
+      const middle = (low + high) >>> 1
+      const label = table.labels[middle]
+      if (label === symbol) {
+        return table.targets[middle]
+      }
+      if (label < symbol) {
+        low = middle + 1
+      }
+      else {
+        high = middle - 1
+      }
+    }
+    state = table.failures[state]
+  }
+  return table.roots[symbol]
 }
 
 /** Internal only: consumers must read each value before advancing the cursor. */
@@ -168,63 +131,191 @@ export function graphemeRuns(text: string, segmenter: Intl.Segmenter): Iterable<
   return asciiRuns(text, segmenter, ascii)
 }
 
-/** Shared transition rule; no iterator or match allocation on the scan hot path. */
-export function advance(nodes: AutomatonNode[], state: number, segment: string): number {
-  let next = nodes[state].next.get(segment)
-  while (next === undefined && state !== 0) {
-    state = nodes[state].failure
-    next = nodes[state].next.get(segment)
-  }
-  return next ?? 0
-}
+// A state usually has zero or one edge. Only branching states need a Map;
+// after a small first block grows to capacity, fixed blocks avoid copying the
+// full trie and allocating one object per state.
+const blockBits = 10
+const blockSize = 1 << blockBits
+const blockMask = blockSize - 1
+const branching = 0xFFFFFFFF
+const patternMemoLimit = 256
 
 export function buildAutomaton(patterns: readonly { pattern: string }[], segmenter: Intl.Segmenter, units?: (segment: string) => string[]): {
-  nodes: AutomatonNode[]
+  compact: CompactAutomaton
   lengths: Uint32Array
   counts: Uint32Array
   order: Uint32Array
   maxLength: number
 } {
-  const nodes: AutomatonNode[] = [createNode()]
+  const symbols = new Map<string, number>()
+  let firstCapacity = 16
+  const labelBlocks: (Uint32Array | undefined)[] = [new Uint32Array(firstCapacity)]
+  const targetBlocks: (Uint32Array | undefined)[] = [new Uint32Array(firstCapacity)]
+  const forks: (Map<number, number> | undefined)[] = []
   const lengths = new Uint32Array(patterns.length)
+  // Repeated strings share their compiled route, never their public metadata.
+  // Bound this temporary index so unique million-pattern inputs cannot grow it.
+  const patternMemo = patterns.length > 1 ? new Map<string, number>() : undefined
+  let terminalStates = new Uint32Array(patterns.length)
+  let size = 1
   let maxLength = 0
-  for (let index = 0; index < patterns.length; index++) {
-    const { pattern } = patterns[index]
-    let state = 0
-    let length = 0
-    const runs = units
-      ? [Array.from(segmenter.segment(pattern)).flatMap(({ segment }) => units(segment).map(segment => ({ segment })))]
-      : graphemeRuns(pattern, segmenter)
-    for (const segments of runs) {
-      for (const { segment } of segments) {
-        length++
-        let next = nodes[state].next.get(segment)
-        if (next === undefined) {
-          next = nodes.length
-          nodes[state].next.set(segment, next)
-          nodes.push(createNode())
-        }
-        state = next
+  function append(state: number, segment: string): number {
+    let symbol = symbols.get(segment)
+    if (symbol === undefined) {
+      symbol = symbols.size
+      symbols.set(segment, symbol)
+    }
+    const block = state >>> blockBits
+    const offset = state & blockMask
+    const labels = labelBlocks[block]!
+    const targets = targetBlocks[block]!
+    const label = labels[offset]
+    if (label === symbol + 1) {
+      return targets[offset]
+    }
+    const fork = label === branching ? forks[targets[offset]] : undefined
+    if (fork) {
+      const child = fork.get(symbol)
+      if (child !== undefined) {
+        return child
       }
     }
-    nodes[state].terminals.push(index)
+    const child = size++
+    if (fork) {
+      fork.set(symbol, child)
+    }
+    else if (label === 0) {
+      labels[offset] = symbol + 1
+      targets[offset] = child
+    }
+    else {
+      const branch = new Map<number, number>()
+      branch.set(label - 1, targets[offset])
+      branch.set(symbol, child)
+      labels[offset] = branching
+      targets[offset] = forks.length
+      forks.push(branch)
+    }
+    // Store the parent edge before copying the first block: labels/targets
+    // above may still reference the old arrays while a fork is being promoted.
+    if (child === firstCapacity && firstCapacity < blockSize) {
+      firstCapacity *= 2
+      const grownLabels = new Uint32Array(firstCapacity)
+      const grownTargets = new Uint32Array(firstCapacity)
+      grownLabels.set(labelBlocks[0]!)
+      grownTargets.set(targetBlocks[0]!)
+      labelBlocks[0] = grownLabels
+      targetBlocks[0] = grownTargets
+    }
+    else if ((child & blockMask) === 0) {
+      labelBlocks.push(new Uint32Array(blockSize))
+      targetBlocks.push(new Uint32Array(blockSize))
+    }
+    return child
+  }
+  for (let index = 0; index < patterns.length; index++) {
+    const { pattern } = patterns[index]
+    const previous = patternMemo?.get(pattern)
+    if (previous !== undefined) {
+      terminalStates[index] = terminalStates[previous]
+      lengths[index] = lengths[previous]
+      continue
+    }
+    let state = 0
+    let length = 0
+    for (const segments of graphemeRuns(pattern, segmenter)) {
+      for (const { segment } of segments) {
+        if (units) {
+          for (const unit of units(segment)) {
+            state = append(state, unit)
+            length++
+          }
+        }
+        else {
+          state = append(state, segment)
+          length++
+        }
+      }
+    }
+    terminalStates[index] = state
     lengths[index] = length
     maxLength = Math.max(maxLength, length)
-  }
-
-  const counts = new Uint32Array(nodes.length)
-  const queue = [...nodes[0].next.values()]
-  for (let head = 0; head < queue.length; head++) {
-    const node = nodes[queue[head]]
-    counts[queue[head]] = node.terminals.length + counts[node.failure]
-    for (const [segment, child] of node.next) {
-      queue.push(child)
-      const failure = advance(nodes, node.failure, segment)
-      nodes[child].failure = failure
-      nodes[child].output = nodes[failure].terminals.length > 0
-        ? failure
-        : nodes[failure].output
+    if (patternMemo && patternMemo.size < patternMemoLimit) {
+      patternMemo.set(pattern, index)
     }
   }
-  return { nodes, lengths, counts, order: Uint32Array.from(queue), maxLength }
+  patternMemo?.clear()
+
+  const edges = new Uint32Array(size + 1)
+  const labels = new Uint32Array(size - 1)
+  const targets = new Uint32Array(size - 1)
+  let edge = 0
+  for (let block = 0; block < labelBlocks.length; block++) {
+    const blockLabels = labelBlocks[block]!
+    const blockTargets = targetBlocks[block]!
+    const start = block * blockSize
+    const end = Math.min(size - start, blockSize)
+    for (let offset = 0; offset < end; offset++) {
+      edges[start + offset] = edge
+      const label = blockLabels[offset]
+      if (label === branching) {
+        const forkIndex = blockTargets[offset]
+        const fork = forks[forkIndex]!
+        const sorted = Array.from(fork.keys()).sort((a, b) => a - b)
+        for (const symbol of sorted) {
+          labels[edge] = symbol
+          targets[edge++] = fork.get(symbol)!
+        }
+        forks[forkIndex] = undefined
+      }
+      else if (label !== 0) {
+        labels[edge] = label - 1
+        targets[edge++] = blockTargets[offset]
+      }
+    }
+    // Release blocks as soon as their edges have entered the final CSR arrays.
+    labelBlocks[block] = undefined
+    targetBlocks[block] = undefined
+  }
+  edges[size] = edge
+  const roots = new Uint32Array(symbols.size)
+  for (let edge = edges[0]; edge < edges[1]; edge++) {
+    roots[labels[edge]] = targets[edge]
+  }
+  const terminals = new Uint32Array(size + 1)
+  for (const state of terminalStates) {
+    terminals[state + 1]++
+  }
+  const counts = new Uint32Array(size)
+  for (let state = 0; state < size; state++) {
+    terminals[state + 1] += terminals[state]
+    // Reuse the final counts array as terminal write cursors before BFS.
+    counts[state] = terminals[state]
+  }
+  const patternIndices = new Uint32Array(patterns.length)
+  for (let index = 0; index < terminalStates.length; index++) {
+    patternIndices[counts[terminalStates[index]]++] = index
+  }
+  terminalStates = new Uint32Array(0)
+  const failures = new Uint32Array(size)
+  const outputs = new Int32Array(size).fill(-1)
+  const compact = { symbols, roots, edges, labels, targets, failures, outputs, terminals, patterns: patternIndices }
+  const order = new Uint32Array(size - 1)
+  let tail = 0
+  for (let edge = edges[0]; edge < edges[1]; edge++) {
+    order[tail++] = targets[edge]
+  }
+  counts[0] = 0
+  for (let head = 0; head < order.length; head++) {
+    const state = order[head]
+    counts[state] = terminals[state + 1] - terminals[state] + counts[failures[state]]
+    for (let edge = edges[state]; edge < edges[state + 1]; edge++) {
+      const child = targets[edge]
+      order[tail++] = child
+      const failure = advanceBuildSymbol(compact, failures[state], labels[edge])
+      failures[child] = failure
+      outputs[child] = terminals[failure] < terminals[failure + 1] ? failure : outputs[failure]
+    }
+  }
+  return { compact, lengths, counts, order, maxLength }
 }

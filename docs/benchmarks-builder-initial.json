@@ -1,0 +1,347 @@
+{
+  "startedAt": "2026-09-23T06:36:06.315Z",
+  "revision": "aea074a9fa57e34c12fc4624a3c061f2ddd9a442",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f22b2566b3a6058b41b05564b214899c8d7",
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "7e80c1fbb2c9e3d279eb7d0bade6946d82eb136e55a1df71b48a71d23a9bff53",
+  "implementationSha256": "2b182aaac2ab24f5296168dcef272a4821d8863e6cef010848f52155fb866086",
+  "rounds": 3,
+  "note": "Medians of independent cold processes with alternating variant order. Count averages 100 scans after warmup. Retained heap excludes preexisting input strings; ArrayBuffer storage is separate. Build peak RSS includes runtime, input, native allocations, temporary builder and final tables. Historical modules use data URLs, so loader storage differs. This is a scale experiment, not a universal ranking.",
+  "results": [
+    {
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 28.221209,
+      "countMs": 0.2535833299999999,
+      "dictionaryHeapBytes": 568024,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66191360,
+      "buildPeakRssBytes": 113557504,
+      "mad": {
+        "buildMs": 0.1762510000000006,
+        "countMs": 0.008955829999999887,
+        "dictionaryHeapBytes": 240,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 0,
+        "buildPeakRssBytes": 163840
+      }
+    },
+    {
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 21.194166999999997,
+      "countMs": 0.26209959000000005,
+      "dictionaryHeapBytes": 606784,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56737792,
+      "buildPeakRssBytes": 75546624,
+      "mad": {
+        "buildMs": 0.732250999999998,
+        "countMs": 0.004959590000000069,
+        "dictionaryHeapBytes": 40,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 16384,
+        "buildPeakRssBytes": 114688
+      }
+    },
+    {
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 174.21225,
+      "countMs": 0.2930783299999999,
+      "dictionaryHeapBytes": 3657984,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79003648,
+      "buildPeakRssBytes": 428998656,
+      "mad": {
+        "buildMs": 2.54416599999999,
+        "countMs": 0.0006720799999996863,
+        "dictionaryHeapBytes": 112,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 81920,
+        "buildPeakRssBytes": 229376
+      }
+    },
+    {
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 77.860209,
+      "countMs": 0.3047445900000001,
+      "dictionaryHeapBytes": 3664136,
+      "dictionaryBufferBytes": 20485352,
+      "beforeRssBytes": 74383360,
+      "buildPeakRssBytes": 146800640,
+      "mad": {
+        "buildMs": 1.4930830000000128,
+        "countMs": 0.010820419999999997,
+        "dictionaryHeapBytes": 248,
+        "dictionaryBufferBytes": 176128,
+        "beforeRssBytes": 49152,
+        "buildPeakRssBytes": 704512
+      }
+    },
+    {
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1811.433541,
+      "countMs": 0.33718958000000154,
+      "dictionaryHeapBytes": 35889016,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 227082240,
+      "buildPeakRssBytes": 2418688000,
+      "mad": {
+        "buildMs": 27.97716700000001,
+        "countMs": 0.012856259999998676,
+        "dictionaryHeapBytes": 0,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 475136,
+        "buildPeakRssBytes": 2048000
+      }
+    },
+    {
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 702.7151670000001,
+      "countMs": 0.36120374999999966,
+      "dictionaryHeapBytes": 35884336,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 218120192,
+      "buildPeakRssBytes": 692977664,
+      "mad": {
+        "buildMs": 2.952126000000135,
+        "countMs": 0.018386250000000937,
+        "dictionaryHeapBytes": 64,
+        "dictionaryBufferBytes": 0,
+        "beforeRssBytes": 1933312,
+        "buildPeakRssBytes": 638976
+      }
+    }
+  ],
+  "rawRuns": [
+    {
+      "round": 1,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 28.044958,
+      "countMs": 0.2535833299999999,
+      "dictionaryHeapBytes": 567784,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66289664,
+      "buildPeakRssBytes": 113393664,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 1,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 20.461916,
+      "countMs": 0.26209959000000005,
+      "dictionaryHeapBytes": 606784,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56852480,
+      "buildPeakRssBytes": 75546624,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 2,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 22.105375,
+      "countMs": 0.25714,
+      "dictionaryHeapBytes": 545672,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56721408,
+      "buildPeakRssBytes": 75661312,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 2,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 28.482292,
+      "countMs": 0.2446275,
+      "dictionaryHeapBytes": 568024,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66191360,
+      "buildPeakRssBytes": 113557504,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 3,
+      "variant": "baseline",
+      "size": 10000,
+      "buildMs": 28.221209,
+      "countMs": 0.27555624999999995,
+      "dictionaryHeapBytes": 568416,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 66191360,
+      "buildPeakRssBytes": 114393088,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 3,
+      "variant": "current",
+      "size": 10000,
+      "buildMs": 21.194166999999997,
+      "countMs": 0.2749075000000001,
+      "dictionaryHeapBytes": 606824,
+      "dictionaryBufferBytes": 1680360,
+      "beforeRssBytes": 56737792,
+      "buildPeakRssBytes": 75333632,
+      "checks": "fe5450e6a717997f0659543fd941c2cac09d3ca0c2a9135be55a9a5c56bbc3e2"
+    },
+    {
+      "round": 1,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 72.50116600000001,
+      "countMs": 0.3047445900000001,
+      "dictionaryHeapBytes": 3512560,
+      "dictionaryBufferBytes": 20097640,
+      "beforeRssBytes": 74432512,
+      "buildPeakRssBytes": 146800640,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 1,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 171.66808400000002,
+      "countMs": 0.2924062500000002,
+      "dictionaryHeapBytes": 3539712,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79265792,
+      "buildPeakRssBytes": 428998656,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 2,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 174.21225,
+      "countMs": 0.32239041999999984,
+      "dictionaryHeapBytes": 3657984,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 78921728,
+      "buildPeakRssBytes": 428769280,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 2,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 77.860209,
+      "countMs": 0.2939241700000001,
+      "dictionaryHeapBytes": 3664136,
+      "dictionaryBufferBytes": 20485352,
+      "beforeRssBytes": 74219520,
+      "buildPeakRssBytes": 145817600,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 3,
+      "variant": "current",
+      "size": 100000,
+      "buildMs": 79.35329200000001,
+      "countMs": 0.3187587500000001,
+      "dictionaryHeapBytes": 3664384,
+      "dictionaryBufferBytes": 20661480,
+      "beforeRssBytes": 74383360,
+      "buildPeakRssBytes": 147505152,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 3,
+      "variant": "baseline",
+      "size": 100000,
+      "buildMs": 180.405416,
+      "countMs": 0.2930783299999999,
+      "dictionaryHeapBytes": 3658096,
+      "dictionaryBufferBytes": 16800360,
+      "beforeRssBytes": 79003648,
+      "buildPeakRssBytes": 429244416,
+      "checks": "84255bd08e6dca57d3a7d3ce01c736b7d9283217aa605780216d37c7adccc8dd"
+    },
+    {
+      "round": 1,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1839.410708,
+      "countMs": 0.33718958000000154,
+      "dictionaryHeapBytes": 35889016,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 227082240,
+      "buildPeakRssBytes": 2418688000,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 1,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 702.7151670000001,
+      "countMs": 0.36120374999999966,
+      "dictionaryHeapBytes": 35884336,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 218120192,
+      "buildPeakRssBytes": 692338688,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 2,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 699.7630409999999,
+      "countMs": 0.33565875000000006,
+      "dictionaryHeapBytes": 35884448,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 220889088,
+      "buildPeakRssBytes": 692977664,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 2,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1811.433541,
+      "countMs": 0.3162770799999998,
+      "dictionaryHeapBytes": 35889016,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 228786176,
+      "buildPeakRssBytes": 2416640000,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 3,
+      "variant": "baseline",
+      "size": 1000000,
+      "buildMs": 1762.006875,
+      "countMs": 0.3500458400000002,
+      "dictionaryHeapBytes": 35881160,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 226607104,
+      "buildPeakRssBytes": 2422063104,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    },
+    {
+      "round": 3,
+      "variant": "current",
+      "size": 1000000,
+      "buildMs": 733.6795830000001,
+      "countMs": 0.3795900000000006,
+      "dictionaryHeapBytes": 35884272,
+      "dictionaryBufferBytes": 168000360,
+      "beforeRssBytes": 216186880,
+      "buildPeakRssBytes": 697810944,
+      "checks": "caaab4e8ef6a4800b866a9b7aa511a40f7ec776b1f5d7858fb742478b4626fb1"
+    }
+  ]
+}

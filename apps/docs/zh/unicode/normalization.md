@@ -40,10 +40,32 @@ matcher.replace(text, 'X') // 'X X'
 
 适配器提供 `search`、`iterate`、`match`、`count`、`countByPattern`、`replace` 和 `tokenize`，
 接受相同的查询选项与参数校验规则。它先处理完整字符串并创建偏移映射；不重叠迭代还会
-收集并排序有效候选。createStream() 对分块输入执行相同的逐字素转换，并把匹配映射回原文
-UTF-16 范围；createTokenStream() 与 createReplaceStream() 提供对应的分块接口。分词流会
-保留尚未结束的原文，直到 end() 才生成完整 token。serialize() 与
-TextMatcher.deserialize() 会保存转换配置、原始关键词和转换后的编译词典。
+收集并排序有效候选。`createStream()` 对分块输入执行相同的逐字素转换，对拼接后的转换文本
+重新分字素，再把匹配映射回原文 UTF-16 范围。转换扩展中的局部匹配会在不重叠选择之前被
+排除。`createTokenStream()` 与 `createReplaceStream()` 复用同一增量流式核心，稳定结果会
+在 EOF 前输出：必须消费每次 `write()` 的返回值，以及匹配流的 `finish()` 或分词／替换流的 `end()`。
+
+```ts
+const stream = matcher.createReplaceStream('X')
+const output = [
+  ...stream.write('Stra'),
+  ...stream.write('ße!'),
+  ...stream.end(),
+].join('') // 'X!'
+```
+
+流会丢弃已提交原文及过期坐标映射。未决原文尾部的上限为
+`maxBufferLength ?? maxBufferedUnits ?? 1_048_576` 个 UTF-16 单元；显式传入 `Infinity`
+可关闭限制。该尾部包含未完成字素、转换尾、待选匹配、词边界上下文和受保护语法。
+大输入块会分段处理，本身超过上限并不等于未决尾部溢出。这是尾部上限，不是进程总内存或
+返回结果的上限。超过限制会抛出 `RangeError` 并关闭流。整词匹配可能需要等到换行或 EOF
+才能确定原文词边界。
+
+过滤器在转换前分类原文。分词流的 `preview()` 使用绝对原文坐标描述未决尾部，不推进实际
+扫描器，其 token 仍是临时预览。取消、结束或失败都会释放保留的扫描状态；交错处理不同
+输入时应分别创建流。
+
+`serialize()` 与 `TextMatcher.deserialize()` 会保存转换配置、原始关键词和转换后的编译词典。
 可选转换需要额外内存和扫描开销，不执行模糊匹配、音译或语言排序比较。
 
 参见 [支持流式处理的折叠](/zh/unicode/case-folding)。

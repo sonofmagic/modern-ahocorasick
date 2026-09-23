@@ -1,0 +1,747 @@
+{
+  "startedAt": "2026-09-23T07:09:40.931Z",
+  "revision": "cd59eb3e36a868e1a6ff7c50a06aa553f24cebb8",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "baselineSourceSha256": "c5eac9909b78d0047f4e86680b38e1bd6747e633f985056c4d25f24692e20b30",
+  "implementationSha256": "c7c20777d07097bf7051f13d0e865025055d920f245157598a43cf3e34cd82b5",
+  "note": "Seven predetermined hash seeds, shared by each baseline/current pair. Full child checks and retained-memory sampling are unchanged; only count and countByPattern are timed. Alternating variant order. This diagnoses process hash randomization; no seed is selected based on results.",
+  "rawRuns": [
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.53312890625,
+          "samplesMs": [
+            1.57135025,
+            1.5263984375000001,
+            1.53312890625,
+            1.5235533750000005,
+            1.54497396875,
+            1.5169427187500002,
+            1.5597877812499998
+          ],
+          "madMs": 0.011845062499999948,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 65231305.46446835
+        },
+        "count": {
+          "ms": 1.3663463750000027,
+          "samplesMs": [
+            1.3701015625000004,
+            1.3828867187499974,
+            1.3663463750000027,
+            1.3620364374999987,
+            1.3962981875000011,
+            1.3517278437500018,
+            1.326673187499999
+          ],
+          "madMs": 0.014618531250000899,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 73193739.03268108
+        }
+      },
+      "dictionaryHeapBytes": 7565.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 1,
+      "hashSeed": 104729,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.5212083124999989,
+          "samplesMs": [
+            1.5486315000000008,
+            1.4927617187500006,
+            1.5325885625000009,
+            1.5315364687499997,
+            1.5043489687499996,
+            1.5212083124999989,
+            1.5044869687499993
+          ],
+          "madMs": 0.016721343749999562,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 65742475.35871263
+        },
+        "count": {
+          "ms": 1.377070312499999,
+          "samplesMs": [
+            1.377070312499999,
+            1.51904296875,
+            1.4010312500000026,
+            1.3724765624999975,
+            1.34596484375,
+            1.3919661249999997,
+            1.3689335937500005
+          ],
+          "madMs": 0.014895812500000716,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 72623742.66019918
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.3870051874999998,
+          "samplesMs": [
+            1.3134687499999997,
+            1.38754296875,
+            1.3817226562499991,
+            1.3989909062500008,
+            1.3566145625000008,
+            1.4128424375000002,
+            1.3870051874999998
+          ],
+          "madMs": 0.011985718750000984,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 72103551.52330676
+        },
+        "count": {
+          "ms": 1.2436054687499976,
+          "samplesMs": [
+            1.2404804687500004,
+            1.2350195312499999,
+            1.2436054687499976,
+            1.2495078124999992,
+            1.2533203125000014,
+            1.2319323124999997,
+            1.269678406249998
+          ],
+          "madMs": 0.008585937499997698,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 80417787.24286443
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 2,
+      "hashSeed": 112648,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.3739739374999989,
+          "samplesMs": [
+            1.3216445312499996,
+            1.4170768437500003,
+            1.413115874999999,
+            1.3736640625000014,
+            1.3739739374999989,
+            1.3537409062499997,
+            1.38444271875
+          ],
+          "madMs": 0.0202330312499992,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 72787406.85719891
+        },
+        "count": {
+          "ms": 1.2182656250000008,
+          "samplesMs": [
+            1.214300781250003,
+            1.2206093750000022,
+            1.2464752812499995,
+            1.2101119999999987,
+            1.2592916562499994,
+            1.2140351562500022,
+            1.2182656250000008
+          ],
+          "madMs": 0.0042304687499985505,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 82090471.85419841
+        }
+      },
+      "dictionaryHeapBytes": 7565.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.8776119999999992,
+          "samplesMs": [
+            1.9079921874999997,
+            1.8776119999999992,
+            1.8212682499999993,
+            2.0116379999999996,
+            1.8283411874999995,
+            1.8296588125,
+            1.921411437499998
+          ],
+          "madMs": 0.04795318749999922,
+          "iterations": 16,
+          "utf16UnitsPerSecond": 53263400.53216535
+        },
+        "count": {
+          "ms": 1.5210455937499994,
+          "samplesMs": [
+            1.5451015624999993,
+            1.545841156249999,
+            1.5112018124999977,
+            1.5118085937500005,
+            1.5045442499999986,
+            1.5210455937499994,
+            1.5224544062499987
+          ],
+          "madMs": 0.009843781250001626,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 65749508.37169804
+        }
+      },
+      "dictionaryHeapBytes": 7565.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 3,
+      "hashSeed": 120567,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.8343958125000004,
+          "samplesMs": [
+            1.9455468750000007,
+            1.8204244999999997,
+            1.8565599375000001,
+            1.8616588749999998,
+            1.8343958125000004,
+            1.7716900625000012,
+            1.7772187499999994
+          ],
+          "madMs": 0.027263062499999435,
+          "iterations": 16,
+          "utf16UnitsPerSecond": 54518223.01300635
+        },
+        "count": {
+          "ms": 1.4911367187500009,
+          "samplesMs": [
+            1.4773984374999998,
+            1.506193999999999,
+            1.4911367187500009,
+            1.4873189999999994,
+            1.4991966249999997,
+            1.4989544375000001,
+            1.4798906249999995
+          ],
+          "madMs": 0.00805990624999886,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 67068296.784908704
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.5816224062500002,
+          "samplesMs": [
+            1.6083502812500008,
+            1.58380078125,
+            1.5652083437500002,
+            1.52387371875,
+            1.5677812499999995,
+            1.5816224062500002,
+            1.5846328125000007
+          ],
+          "madMs": 0.013841156250000708,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 63231274.16809759
+        },
+        "count": {
+          "ms": 1.4082122499999983,
+          "samplesMs": [
+            1.3994870000000006,
+            1.4082122499999983,
+            1.4106835937500009,
+            1.4397539062500009,
+            1.382100281249997,
+            1.3852981875000019,
+            1.4107551875000013
+          ],
+          "madMs": 0.008725249999997686,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 71017703.47474262
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 4,
+      "hashSeed": 128486,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.7073906250000004,
+          "samplesMs": [
+            1.6011302500000006,
+            1.753059874999999,
+            1.7016562499999992,
+            1.7375051875,
+            1.7073906250000004,
+            1.7009479375000023,
+            1.7555833125000007
+          ],
+          "madMs": 0.030114562499999664,
+          "iterations": 16,
+          "utf16UnitsPerSecond": 58573590.91449854
+        },
+        "count": {
+          "ms": 1.4172812499999985,
+          "samplesMs": [
+            1.4165533750000012,
+            1.38901171875,
+            1.4255208124999985,
+            1.4264010312499984,
+            1.4128984375000009,
+            1.418566406250001,
+            1.4172812499999985
+          ],
+          "madMs": 0.004382812499997613,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 70563270.34595294
+        }
+      },
+      "dictionaryHeapBytes": 7565.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.3694752812499988,
+          "samplesMs": [
+            1.3177044062499998,
+            1.4055052187499992,
+            1.384569,
+            1.3649023437499999,
+            1.3613919375000005,
+            1.4051562499999992,
+            1.3694752812499988
+          ],
+          "madMs": 0.015093718750001095,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 73026509.7656359
+        },
+        "count": {
+          "ms": 1.2328176875000025,
+          "samplesMs": [
+            1.2328176875000025,
+            1.2259388125000008,
+            1.2190937500000025,
+            1.2377265625000007,
+            1.2487734374999988,
+            1.2190573125000022,
+            1.240247406249999
+          ],
+          "madMs": 0.007429718749996539,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 81121483.7473686
+        }
+      },
+      "dictionaryHeapBytes": 7565.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 5,
+      "hashSeed": 136405,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.3880898437500004,
+          "samplesMs": [
+            1.4648919374999996,
+            1.3977552187499995,
+            1.4326432500000008,
+            1.3861263125,
+            1.38720703125,
+            1.3556705625000003,
+            1.3880898437500004
+          ],
+          "madMs": 0.009665374999999088,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 72047209.66030766
+        },
+        "count": {
+          "ms": 1.246944031249999,
+          "samplesMs": [
+            1.2259205625000007,
+            1.2363320312499972,
+            1.253365875,
+            1.2314635312500002,
+            1.2534856874999996,
+            1.271805999999998,
+            1.246944031249999
+          ],
+          "madMs": 0.010612000000001842,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 80202477.01073398
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.5346484374999996,
+          "samplesMs": [
+            1.5432057187499995,
+            1.5229687500000004,
+            1.5353906249999998,
+            1.523503906250001,
+            1.5346484374999996,
+            1.5093307499999984,
+            1.5402578125000002
+          ],
+          "madMs": 0.008557281249999882,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 65166716.725634456
+        },
+        "count": {
+          "ms": 1.3629830624999997,
+          "samplesMs": [
+            1.347285156249999,
+            1.3650442812500003,
+            1.3629830624999997,
+            1.391872375000002,
+            1.356592437499998,
+            1.3475703125000003,
+            1.3712057187500015
+          ],
+          "madMs": 0.008222656250001847,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 73374352.73521605
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 6,
+      "hashSeed": 144324,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.55629165625,
+          "samplesMs": [
+            1.5436041562499998,
+            1.56331509375,
+            1.5665052187499997,
+            1.5455234375,
+            1.5959596250000008,
+            1.55629165625,
+            1.5530624999999993
+          ],
+          "madMs": 0.010213562499999718,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 64260448.61088357
+        },
+        "count": {
+          "ms": 1.3804257812500005,
+          "samplesMs": [
+            1.3668840937499986,
+            1.3917747187499998,
+            1.370839843749998,
+            1.367144531250002,
+            1.3804257812500005,
+            1.383609374999999,
+            1.3987109374999989
+          ],
+          "madMs": 0.011348937499999323,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 72447212.56179449
+        }
+      },
+      "dictionaryHeapBytes": 7570.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3-before",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.2262382812499997,
+          "samplesMs": [
+            1.1932200625000005,
+            1.1986041875,
+            1.2513385312499992,
+            1.2262382812499997,
+            1.238203125,
+            1.2511419375,
+            1.1987812499999997
+          ],
+          "madMs": 0.02510024999999949,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 81556742.70587452
+        },
+        "count": {
+          "ms": 1.104669281249997,
+          "samplesMs": [
+            1.1026275937500003,
+            1.1058307187500027,
+            1.0980208437500032,
+            1.104669281249997,
+            1.1127135625000015,
+            1.0854583437500018,
+            1.113755218749997
+          ],
+          "madMs": 0.006648437499993776,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 90532072.99005833
+        }
+      },
+      "dictionaryHeapBytes": 7565.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 23424,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    },
+    {
+      "round": 7,
+      "hashSeed": 152243,
+      "scenario": "ascii-early-unicode",
+      "variant": "v3",
+      "keywords": 1,
+      "utf16Length": 100008,
+      "count": 1,
+      "metrics": {
+        "countByPattern": {
+          "ms": 1.236196624999999,
+          "samplesMs": [
+            1.2310664062500005,
+            1.2284400937499997,
+            1.2397825312500004,
+            1.236196624999999,
+            1.24227475,
+            1.2416484375000003,
+            1.2360989374999996
+          ],
+          "madMs": 0.005130218749998416,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 80899751.68796475
+        },
+        "count": {
+          "ms": 1.1094987187500003,
+          "samplesMs": [
+            1.100833312499999,
+            1.1283867187500007,
+            1.102893250000001,
+            1.131039062500001,
+            1.1166888125000014,
+            1.0974400937500022,
+            1.1094987187500003
+          ],
+          "madMs": 0.00866540625000134,
+          "iterations": 32,
+          "utf16UnitsPerSecond": 90138004.04625297
+        }
+      },
+      "dictionaryHeapBytes": 9025.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 30888,
+      "checks": {
+        "search": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "frequencies": "080a9ed428559ef602668b4c00f114f1a11c3f6b02a435f0bdc154578e4d7f22",
+        "first": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "longest": "5396f069a228eab2d72f52e633c874588965dedaed6c6c70875d8f88109772dd",
+        "replaceFirst": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a",
+        "replaceLongest": "e52f7ac883a073fef40ae5ebe890a0bf0fae9d66a1b3b63d31e684b26c07cf1a"
+      }
+    }
+  ]
+}

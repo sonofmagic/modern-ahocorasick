@@ -1,0 +1,449 @@
+{
+  "startedAt": "2026-09-23T08:12:07.001Z",
+  "revision": "0d10f03bade9609faf6bbe086b0dd4666452c4e0",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "48947f30fe4950507ce8232ea46e5845ea7eca2bf34138a06a4cac54de01b233",
+  "implementationSha256": "6716d18808b34e066dc30eaaaa8b90d773adc567feda47150f18e51b0283296c",
+  "corpusSha256": "4afa3eee0768ace1840771227bd94753d446ab82a09bbaf11d2acf1834462c5e",
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "samples": 7,
+  "rounds": 7,
+  "operations": [
+    "match",
+    "load",
+    "build"
+  ],
+  "note": "v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained-memory samples follow three GC/task turns to settle backing-store disposal. JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. BENCH_TIMINGS=0 measures retained storage and correctness without timing operations. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "load": {
+          "ms": 0.1645836601562498,
+          "madMs": 0.005328613281249783,
+          "betweenRoundsMadMs": 0.0037864609374997915,
+          "roundMediansMs": [
+            0.16304931640624987,
+            0.17689648437500005,
+            0.16964908984374993,
+            0.16318619921875,
+            0.17015494921874996,
+            0.1645836601562498,
+            0.16079719921875002
+          ],
+          "utf16UnitsPerSecond": 205360604.86145735
+        },
+        "build": {
+          "ms": 0.16309782031249975,
+          "madMs": 0.0010795898437505613,
+          "betweenRoundsMadMs": 0.0013994101562500028,
+          "roundMediansMs": [
+            0.16449723046874976,
+            0.15963411328125066,
+            0.17117187500000064,
+            0.1613198242187499,
+            0.16202343750000026,
+            0.16309782031249975,
+            0.16341406249999935
+          ],
+          "utf16UnitsPerSecond": 3004331.9957381836
+        },
+        "match": {
+          "ms": 0.004105168701171863,
+          "madMs": 0.00035403442382811456,
+          "betweenRoundsMadMs": 0.00029038488769533854,
+          "roundMediansMs": [
+            0.004105168701171863,
+            0.004499277832031245,
+            0.0036758474121093843,
+            0.0036318613281250134,
+            0.004163014648437491,
+            0.0043955535888672015,
+            0.0038312175292968542
+          ],
+          "utf16UnitsPerSecond": 8233279180.549078
+        }
+      },
+      "dictionaryCopies": 100,
+      "dictionaryHeapBytes": 9014.48,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 191200,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "load": {
+          "ms": 0.15970247265624993,
+          "madMs": 0.005807941406249739,
+          "betweenRoundsMadMs": 0.0012493515625000562,
+          "roundMediansMs": [
+            0.1581873359374999,
+            0.15763639453125,
+            0.1601196289062501,
+            0.1595143203124998,
+            0.19975309374999983,
+            0.16095182421874998,
+            0.15970247265624993
+          ],
+          "utf16UnitsPerSecond": 211637299.2718174
+        },
+        "build": {
+          "ms": 0.15446630859375032,
+          "madMs": 0.0015008085937497917,
+          "betweenRoundsMadMs": 0.0013030624999994522,
+          "roundMediansMs": [
+            0.15340494921874992,
+            0.1577381210937494,
+            0.15325081250000006,
+            0.15153532031250005,
+            0.15576937109374978,
+            0.15767562109375,
+            0.15446630859375032
+          ],
+          "utf16UnitsPerSecond": 3172212.7916496694
+        },
+        "match": {
+          "ms": 0.0037215476074218823,
+          "madMs": 0.00018739819335933383,
+          "betweenRoundsMadMs": 0.0001214702148437663,
+          "roundMediansMs": [
+            0.003600077392578116,
+            0.0037421264648437313,
+            0.0037215476074218823,
+            0.00414903759765628,
+            0.004006551025390603,
+            0.0036932473144530853,
+            0.003576293945312503
+          ],
+          "utf16UnitsPerSecond": 9081974373.401714
+        }
+      },
+      "dictionaryCopies": 100,
+      "dictionaryHeapBytes": 9102.64,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 191936,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3-before",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "load": {
+          "ms": 1.0194283750000004,
+          "madMs": 0.02272003124999955,
+          "betweenRoundsMadMs": 0.02998434374999981,
+          "roundMediansMs": [
+            1.0675677187499986,
+            1.021601562499999,
+            1.0194283750000004,
+            0.9894440312500006,
+            0.9714869687499998,
+            1.055738281250001,
+            0.999942718749999
+          ],
+          "utf16UnitsPerSecond": 24414662.77608762
+        },
+        "build": {
+          "ms": 1.269145843749996,
+          "madMs": 0.01585156249999997,
+          "betweenRoundsMadMs": 0.012027374999995288,
+          "roundMediansMs": [
+            1.3166666562499998,
+            1.2571184687500008,
+            1.269145843749996,
+            1.2461640625000001,
+            1.2695130312499998,
+            1.3201770937499973,
+            1.258014312500002
+          ],
+          "utf16UnitsPerSecond": 18823683.753642734
+        },
+        "match": {
+          "ms": 0.0003028109817504888,
+          "madMs": 0.0000027198791503913605,
+          "betweenRoundsMadMs": 0.000009643554687500944,
+          "roundMediansMs": [
+            0.0003221963272094716,
+            0.0002989956512451167,
+            0.0003077154159545903,
+            0.00029316742706298783,
+            0.00029025268554687574,
+            0.0003179903030395507,
+            0.0003028109817504888
+          ],
+          "utf16UnitsPerSecond": 82193188160.22374
+        }
+      },
+      "dictionaryCopies": 10,
+      "dictionaryHeapBytes": 55832.8,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 93832,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "shared-prefix",
+      "variant": "v3",
+      "keywords": 1000,
+      "utf16Length": 24889,
+      "count": 1000,
+      "metrics": {
+        "load": {
+          "ms": 1.0081223749999992,
+          "madMs": 0.028877624999999796,
+          "betweenRoundsMadMs": 0.012988249999999368,
+          "roundMediansMs": [
+            1.0382448125000003,
+            0.9951341249999999,
+            1.0081223749999992,
+            1.0099596250000005,
+            0.9686640624999985,
+            1.0226184687500002,
+            0.9952239687500004
+          ],
+          "utf16UnitsPerSecond": 24688470.98051962
+        },
+        "build": {
+          "ms": 0.7827929687499982,
+          "madMs": 0.009999999999999787,
+          "betweenRoundsMadMs": 0.035872390625002026,
+          "roundMediansMs": [
+            0.7981523437500009,
+            0.7827929687499982,
+            0.8450742187499998,
+            0.7336920624999994,
+            0.7387552187500006,
+            0.8186653593750002,
+            0.7644733124999998
+          ],
+          "utf16UnitsPerSecond": 30518925.12288238
+        },
+        "match": {
+          "ms": 0.00031351916503906223,
+          "madMs": 0.0000025278778076152225,
+          "betweenRoundsMadMs": 0.000015335090637206075,
+          "roundMediansMs": [
+            0.0003267202377319339,
+            0.00040234438323974615,
+            0.00031351916503906223,
+            0.0002921059951782219,
+            0.00028784465789794857,
+            0.0003270397186279292,
+            0.00029818407440185615
+          ],
+          "utf16UnitsPerSecond": 79385896542.87643
+        }
+      },
+      "dictionaryCopies": 10,
+      "dictionaryHeapBytes": 62498.4,
+      "dictionaryBufferBytes": 264568,
+      "resultHeapBytes": 105480,
+      "checks": {
+        "search": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "frequencies": "2d95b582a41ce2d9b9197d52bc0de3b041234c65895f8e0e384965427064d34b",
+        "first": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "longest": "60b0304b7da2419252ec7e1f9bfaf0cfd09b65493ebdd3843a9ba69e018c7f8d",
+        "replaceFirst": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9",
+        "replaceLongest": "e6f5011a0136795d100a56bed664ca277d44d599fc8dc238aad80645e6aed7d9"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "load": {
+          "ms": 0.05163895703124999,
+          "madMs": 0.001253906250000103,
+          "betweenRoundsMadMs": 0.00045654296875002887,
+          "roundMediansMs": [
+            0.053555053710937495,
+            0.05163895703124999,
+            0.050530395507812575,
+            0.051999104492187476,
+            0.051507243164062466,
+            0.05209550000000002,
+            0.05094315625000001
+          ],
+          "utf16UnitsPerSecond": 348574042.4444875
+        },
+        "build": {
+          "ms": 0.0360347080078125,
+          "madMs": 0.0004331865234377119,
+          "betweenRoundsMadMs": 0.00019531347656243092,
+          "roundMediansMs": [
+            0.03623002148437493,
+            0.035857380859374954,
+            0.0360347080078125,
+            0.03616027832031232,
+            0.03552262402343742,
+            0.03779516601562505,
+            0.03512967871093764
+          ],
+          "utf16UnitsPerSecond": 27751022.702423315
+        },
+        "match": {
+          "ms": 0.00009564526748657249,
+          "madMs": 0.000001040220260619968,
+          "betweenRoundsMadMs": 0.0000026806182861329256,
+          "roundMediansMs": [
+            0.0000956091880798338,
+            0.00009296464920043957,
+            0.00010045162963867203,
+            0.00009990382194519044,
+            0.00009504246711730972,
+            0.00010656849670410192,
+            0.00009564526748657249
+          ],
+          "utf16UnitsPerSecond": 188195406558.16553
+        }
+      },
+      "dictionaryCopies": 50,
+      "dictionaryHeapBytes": 14412.96,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4471472,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "load": {
+          "ms": 0.05156400585937504,
+          "madMs": 0.0014843330078125327,
+          "betweenRoundsMadMs": 0.00021911718750011744,
+          "roundMediansMs": [
+            0.05156400585937504,
+            0.05159615136718748,
+            0.05109069824218759,
+            0.05066446972656252,
+            0.0516572666015625,
+            0.05256290625000004,
+            0.05134488867187492
+          ],
+          "utf16UnitsPerSecond": 349080714.34731936
+        },
+        "build": {
+          "ms": 0.045099609375000016,
+          "madMs": 0.0005607509765623853,
+          "betweenRoundsMadMs": 0.00031864355468735894,
+          "roundMediansMs": [
+            0.04594742773437499,
+            0.043769612304687566,
+            0.045099609375000016,
+            0.04527628613281265,
+            0.04460335253906256,
+            0.04478096582031266,
+            0.04518452929687489
+          ],
+          "utf16UnitsPerSecond": 22173141.05062578
+        },
+        "match": {
+          "ms": 0.00009689815902709942,
+          "madMs": 0.0000010423679351807304,
+          "betweenRoundsMadMs": 0.0000021209716796876527,
+          "roundMediansMs": [
+            0.00009689815902709942,
+            0.00009099340438842784,
+            0.00009748252105712873,
+            0.00009867461585998539,
+            0.00009477718734741177,
+            0.00010033798217773436,
+            0.000094089111328125
+          ],
+          "utf16UnitsPerSecond": 185762043167.05292
+        }
+      },
+      "dictionaryCopies": 50,
+      "dictionaryHeapBytes": 14581.28,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4483120,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": [
+    {
+      "scenario": "duplicates",
+      "operation": "build",
+      "percent": 25.15602836360489,
+      "beforeMadMs": 0.0004331865234377119,
+      "afterMadMs": 0.0005607509765623853
+    }
+  ]
+}

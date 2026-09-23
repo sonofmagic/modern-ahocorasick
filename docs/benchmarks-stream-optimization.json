@@ -1,0 +1,522 @@
+{
+  "startedAt": "2026-09-23T06:23:33.062Z",
+  "revision": "b6ebdce7f04a8c511060a9af9a65ff64e9c9c04f",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f22b2566b3a6058b41b05564b214899c8d7",
+  "baselineSourceSha256": "8c4bb499ac67a4b7917f264e0f84b36c5d88a3ba7cd0f5cdb0c75fd87b9b3566",
+  "implementationSha256": "593af04bb53db03a3dd84c0be75c30ec04dc51cbd6e863af74db75d6a0e1fb7a",
+  "rounds": 3,
+  "note": "Post-GC retained memory in independent processes; consume outputs immediately and retain the stream handle after finish/cancel. Dictionary and input chunk predate the baseline. Deltas include JIT/runtime heap noise and exclude native ICU and peak RSS. Original ranges and input-index multiplicity are checked by matching full output digests.",
+  "results": [
+    {
+      "variant": "baseline",
+      "strategy": "all",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 2079760,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 3941064,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 15060832,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 15018760,
+      "closedBufferBytes": 0
+    },
+    {
+      "variant": "current",
+      "strategy": "all",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 270016,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 274552,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 270344,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 162272,
+      "closedBufferBytes": 0
+    },
+    {
+      "variant": "baseline",
+      "strategy": "leftmost-longest",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 0,
+          "heapBytes": 2969160,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 0,
+          "heapBytes": 6542264,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 0,
+          "heapBytes": 23765248,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 23735504,
+      "closedBufferBytes": 0
+    },
+    {
+      "variant": "current",
+      "strategy": "leftmost-longest",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 7997,
+          "heapBytes": 277648,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 23997,
+          "heapBytes": 282296,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 79997,
+          "heapBytes": 277600,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 162240,
+      "closedBufferBytes": 0
+    }
+  ],
+  "rawRuns": [
+    {
+      "round": 1,
+      "variant": "baseline",
+      "strategy": "all",
+      "count": 120000,
+      "checks": "7649c1f27da07b95a033991541b69b3fcc11569aca84155b4224e14d97a7e5ce",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 2079704,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 3940968,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 15060776,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 15018704,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 1,
+      "variant": "current",
+      "strategy": "all",
+      "count": 120000,
+      "checks": "7649c1f27da07b95a033991541b69b3fcc11569aca84155b4224e14d97a7e5ce",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 270016,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 274552,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 270344,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 162272,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 2,
+      "variant": "current",
+      "strategy": "all",
+      "count": 120000,
+      "checks": "7649c1f27da07b95a033991541b69b3fcc11569aca84155b4224e14d97a7e5ce",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 270016,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 274552,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 270344,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 162272,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 2,
+      "variant": "baseline",
+      "strategy": "all",
+      "count": 120000,
+      "checks": "7649c1f27da07b95a033991541b69b3fcc11569aca84155b4224e14d97a7e5ce",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 2079800,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 3941064,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 15060872,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 15018800,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 3,
+      "variant": "baseline",
+      "strategy": "all",
+      "count": 120000,
+      "checks": "7649c1f27da07b95a033991541b69b3fcc11569aca84155b4224e14d97a7e5ce",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 2079760,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 3941192,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 15060832,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 15018760,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 3,
+      "variant": "current",
+      "strategy": "all",
+      "count": 120000,
+      "checks": "7649c1f27da07b95a033991541b69b3fcc11569aca84155b4224e14d97a7e5ce",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 11997,
+          "heapBytes": 268928,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 35997,
+          "heapBytes": 273464,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 119997,
+          "heapBytes": 269256,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 161184,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 1,
+      "variant": "current",
+      "strategy": "leftmost-longest",
+      "count": 80000,
+      "checks": "1f5c6da49b33bbef9ad40c5ef4fbc763e5c352b6597a1cf239a708a77d128803",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 7997,
+          "heapBytes": 278592,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 23997,
+          "heapBytes": 283136,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 79997,
+          "heapBytes": 278440,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 163080,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 1,
+      "variant": "baseline",
+      "strategy": "leftmost-longest",
+      "count": 80000,
+      "checks": "1f5c6da49b33bbef9ad40c5ef4fbc763e5c352b6597a1cf239a708a77d128803",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 0,
+          "heapBytes": 2969160,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 0,
+          "heapBytes": 6542264,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 0,
+          "heapBytes": 23764640,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 23735056,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 2,
+      "variant": "baseline",
+      "strategy": "leftmost-longest",
+      "count": 80000,
+      "checks": "1f5c6da49b33bbef9ad40c5ef4fbc763e5c352b6597a1cf239a708a77d128803",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 0,
+          "heapBytes": 2969176,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 0,
+          "heapBytes": 6542280,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 0,
+          "heapBytes": 23765888,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 23735968,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 2,
+      "variant": "current",
+      "strategy": "leftmost-longest",
+      "count": 80000,
+      "checks": "1f5c6da49b33bbef9ad40c5ef4fbc763e5c352b6597a1cf239a708a77d128803",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 7997,
+          "heapBytes": 277504,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 23997,
+          "heapBytes": 282152,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 79997,
+          "heapBytes": 277456,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 162096,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 3,
+      "variant": "current",
+      "strategy": "leftmost-longest",
+      "count": 80000,
+      "checks": "1f5c6da49b33bbef9ad40c5ef4fbc763e5c352b6597a1cf239a708a77d128803",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 7997,
+          "heapBytes": 277648,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 23997,
+          "heapBytes": 282296,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 79997,
+          "heapBytes": 277600,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 162240,
+      "closedBufferBytes": 0
+    },
+    {
+      "round": 3,
+      "variant": "baseline",
+      "strategy": "leftmost-longest",
+      "count": 80000,
+      "checks": "1f5c6da49b33bbef9ad40c5ef4fbc763e5c352b6597a1cf239a708a77d128803",
+      "samples": [
+        {
+          "chunks": 500,
+          "utf16Units": 40000,
+          "emitted": 0,
+          "heapBytes": 2968536,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 1500,
+          "utf16Units": 120000,
+          "emitted": 0,
+          "heapBytes": 6541640,
+          "arrayBufferBytes": 0
+        },
+        {
+          "chunks": 5000,
+          "utf16Units": 400000,
+          "emitted": 0,
+          "heapBytes": 23765248,
+          "arrayBufferBytes": 0
+        }
+      ],
+      "closedHeapBytes": 23735504,
+      "closedBufferBytes": 0
+    }
+  ]
+}
