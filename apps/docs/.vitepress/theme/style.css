@@ -132,6 +132,18 @@ h3,
   margin: 0 auto;
 }
 
+.hero-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 52px;
+}
+
+.hero-intro-copy {
+  min-width: 0;
+}
+
 .hero-kicker {
   font: 13px var(--vp-font-family-mono);
   color: var(--vp-c-brand-1);
@@ -157,9 +169,10 @@ h3,
 
 .hero-links {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   align-items: center;
-  margin: 32px 0 52px;
+  margin: 32px 0 0;
 }
 
 .hero-links a {
@@ -373,6 +386,14 @@ h3,
 .home-path-list b {
   font-size: 18px;
   font-weight: 400;
+}
+
+@media (max-width: 960px) {
+  .hero-intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+  }
 }
 
 @media (max-width: 640px) {

@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="#17243B"/><path d="M12 24L35 12M12 24L35 36" fill="none" stroke="#81acff" stroke-width="3"/><g fill="#17243B" stroke="#81acff" stroke-width="3"><circle cx="12" cy="24" r="5"/><circle cx="35" cy="12" r="5"/><circle cx="35" cy="36" r="5"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <title>modern-ahocorasick</title>
+  <rect width="48" height="48" rx="10" fill="#17243b"/>
+  <path d="M11 38 22 12Q24 7 26 12L37 38" stroke="#81acff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M15 28H36" stroke="#e5edf8" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="36" cy="28" r="3" fill="#60d7b3"/>
+</svg>

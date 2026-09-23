@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <title>modern-ahocorasick</title>
+  <desc>A branching path forms the letter A. A horizontal scan ends at a green match node.</desc>
+  <path d="M42 216 116 48Q128 21 140 48L214 216" stroke="#81acff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M64 154H214" stroke="#e5edf8" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="214" cy="154" r="15" fill="#60d7b3"/>
+</svg>

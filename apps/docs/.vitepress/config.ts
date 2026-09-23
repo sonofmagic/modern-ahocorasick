@@ -5,7 +5,7 @@ import { nav, sidebar } from './navigation.js'
 export default defineConfig({
   title: 'modern-ahocorasick',
   description: 'Exact multi-pattern text matching, one grapheme at a time.',
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg?v=2' }]],
   cleanUrls: true,
   lastUpdated: true,
   locales: {
@@ -39,6 +39,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    logo: { light: '/brand/logo-light.svg', dark: '/brand/logo-dark.svg', alt: '' },
     outline: { level: [2, 3] },
     socialLinks: [
       {
