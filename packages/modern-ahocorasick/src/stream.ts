@@ -60,13 +60,12 @@ function core<T>(matcher: Matcher<T>, options: StreamOptions | undefined, tokenM
   const wordSegmenter = options?.wholeWord ? new Intl.Segmenter(options.locale, { granularity: 'word' }) : undefined
   const wordStarts = new Set<number>()
   const wordEnds = new Set<number>()
-  const history: number[] = []
-  let graphemes = 0
   let session = scanner(matcher, strategy, wordSegmenter ? (start, end) => wordStarts.has(start) && wordEnds.has(end) : undefined)
   const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
   const parser = filter?.create()
   let raw = ''
   let rawBase = 0
+  let rawStartsLine = true
   let tail = ''
   let tailBase = 0
   let classifiedEnd = 0
@@ -81,8 +80,8 @@ function core<T>(matcher: Matcher<T>, options: StreamOptions | undefined, tokenM
     protectedRanges = []
     wordStarts.clear()
     wordEnds.clear()
-    history.length = 0
     parser?.destroy()
+    session?.destroy?.()
     // Drop candidates and grapheme rings as well as original text.
     session = undefined as unknown as typeof session
   }
@@ -108,7 +107,6 @@ function core<T>(matcher: Matcher<T>, options: StreamOptions | undefined, tokenM
     }
     const segments = Array.from(segmenter.segment(settledText))
     if (wordSegmenter) {
-      wordEnds.clear()
       for (const part of wordSegmenter.segment(settledText)) {
         if (part.isWordLike) {
           wordStarts.add(tailBase + part.index)
@@ -126,9 +124,6 @@ function core<T>(matcher: Matcher<T>, options: StreamOptions | undefined, tokenM
       const { segment, index: offset } = segments[index]
       const start = tailBase + offset
       const end = start + segment.length
-      if (wordSegmenter) {
-        history[graphemes++ % (session.maxLength + 1)] = start
-      }
       while (range < protectedRanges.length && protectedRanges[range].end <= start) {
         range++
       }
@@ -161,19 +156,27 @@ function core<T>(matcher: Matcher<T>, options: StreamOptions | undefined, tokenM
         output.push(hit)
       }
     }
-    if (wordSegmenter && graphemes > session.maxLength) {
-      const cutoff = history[(graphemes - session.maxLength - 1) % (session.maxLength + 1)]
-      for (const start of wordStarts) {
-        if (start < cutoff) {
-          wordStarts.delete(start)
+    if (wordSegmenter) {
+      // A transformed scanner may still need a previous line's end boundary.
+      // Its source-coordinate watermark includes pending mapped candidates.
+      for (const boundaries of [wordStarts, wordEnds]) {
+        for (const boundary of boundaries) {
+          if (boundary < session.retainOffset) {
+            boundaries.delete(boundary)
+          }
         }
       }
     }
-    raw = raw.slice(session.safeOffset - rawBase)
+    const released = session.safeOffset - rawBase
+    if (released > 0) {
+      const previous = raw.charCodeAt(released - 1)
+      rawStartsLine = previous === 10 || previous === 13 || previous === 0x2028 || previous === 0x2029
+    }
+    raw = raw.slice(released)
     rawBase = session.safeOffset
     tail = tail.slice(consumed)
     tailBase += consumed
-    protectedRanges = protectedRanges.filter(range => range.end > tailBase)
+    protectedRanges = protectedRanges.filter(range => range.end > Math.min(tailBase, rawBase))
     if (raw.length > maxBufferLength) {
       throw new RangeError('undecided original text exceeds maxBufferLength')
     }
@@ -230,9 +233,43 @@ function core<T>(matcher: Matcher<T>, options: StreamOptions | undefined, tokenM
       if (lifecycle === 'destroyed') {
         throw new Error('stream is destroyed')
       }
-      const tokens = matcher.tokenize(raw, { strategy: strategy === 'all' ? 'leftmost-longest' : strategy }).map((token): Token<T> => token.type === 'text'
-        ? { ...token, start: token.start + rawBase, end: token.end + rawBase }
-        : { ...token, start: token.start + rawBase, end: token.end + rawBase, match: { ...token.match, start: token.match.start + rawBase, end: token.match.end + rawBase } })
+      const localBoundary = wordSegmenter ? resolveBoundary(raw, options) : undefined
+      const preview = scanner(matcher, strategy === 'all' ? 'leftmost-longest' : strategy, localBoundary
+        ? (start, end) => (start !== rawBase || rawStartsLine || wordStarts.has(start)) && localBoundary(start - rawBase, end - rawBase)
+        : undefined)
+      const tokens: Token<T>[] = []
+      let cursor = rawBase
+      const append = (matches: Match<T>[]) => {
+        for (const match of matches) {
+          if (cursor < match.start) {
+            tokens.push({ type: 'text', text: raw.slice(cursor - rawBase, match.start - rawBase), start: cursor, end: match.start })
+          }
+          tokens.push({ type: 'match', text: raw.slice(match.start - rawBase, match.end - rawBase), start: match.start, end: match.end, match })
+          cursor = match.end
+        }
+      }
+      try {
+        const segments = Array.from(segmenter.segment(raw))
+        let range = 0
+        for (let index = 0; index < segments.length; index++) {
+          const part = segments[index]
+          const start = rawBase + part.index
+          const end = start + part.segment.length
+          while (range < protectedRanges.length && protectedRanges[range].end <= start) {
+            range++
+          }
+          // Unclassified filter input stays literal in a provisional preview.
+          const protectedText = end > classifiedEnd || (range < protectedRanges.length && protectedRanges[range].start < end)
+          append(preview.feed(part.segment, start, segments[index + 1]?.segment, protectedText))
+        }
+        append(preview.end())
+      }
+      finally {
+        preview.destroy?.()
+      }
+      if (cursor < rawBase + raw.length) {
+        tokens.push({ type: 'text', text: raw.slice(cursor - rawBase), start: cursor, end: rawBase + raw.length })
+      }
       return { start: rawBase, text: raw, tokens }
     },
   }

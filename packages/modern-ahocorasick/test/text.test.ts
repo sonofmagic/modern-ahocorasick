@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { caseFold } from '../src/case-folding'
+import { createMatchStream, replaceChunks, tokenizeChunks } from '../src/stream'
+import { protectedText, urls } from '../src/stream/filters'
 import TextMatcher from '../src/text'
 
 it('agrees with an independent original-boundary substring oracle', () => {
@@ -178,4 +180,176 @@ it('snapshots inputs and options and validates runtime arguments', () => {
   expect(() => ac.replace('a', null as never)).toThrow(TypeError)
   expect(() => ac.replace('a', () => 1 as never)).toThrow(TypeError)
   expect(() => ac.replace('a', 'X', { strategy: 'all' } as never)).toThrow(TypeError)
+})
+
+it('emits default transformed tokens and replacements before EOF without losing early matches', () => {
+  const matcher = new TextMatcher(['cat', 'a', 'ab'], { caseFold: true })
+  const text = `CAT ab${' '.repeat(24)}`
+  const tokens = matcher.createTokenStream()
+  const early = tokens.write(text)
+  expect(early.filter(token => token.type === 'match').map(token => token.text)).toEqual(['CAT', 'ab'])
+  const all = [...early, ...tokens.end()]
+  expect(all.map(token => token.text).join('')).toBe(text)
+  expect(all.filter(token => token.type === 'match').map(token => token.match)).toEqual(matcher.search(text, { strategy: 'leftmost-longest' }))
+  const replacement = matcher.createReplaceStream('X')
+  const first = replacement.write(text)
+  expect(first.join('')).toContain('X X')
+  expect([...first, ...replacement.end()].join('')).toBe(matcher.replace(text, 'X'))
+  const overlap = new TextMatcher(['a', 'ab']).createTokenStream()
+  expect([...overlap.write('ab'), ...overlap.end()].map(token => token.text)).toEqual(['ab'])
+})
+
+it('keeps transformed grapheme joins and complete expansions identical at every source split', () => {
+  const text = 'ㄱㅏ ß ﬁ e\u0301 İ 👨‍👩‍👧‍👦 a\u{1D165} \uD800!'
+  const patterns = ['ㄱ', 'ㅏ', '가', 's', 'ss', 'ß', 'f', 'fi', 'ﬁ', 'é', 'i\u0307', '👨‍👩‍👧‍👦', 'a', 'a\u{1D165}', '\uD800']
+  for (const normalization of ['NFC', 'NFD', 'NFKC', 'NFKD'] as const) {
+    const matcher = new TextMatcher(patterns, { normalization, caseFold: true })
+    const chunkings = [...Array.from({ length: text.length + 1 }, (_, at) => [text.slice(0, at), text.slice(at)]), text.split('')]
+    for (const strategy of ['all', 'leftmost-first', 'leftmost-longest'] as const) {
+      const expected = matcher.search(text, { strategy })
+      for (const chunks of chunkings) {
+        const stream = matcher.createStream({ strategy })
+        expect([...chunks.flatMap(chunk => stream.write(chunk)), ...stream.finish()], `${normalization}, ${strategy}`).toEqual(expected)
+        if (strategy !== 'all') {
+          const tokens = [...tokenizeChunks(matcher, chunks, { strategy })]
+          expect(tokens.map(token => token.text).join('')).toBe(text)
+          expect(tokens.filter(token => token.type === 'match').map(token => token.match)).toEqual(expected)
+        }
+      }
+    }
+  }
+  const hangul = new TextMatcher(['ㄱ', 'ㅏ', '가'], { normalization: 'NFKD' })
+  const stream = hangul.createStream()
+  expect([...stream.write('ㄱ'), ...stream.write('ㅏ'), ...stream.finish()].map(hit => hit.pattern)).toEqual(['가'])
+})
+
+it('retains original word boundaries until delayed transformed matches settle across lines', () => {
+  const matcher = new TextMatcher(['s', 'ss', 'strasse', 'strasse\ncat', 'cat'], { caseFold: true })
+  const text = 'Straße\nCAT Straße!catx CAT\nStraße\n'
+  for (const strategy of ['all', 'leftmost-first', 'leftmost-longest'] as const) {
+    const options = { strategy, wholeWord: true, locale: 'de' }
+    const stream = matcher.createStream(options)
+    const matches = []
+    for (const chunk of text.split('')) {
+      matches.push(...stream.write(chunk))
+    }
+    expect(matches.length).toBeGreaterThan(0)
+    matches.push(...stream.finish())
+    expect(matches).toEqual(matcher.search(text, options))
+  }
+})
+
+it('filters original syntax before transformation and previews without consuming parser state', () => {
+  const matcher = new TextMatcher(['cat'], { normalization: 'NFKC', caseFold: true })
+  const text = 'ＣＡＴ https://ＣＡＴ ＣＡＴ `ＣＡＴ` ｈｔｔｐｓ：／／ＣＡＴ'
+  const expected = 'X https://ＣＡＴ X `ＣＡＴ` ｈｔｔｐｓ：／／X'
+  const filter = protectedText({ urls: true, markdown: true })
+  for (const chunks of [text.split(''), ...Array.from({ length: text.length + 1 }, (_, at) => [text.slice(0, at), text.slice(at)])]) {
+    expect([...replaceChunks(matcher, chunks, 'X', { filter })].join('')).toBe(expected)
+  }
+  const stream = matcher.createTokenStream({ filter })
+  const tokens = stream.write('ＣＡＴ https://ＣＡＴ `ＣＡＴ')
+  const first = stream.preview()
+  expect(stream.preview()).toEqual(first)
+  expect(first.tokens.filter(token => token.type === 'match').map(token => token.text)).not.toContain('ＣＡＴ')
+  tokens.push(...stream.write('` ＣＡＴ'), ...stream.end())
+  expect(tokens.map(token => token.text).join('')).toBe('ＣＡＴ https://ＣＡＴ `ＣＡＴ` ＣＡＴ')
+  expect(tokens.filter(token => token.type === 'match').map(token => token.match.start)).toEqual([0, 22])
+  const prefix = matcher.createTokenStream({ filter: urls() })
+  prefix.write('ＣＡＴ http')
+  expect(prefix.preview().tokens.map(token => token.text).join('')).toBe(prefix.preview().text)
+  prefix.destroy()
+})
+
+it('bounds undecided original text through normalization, whole words and protected syntax', () => {
+  const matcher = new TextMatcher(['ss', 'cat'], { caseFold: true, normalization: 'NFKD' })
+  for (const create of [
+    () => matcher.createStream({ maxBufferedUnits: 8 }),
+    () => matcher.createTokenStream({ maxBufferLength: 8 }),
+    () => matcher.createReplaceStream('X', { maxBufferLength: 8 }),
+  ]) {
+    const stream = create()
+    expect(() => stream.write(`a${'\u0301'.repeat(20)}`)).toThrow(RangeError)
+    expect(() => stream.write('cat')).toThrow()
+  }
+  const joined = matcher.createStream({ maxBufferLength: 8 })
+  expect(() => joined.write('ㄱ'.repeat(20))).toThrow(RangeError)
+  const word = matcher.createStream({ wholeWord: true, maxBufferLength: 8 })
+  expect(() => word.write('x'.repeat(20))).toThrow(RangeError)
+  const syntax = matcher.createStream({ filter: protectedText({ markdown: true }), maxBufferLength: 8 })
+  expect(() => syntax.write(`\`${'x'.repeat(20)}`)).toThrow(RangeError)
+  const unlimited = matcher.createStream({ maxBufferLength: Number.POSITIVE_INFINITY, maxBufferedUnits: 1 })
+  expect(unlimited.write(`a${'\u0301'.repeat(20)}`)).toEqual([])
+  expect(unlimited.finish()).toEqual([])
+  const bounded = matcher.createStream({ maxBufferLength: 8, maxBufferedUnits: Number.POSITIVE_INFINITY })
+  expect(() => bounded.write(`a${'\u0301'.repeat(20)}`)).toThrow(RangeError)
+  const expansion = new TextMatcher(['ss'], { caseFold: true }).createStream({ maxBufferLength: 8 })
+  const matches = [...expansion.write('ß '.repeat(40)), ...expansion.finish()]
+  expect(matches).toHaveLength(40)
+})
+
+it('keeps transformed offset history bounded and clears it at EOF or cancellation', () => {
+  const matcher = new TextMatcher(['strasse'], { caseFold: true })
+  const maps = new Set<Map<unknown, unknown>>()
+  const originalSet = Map.prototype.set
+  let maximum = 0
+  let count = 0
+  const spy = vi.spyOn(Map.prototype, 'set').mockImplementation(function (this: Map<unknown, unknown>, key: unknown, value: unknown) {
+    const result = originalSet.call(this, key, value)
+    if (typeof key === 'number' && typeof value === 'number') {
+      maps.add(this)
+      maximum = Math.max(maximum, this.size)
+    }
+    return result
+  })
+  try {
+    const stream = matcher.createStream({ maxBufferedUnits: 32 })
+    for (let index = 0; index < 200; index++) {
+      count += stream.write('Straße '.repeat(6)).length
+    }
+    count += stream.finish().length
+    const cancelled = matcher.createStream({ maxBufferedUnits: 32 })
+    for (let index = 0; index < 200; index++) {
+      cancelled.write('Straße '.repeat(6))
+    }
+    cancelled.cancel()
+  }
+  finally {
+    spy.mockRestore()
+  }
+  expect(count).toBe(1200)
+  expect(maps.size).toBe(2)
+  expect(maximum).toBeLessThan(32)
+  expect([...maps].map(map => map.size)).toEqual([0, 0])
+})
+
+it('preserves strict text-session closure while shared adapters remain independently usable', () => {
+  const matcher = new TextMatcher(['cat'], { caseFold: true })
+  const stream = matcher.createStream()
+  stream.write('CAT')
+  const hits = stream.finish()
+  hits[0].pattern = 'changed'
+  expect(matcher.search('CAT')[0].pattern).toBe('cat')
+  expect(() => stream.finish()).toThrow('finished or cancelled')
+  expect(() => stream.write('CAT')).toThrow('finished or cancelled')
+  stream.cancel()
+  stream.cancel()
+  const tokens = matcher.createTokenStream()
+  tokens.write('CAT')
+  tokens.end()
+  expect(() => tokens.end()).toThrow('finished or cancelled')
+  expect(tokens.preview()).toEqual({ start: 0, text: '', tokens: [] })
+  const cancelled = matcher.createTokenStream()
+  cancelled.write('CAT')
+  cancelled.destroy()
+  expect(cancelled.preview()).toEqual({ start: 0, text: '', tokens: [] })
+  expect(() => cancelled.write('CAT')).toThrow('finished or cancelled')
+  const shared = createMatchStream(matcher)
+  expect([...shared.write('CAT'), ...shared.end()]).toEqual(matcher.search('CAT'))
+  expect(shared.end()).toEqual([])
+  const failed = matcher.createReplaceStream(() => {
+    throw new Error('callback failed')
+  })
+  expect(() => failed.write('CAT'.repeat(30))).toThrow('callback failed')
+  expect(() => failed.write('CAT')).toThrow()
 })
