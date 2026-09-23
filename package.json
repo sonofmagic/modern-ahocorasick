@@ -37,7 +37,7 @@
     "release": "pnpm change",
     "version-packages": "repo release stable prepare",
     "publish-packages": "repo release stable publish",
-    "benchmark": "pnpm build && node --expose-gc scripts/benchmark.mjs",
+    "benchmark": "pnpm build >&2 && node --expose-gc scripts/benchmark.mjs",
     "docs:dev": "pnpm --filter modern-ahocorasick build && pnpm --filter @modern-ahocorasick/docs dev",
     "docs:build": "turbo run build --filter=@modern-ahocorasick/docs",
     "docs:preview": "pnpm --filter @modern-ahocorasick/docs preview",
@@ -49,6 +49,8 @@
     "benchmark:external": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-external.mjs",
     "benchmark:history": "pnpm --filter modern-ahocorasick build && node --expose-gc scripts/benchmark-history.mjs",
     "benchmark:versions": "pnpm --filter modern-ahocorasick build >&2 && node --expose-gc scripts/benchmark-versions.mjs",
+    "benchmark:scale": "pnpm --filter modern-ahocorasick build >&2 && node --expose-gc scripts/benchmark-scale.mjs",
+    "benchmark:stream": "pnpm --filter modern-ahocorasick build >&2 && node --expose-gc scripts/benchmark-stream.mjs",
     "test:benchmark:versions": "vitest run packages/modern-ahocorasick/test/benchmark-versions.test.ts"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import { cpus } from 'node:os'
 import { performance } from 'node:perf_hooks'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { implementationDigest, median, time } from './benchmark-utils.mjs'
+import { benchmarkHashSeed, benchmarkJournal, collectGarbage, implementationDigest, median, retainedDictionaryCopies, time } from './benchmark-utils.mjs'
 import { compare, digest, normalizer, reference, scenarios, selection } from './benchmark-versions-utils.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
@@ -16,12 +16,16 @@ const entries = {
   v2: import.meta.resolve('modern-ahocorasick-v2'),
   current: new URL('../packages/modern-ahocorasick/dist/index.js', import.meta.url).href,
 }
+const environment = { node: process.version, pnpm: JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).packageManager, platform: process.platform, arch: process.arch, cpu: cpus()[0]?.model, icu: process.versions.icu, unicode: process.versions.unicode }
+const runnerSha256 = digest(['benchmark-versions.mjs', 'benchmark-versions-utils.mjs', 'benchmark-utils.mjs'].map(file => [file, readFileSync(new URL(file, import.meta.url), 'utf8')]))
 const operations = selection(process.env.BENCH_OPERATIONS, ['build', 'search', 'match', 'normalizedSearch'], 'BENCH_OPERATIONS')
 const recheck = process.argv[2] === '--recheck'
   ? JSON.parse(readFileSync(process.argv[3], 'utf8'))
   : undefined
 if (recheck) {
   assert.equal(recheck.schemaVersion, 1, 'Unsupported recheck input')
+  assert.deepEqual(recheck.environment, environment, 'Recheck environment changed')
+  assert.equal(recheck.runnerSha256, runnerSha256, 'Recheck benchmark methodology changed; run a new full comparison')
   assert.equal(recheck.corpusSha256, digest(scenarios), 'Recheck corpus changed')
   for (const variant of variants) {
     assert.equal(recheck.versions[variant].implementationSha256, implementationDigest(fileURLToPath(new URL('./', entries[variant]))), `Recheck ${variant} implementation changed`)
@@ -41,12 +45,12 @@ assert.equal(typeof globalThis.gc, 'function', 'Run Node with --expose-gc')
 
 // A global root keeps the measured objects alive across explicit GC.
 let retained
-function retention(operation, divisor = 1) {
+async function retention(operation, divisor = 1) {
   retained = undefined
-  globalThis.gc()
+  await collectGarbage()
   const before = process.memoryUsage()
   retained = operation()
-  globalThis.gc()
+  await collectGarbage()
   const after = process.memoryUsage()
   assert.notEqual(retained, undefined)
   const value = {
@@ -54,7 +58,7 @@ function retention(operation, divisor = 1) {
     arrayBufferBytes: (after.arrayBuffers - before.arrayBuffers) / divisor,
   }
   retained = undefined
-  globalThis.gc()
+  await collectGarbage()
   return value
 }
 
@@ -75,16 +79,17 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
     // Warm the constructor and each result representation before the post-GC deltas.
     retained = new Constructor(patterns)
     retained = undefined
-    const dictionary = retention(() => Array.from({ length: 10 }, () => new Constructor(patterns)), 10)
+    const dictionaryCopies = retainedDictionaryCopies(patterns.length)
+    const dictionary = await retention(() => Array.from({ length: dictionaryCopies }, () => new Constructor(patterns)), dictionaryCopies)
     const matcher = new Constructor(patterns)
     retained = matcher.search(text)
     retained = undefined
-    const nativeResults = retention(() => matcher.search(text))
+    const nativeResults = await retention(() => matcher.search(text))
     const normalize = normalizer(variant, patterns)
     retained = normalize(matcher.search(text), text)
     retained = undefined
-    const normalizedResults = retention(() => normalize(matcher.search(text), text))
-    console.log(JSON.stringify({ variant, scenario, dictionary, nativeResults, normalizedResults }))
+    const normalizedResults = await retention(() => normalize(matcher.search(text), text))
+    console.log(JSON.stringify({ variant, scenario, dictionaryCopies, dictionary, nativeResults, normalizedResults }))
   }
   else {
     const matcher = new Constructor(patterns)
@@ -110,7 +115,23 @@ if (process.argv[2] === '--child' || process.argv[2] === '--memory') {
   }
 }
 else {
-  const startedAt = new Date().toISOString()
+  const packageInfo = (url) => {
+    const pkg = JSON.parse(readFileSync(url, 'utf8'))
+    return { name: pkg.name, version: pkg.version }
+  }
+  const journal = benchmarkJournal(root, 'versions', {
+    environment,
+    hashSeeds: Array.from({ length: rounds }, (_, round) => benchmarkHashSeed(round)),
+    versions: {
+      v1: { ...packageInfo(new URL(import.meta.resolve('modern-ahocorasick-v1/package.json'))), implementationSha256: implementationDigest(fileURLToPath(new URL('./', entries.v1))) },
+      v2: { ...packageInfo(new URL(import.meta.resolve('modern-ahocorasick-v2/package.json'))), implementationSha256: implementationDigest(fileURLToPath(new URL('./', entries.v2))) },
+      current: { ...packageInfo(new URL('../packages/modern-ahocorasick/package.json', import.meta.url)), implementationSha256: implementationDigest(fileURLToPath(new URL('./', entries.current))) },
+    },
+    runnerSha256,
+    lockfileSha256: digest(readFileSync(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8')),
+    corpusSha256: digest(scenarios),
+    timingMethod: 'Each operation has at least 250 ms of cumulative warmup, calibrated batches targeting 25 ms up to 1,048,576 iterations, and seven GC-separated samples.',
+  })
   const start = performance.now()
   const rawRuns = []
   const memoryRuns = []
@@ -124,8 +145,10 @@ else {
       for (const variant of order) {
         process.stderr.write(`Versions ${scenario} / ${variant} / round ${round + 1}/${rounds}\n`)
         for (const [mode, destination] of (recheck ? [['--child', rawRuns]] : [['--child', rawRuns], ['--memory', memoryRuns]])) {
-          const result = JSON.parse(execFileSync(process.execPath, ['--expose-gc', script, mode, variant, scenario], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, env: { ...process.env, BENCH_OPERATIONS: operationsFor(scenario).join(',') } }))
-          destination.push({ round: round + 1, ...result })
+          const hashSeed = benchmarkHashSeed(round)
+          const result = JSON.parse(execFileSync(process.execPath, [`--hash-seed=${hashSeed}`, '--expose-gc', script, mode, variant, scenario], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, env: { ...process.env, BENCH_OPERATIONS: operationsFor(scenario).join(',') } }))
+          journal.record(mode === '--child' ? 'timing' : 'memory', { round: round + 1, hashSeed, ...result })
+          destination.push({ round: round + 1, hashSeed, ...result })
         }
       }
     }
@@ -143,6 +166,7 @@ else {
       utf16Length: scenarios[scenario].text.length,
       unicode: scenarios[scenario].unicode === true,
       checks: runs[0].checks,
+      dictionaryCopies: recheck ? null : memory[0].dictionaryCopies,
       metrics: Object.fromEntries(operationsFor(scenario).map((operation) => {
         const values = runs.map(run => run.metrics[operation])
         const roundMediansMs = values.map(value => value.ms)
@@ -174,26 +198,11 @@ else {
       }
     }
   }
-  const packageInfo = (url) => {
-    const pkg = JSON.parse(readFileSync(url, 'utf8'))
-    return { name: pkg.name, version: pkg.version }
-  }
   console.log(JSON.stringify({
+    ...journal.metadata,
     schemaVersion: 1,
     recheckOf: recheck ? { startedAt: recheck.startedAt, reportSha256: digest(recheck) } : null,
-    startedAt,
     elapsedSeconds: (performance.now() - start) / 1000,
-    environment: { node: process.version, pnpm: JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).packageManager, platform: process.platform, arch: process.arch, cpu: cpus()[0]?.model, icu: process.versions.icu, unicode: process.versions.unicode },
-    revision: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
-    workingTreeDirty: execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim().length > 0,
-    versions: {
-      v1: { ...packageInfo(new URL(import.meta.resolve('modern-ahocorasick-v1/package.json'))), implementationSha256: implementationDigest(fileURLToPath(new URL('./', entries.v1))) },
-      v2: { ...packageInfo(new URL(import.meta.resolve('modern-ahocorasick-v2/package.json'))), implementationSha256: implementationDigest(fileURLToPath(new URL('./', entries.v2))) },
-      current: { ...packageInfo(new URL('../packages/modern-ahocorasick/package.json', import.meta.url)), implementationSha256: implementationDigest(fileURLToPath(new URL('./', entries.current))) },
-    },
-    runnerSha256: digest(['benchmark-versions.mjs', 'benchmark-versions-utils.mjs', 'benchmark-utils.mjs'].map(file => [file, readFileSync(new URL(file, import.meta.url), 'utf8')])),
-    lockfileSha256: digest(readFileSync(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8')),
-    corpusSha256: digest(scenarios),
     rounds,
     samples: 7,
     operations,
@@ -202,8 +211,8 @@ else {
       'Current is the local default ESM build; v1/v2 are exact published ESM artifacts, pinned by npm aliases and lockfile.',
       'Native search returns grouped arrays for v1/v2 and independent ranges for current; output work differs. normalizedSearch includes historical flattening and v2 per-query grapheme-to-UTF-16 segmentation; dictionary index maps are prepared outside timing. Current already returns the target format. Canonical sorting is correctness-only.',
       'Correctness uses independent boundary-aware substring searches, including duplicate multiplicity. Known v1 Unicode defects are recorded, never repaired or used for ratios. Unexpected mismatches fail the run.',
-      'Five rounds by default; seven calibrated batched samples per operation, GC outside timings, fresh processes with rotated version order. match has no throughput because it can exit early.',
-      'Memory uses separate processes each round: post-GC deltas, ten retained native dictionaries, and one retained native/normalized result. Shared keyword arrays in historical native results are already owned by the dictionary; adapter maps are excluded. Signed deltas retain GC noise; buffers are separate from JS heap. Neither native ICU memory nor peak RSS is measured.',
+      'Five rounds by default; at least 250 ms of cumulative warmup followed by seven calibrated batched samples per operation, GC outside timings, fresh processes with rotated version order. match has no throughput because it can exit early.',
+      'Memory uses separate processes each round: deltas after three GC/task turns to settle backing-store disposal, 10–1000 retained native dictionaries depending on pattern count (dictionaryCopies records the divisor), and one retained native/normalized result. Shared keyword arrays in historical native results are already owned by the dictionary; adapter maps are excluded. Signed deltas retain GC noise; buffers are separate from JS heap. Neither native ICU memory nor peak RSS is measured.',
       'Ratios are current milliseconds / baseline milliseconds; below one is faster. Flags above 1.05 request a seven-round recheck, not an automatic performance failure.',
     ],
     results,

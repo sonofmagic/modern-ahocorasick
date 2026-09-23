@@ -1,0 +1,544 @@
+{
+  "startedAt": "2026-09-23T07:30:59.573Z",
+  "revision": "cd59eb3e36a868e1a6ff7c50a06aa553f24cebb8",
+  "workingTreeDirty": true,
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Max",
+    "icu": "78.3",
+    "unicode": "17.0"
+  },
+  "baselineRef": "b01c9f2",
+  "hashSeeds": [
+    104729,
+    112648,
+    120567,
+    128486,
+    136405,
+    144324,
+    152243
+  ],
+  "baselineBundling": "public-multi-entry",
+  "baselineSourceSha256": "f9f1db7fe857207acf4dc4afaa810c8216769cc4a97e94096c50a7b0672e4241",
+  "implementationSha256": "3b9119908bfda141b7ebba8f291ebba40f285cb04bbde0caadb87781cade0e36",
+  "corpusSha256": "5359a336ba03cd231b9fd7fd17e4b06e4945478fdc3682fb28c7e1322610f043",
+  "node": "v24.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Max",
+  "icu": "78.3",
+  "unicode": "17.0",
+  "samples": 7,
+  "rounds": 7,
+  "operations": [
+    "search",
+    "iterate:all"
+  ],
+  "note": "v3-before is the implementation at baselineRef. Medians across counterbalanced independent processes, each using batched samples after warmup; within/between-round MAD reports noise. load uses validated restoration when available, otherwise rebuilds from patterns; saving is excluded. countByPattern uses the native method when available, otherwise iterator tallying. Presence-query throughput uses total input length despite early exit. Retained-memory samples follow three GC/task turns to settle backing-store disposal. JS heap excludes ArrayBuffer backing stores (reported separately) and native ICU. Memory runs are separate cold processes; OS peak RSS includes runtime, input, dictionary and native memory; historical modules are transported as data URLs, so loader storage also differs. BENCH_TIMINGS=0 measures retained storage and correctness without timing operations. Regressions >5% require reproduction and investigation, not an automatic noisy CI gate.",
+  "results": [
+    {
+      "scenario": "dense-suffix",
+      "variant": "v3-before",
+      "keywords": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "metrics": {
+        "search": {
+          "ms": 2.391091124999999,
+          "madMs": 0.02369006250000183,
+          "betweenRoundsMadMs": 0.029229124999998746,
+          "roundMediansMs": [
+            2.395320312499999,
+            2.391091124999999,
+            2.3618620000000004,
+            2.4052734375,
+            2.359190124999998,
+            2.4647056875000004,
+            2.3283463750000006
+          ],
+          "utf16UnitsPerSecond": 418219.10906887765
+        },
+        "iterate:all": {
+          "ms": 1.7896119374999984,
+          "madMs": 0.012713562500003661,
+          "betweenRoundsMadMs": 0.023572874999992166,
+          "roundMediansMs": [
+            1.763239624999997,
+            1.7907682499999993,
+            1.7660390625000062,
+            1.7919713749999957,
+            1.844437499999998,
+            1.7896119374999984,
+            1.732989562500002
+          ],
+          "utf16UnitsPerSecond": 558780.3584932227
+        }
+      },
+      "dictionaryHeapBytes": 18788,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6781528,
+      "checks": {
+        "search": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+        "frequencies": "5aa956efc4b9519a4c8d311a686757f433b11436266510328032f93b1d529b59",
+        "first": "60871d4ca1167dc3fa76a1e8cc5e16f7f9693ec7f9c4577d7c02b6dbae9461cd",
+        "longest": "e217d123343140c3386b4181d50945a0d5249f73be9a2ad9a95857e3cde2607e",
+        "replaceFirst": "3685cba09912705fc3989b10ad31b8b1c4efe2f0a8a0e6bb1472cab9c5d601d1",
+        "replaceLongest": "0be67507e8a5618ea566654b99a00b9a174421c4f313fdb9690187c70f65dc3b"
+      }
+    },
+    {
+      "scenario": "dense-suffix",
+      "variant": "v3",
+      "keywords": 96,
+      "utf16Length": 1000,
+      "count": 91440,
+      "metrics": {
+        "search": {
+          "ms": 2.4197968749999994,
+          "madMs": 0.03946875000000105,
+          "betweenRoundsMadMs": 0.013239625000000643,
+          "roundMediansMs": [
+            2.4197968749999994,
+            2.4121536874999983,
+            2.4421745,
+            2.429859375000003,
+            2.3764973749999996,
+            2.4330365,
+            2.3164974375000007
+          ],
+          "utf16UnitsPerSecond": 413257.8276844003
+        },
+        "iterate:all": {
+          "ms": 1.788609375,
+          "madMs": 0.010828062500007007,
+          "betweenRoundsMadMs": 0.011083374999998341,
+          "roundMediansMs": [
+            1.7891093750000024,
+            1.7775260000000017,
+            1.8200963124999987,
+            1.7955520625000005,
+            1.7760156249999994,
+            1.788609375,
+            1.7526718750000043
+          ],
+          "utf16UnitsPerSecond": 559093.5695503665
+        }
+      },
+      "dictionaryHeapBytes": 11312,
+      "dictionaryBufferBytes": 3868,
+      "resultHeapBytes": 6784552,
+      "checks": {
+        "search": "4ae6d0e5186df567f8775472cf070229c278e91daca1c271103cc3b0ca0a049b",
+        "frequencies": "5aa956efc4b9519a4c8d311a686757f433b11436266510328032f93b1d529b59",
+        "first": "60871d4ca1167dc3fa76a1e8cc5e16f7f9693ec7f9c4577d7c02b6dbae9461cd",
+        "longest": "e217d123343140c3386b4181d50945a0d5249f73be9a2ad9a95857e3cde2607e",
+        "replaceFirst": "3685cba09912705fc3989b10ad31b8b1c4efe2f0a8a0e6bb1472cab9c5d601d1",
+        "replaceLongest": "0be67507e8a5618ea566654b99a00b9a174421c4f313fdb9690187c70f65dc3b"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "search": {
+          "ms": 2.356497375,
+          "madMs": 0.02020568750000251,
+          "betweenRoundsMadMs": 0.028369812500001146,
+          "roundMediansMs": [
+            2.3255078124999997,
+            2.3290573125,
+            2.4082448125000013,
+            2.2913203125000017,
+            2.356497375,
+            2.3723515625000005,
+            2.384867187500001
+          ],
+          "utf16UnitsPerSecond": 7638455.3579229
+        },
+        "iterate:all": {
+          "ms": 2.005765625000002,
+          "madMs": 0.012872437500000444,
+          "betweenRoundsMadMs": 0.00795049999999975,
+          "roundMediansMs": [
+            1.9978151250000025,
+            1.9937916875,
+            2.0037005625000006,
+            2.005765625000002,
+            2.0238124999999982,
+            2.038177062500001,
+            2.007354187499999
+          ],
+          "utf16UnitsPerSecond": 8974129.26796967
+        }
+      },
+      "dictionaryHeapBytes": 21280,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4464624,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "duplicates",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 18000,
+      "count": 60000,
+      "metrics": {
+        "search": {
+          "ms": 1.7177760624999987,
+          "madMs": 0.032427062500001824,
+          "betweenRoundsMadMs": 0.015309937499997872,
+          "roundMediansMs": [
+            1.8739244999999993,
+            1.7104505000000003,
+            1.7177760624999987,
+            1.7009973749999983,
+            1.7024661250000008,
+            1.722203125,
+            1.7866354374999993
+          ],
+          "utf16UnitsPerSecond": 10478665.05591151
+        },
+        "iterate:all": {
+          "ms": 1.2997721250000005,
+          "madMs": 0.010317750000002235,
+          "betweenRoundsMadMs": 0.007930968749999323,
+          "roundMediansMs": [
+            1.3037239374999992,
+            1.283407531249999,
+            1.334990874999999,
+            1.2890117187500003,
+            1.3014466250000005,
+            1.2997721250000005,
+            1.2918411562500012
+          ],
+          "utf16UnitsPerSecond": 13848581.34267189
+        }
+      },
+      "dictionaryHeapBytes": 24015.2,
+      "dictionaryBufferBytes": 1600,
+      "resultHeapBytes": 4468264,
+      "checks": {
+        "search": "7b95bbbf8026266e8892cb1acc507894c52e1ca18219a3e3f3f23c55a0f73a08",
+        "frequencies": "a0bf390c11fb9ddd63616f6b54c25d527a18de56eb5975a6087a93df411c841a",
+        "first": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "longest": "110377ae8e00024be8151010a12dce40219c7949f50cd6d997a5439fa4106edb",
+        "replaceFirst": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38",
+        "replaceLongest": "d122243a933d8923fe5ee6c317d552f67f1be303ab156e3710a3e7bb6ef29b38"
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "variant": "v3-before",
+      "keywords": 200,
+      "utf16Length": 32899,
+      "count": 4900,
+      "metrics": {
+        "search": {
+          "ms": 2.020705750000001,
+          "madMs": 0.01893487499999935,
+          "betweenRoundsMadMs": 0.017796875000001933,
+          "roundMediansMs": [
+            2.0051301875000007,
+            2.020705750000001,
+            2.054869749999998,
+            2.0029088749999993,
+            2.0661510624999995,
+            2.057888000000002,
+            2.0100130000000007
+          ],
+          "utf16UnitsPerSecond": 16280945.40731622
+        },
+        "iterate:all": {
+          "ms": 1.9427994999999996,
+          "madMs": 0.014049437500005979,
+          "betweenRoundsMadMs": 0.018471375000000734,
+          "roundMediansMs": [
+            1.9243281249999988,
+            1.9235546875000011,
+            1.941640624999998,
+            1.9427994999999996,
+            2.033773437499999,
+            1.9950468749999999,
+            1.9491432499999988
+          ],
+          "utf16UnitsPerSecond": 16933811.234767154
+        }
+      },
+      "dictionaryHeapBytes": 24623.2,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 381208,
+      "checks": {
+        "search": "93064955d980a1edbc548be7a7068d159c341c4ab5d3e808fca69da6d631adca",
+        "frequencies": "584420f693440e23d163f4e074345a00a6b710c0dcda57f41e5d9fd2d069a3b2",
+        "first": "0f58040334188573e31242045bfb7750c08b608506db249f90d907112949d27f",
+        "longest": "7fcd5c49561e60549f1dab41f9090c6b8bbb63639fa1b5c645fa94291d597d83",
+        "replaceFirst": "d30418c5b9cbd55553b8a545481d43661a590893ce38fcaf80bb25df8299c5c1",
+        "replaceLongest": "6608677c8b31b1bcc132f4b06709d229eb70b0a289b8dc350134a03c0697867e"
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "variant": "v3",
+      "keywords": 200,
+      "utf16Length": 32899,
+      "count": 4900,
+      "metrics": {
+        "search": {
+          "ms": 0.623997390625,
+          "madMs": 0.008968093750000072,
+          "betweenRoundsMadMs": 0.007377609375000205,
+          "roundMediansMs": [
+            0.6166197812499998,
+            0.6217884062499999,
+            0.6406803437499997,
+            0.6298802031249999,
+            0.623997390625,
+            0.6450930937499999,
+            0.6037369843749998
+          ],
+          "utf16UnitsPerSecond": 52722976.88143878
+        },
+        "iterate:all": {
+          "ms": 0.6049192812499999,
+          "madMs": 0.004626296875001046,
+          "betweenRoundsMadMs": 0.008908218749999364,
+          "roundMediansMs": [
+            0.5960110625000006,
+            0.6016028593749994,
+            0.6351692656249988,
+            0.6093704375000009,
+            0.6049192812499999,
+            0.6300403593750001,
+            0.582284515625
+          ],
+          "utf16UnitsPerSecond": 54385768.51446658
+        }
+      },
+      "dictionaryHeapBytes": 23546.4,
+      "dictionaryBufferBytes": 8156,
+      "resultHeapBytes": 384800,
+      "checks": {
+        "search": "93064955d980a1edbc548be7a7068d159c341c4ab5d3e808fca69da6d631adca",
+        "frequencies": "584420f693440e23d163f4e074345a00a6b710c0dcda57f41e5d9fd2d069a3b2",
+        "first": "0f58040334188573e31242045bfb7750c08b608506db249f90d907112949d27f",
+        "longest": "7fcd5c49561e60549f1dab41f9090c6b8bbb63639fa1b5c645fa94291d597d83",
+        "replaceFirst": "d30418c5b9cbd55553b8a545481d43661a590893ce38fcaf80bb25df8299c5c1",
+        "replaceLongest": "6608677c8b31b1bcc132f4b06709d229eb70b0a289b8dc350134a03c0697867e"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3-before",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "search": {
+          "ms": 0.8807213437499999,
+          "madMs": 0.005307281249999907,
+          "betweenRoundsMadMs": 0.01725131249999956,
+          "roundMediansMs": [
+            0.8720351562499999,
+            0.8807213437499999,
+            0.9090377499999995,
+            0.9050000000000002,
+            0.8521757812499997,
+            0.8979726562499994,
+            0.8789908750000004
+          ],
+          "utf16UnitsPerSecond": 38376496.99289464
+        },
+        "iterate:all": {
+          "ms": 0.8568489687500005,
+          "madMs": 0.0054466250000011485,
+          "betweenRoundsMadMs": 0.006093718749998089,
+          "roundMediansMs": [
+            0.8535872500000004,
+            0.8568489687500005,
+            0.8629426874999986,
+            0.8795546875000007,
+            0.8404010312499999,
+            0.8685325624999969,
+            0.8530494999999991
+          ],
+          "utf16UnitsPerSecond": 39445691.40266002
+        }
+      },
+      "dictionaryHeapBytes": 19264,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 165776,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "unicode",
+      "variant": "v3",
+      "keywords": 100,
+      "utf16Length": 33799,
+      "count": 2000,
+      "metrics": {
+        "search": {
+          "ms": 0.86557421875,
+          "madMs": 0.010253906249999556,
+          "betweenRoundsMadMs": 0.005549500000000318,
+          "roundMediansMs": [
+            0.8425585937500002,
+            0.8650091250000003,
+            0.8960208125000002,
+            0.869977875,
+            0.8556145937500004,
+            0.8711237187500003,
+            0.86557421875
+          ],
+          "utf16UnitsPerSecond": 39048066.899231456
+        },
+        "iterate:all": {
+          "ms": 0.8345182187500004,
+          "madMs": 0.005400999999999101,
+          "betweenRoundsMadMs": 0.013558562500000093,
+          "roundMediansMs": [
+            0.8117955937500003,
+            0.8468815000000003,
+            0.8577591250000012,
+            0.8557435000000009,
+            0.8209596562500003,
+            0.8345182187500004,
+            0.8256666562500001
+          ],
+          "utf16UnitsPerSecond": 40501212.84425222
+        }
+      },
+      "dictionaryHeapBytes": 17601.6,
+      "dictionaryBufferBytes": 7260,
+      "resultHeapBytes": 165680,
+      "checks": {
+        "search": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "frequencies": "d8eeb8686f131dc92f015e7fe699332d44feda172c0888ee641792b31760bfbe",
+        "first": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "longest": "5f2ee1cffe18e7213f13a8f838387c6732ba6cf1c4c32525dd585ab0185235f3",
+        "replaceFirst": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0",
+        "replaceLongest": "66d475285f52dd737b4dc7ce2201b76ba1881f6035e04a8e8b6863899232e2e0"
+      }
+    },
+    {
+      "scenario": "ascii-prefix",
+      "variant": "v3-before",
+      "keywords": 2,
+      "utf16Length": 56007,
+      "count": 2,
+      "metrics": {
+        "search": {
+          "ms": 2.865700562499999,
+          "madMs": 0.024916625000003023,
+          "betweenRoundsMadMs": 0.08362231250000107,
+          "roundMediansMs": [
+            2.800388062499998,
+            2.979776062500001,
+            2.949322875,
+            2.865700562499999,
+            2.832640625,
+            2.9875338750000004,
+            2.7701510625
+          ],
+          "utf16UnitsPerSecond": 19543912.13544664
+        },
+        "iterate:all": {
+          "ms": 2.8629323125,
+          "madMs": 0.014429750000005015,
+          "betweenRoundsMadMs": 0.0905234999999962,
+          "roundMediansMs": [
+            2.7724088125000037,
+            2.933130187499998,
+            3.064388062500001,
+            2.8629323125,
+            2.8541849375000012,
+            2.9624740000000003,
+            2.7584870000000024
+          ],
+          "utf16UnitsPerSecond": 19562809.695313048
+        }
+      },
+      "dictionaryHeapBytes": 9218.4,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 14488,
+      "checks": {
+        "search": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "frequencies": "e61b9f584dbe27741cef6e9ee440831d7d94470c0871b0871541f0308916efea",
+        "first": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "longest": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "replaceFirst": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3",
+        "replaceLongest": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3"
+      }
+    },
+    {
+      "scenario": "ascii-prefix",
+      "variant": "v3",
+      "keywords": 2,
+      "utf16Length": 56007,
+      "count": 2,
+      "metrics": {
+        "search": {
+          "ms": 0.8531119843749995,
+          "madMs": 0.009233734375000413,
+          "betweenRoundsMadMs": 0.03494792187499973,
+          "roundMediansMs": [
+            0.9456198124999999,
+            0.9838385312500009,
+            0.8181640624999997,
+            0.7989401093750002,
+            0.8531119843749995,
+            0.8769101562500001,
+            0.8297988281250004
+          ],
+          "utf16UnitsPerSecond": 65650232.35610907
+        },
+        "iterate:all": {
+          "ms": 0.8525898437499997,
+          "madMs": 0.010455718750000287,
+          "betweenRoundsMadMs": 0.04219401562499847,
+          "roundMediansMs": [
+            0.8600175781249995,
+            0.9683906250000014,
+            0.8103958281250012,
+            0.7953255156249988,
+            0.8525898437499997,
+            0.9276614687499993,
+            0.8265266874999995
+          ],
+          "utf16UnitsPerSecond": 65690437.68297882
+        }
+      },
+      "dictionaryHeapBytes": 9685.6,
+      "dictionaryBufferBytes": 0,
+      "resultHeapBytes": 26232,
+      "checks": {
+        "search": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "frequencies": "e61b9f584dbe27741cef6e9ee440831d7d94470c0871b0871541f0308916efea",
+        "first": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "longest": "8464434542f59056af7d5903341bf79f020f4ea8edd51b6e3e0a241b6fb15d6c",
+        "replaceFirst": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3",
+        "replaceLongest": "cd32956eb4319b651db98514c963436e6983ab60a285be3cc9fe73fa2215edc3"
+      }
+    }
+  ],
+  "memory": [],
+  "regressions": []
+}
