@@ -1,5 +1,19 @@
 # modern-ahocorasick
 
+## 3.3.0
+
+### Minor Changes
+
+- Add transformed streaming, first-hit queries, portable artifacts, async dynamic compilation and snapshot persistence
+
+### Patch Changes
+
+- Fix transformed token and replacement streams losing early matches or selecting overlaps. Share incremental stream processing, enforce original-text buffer limits, release obsolete mapping and lifecycle state, and preserve original Unicode boundaries, word context and protected text before selection.
+
+- Reduce dictionary construction memory with a numeric compact builder shared by all backends
+
+- Accelerate result-producing ASCII scans while preserving grapheme boundaries, original ranges, and lazy non-overlapping selection.
+
 ## 3.2.0
 
 ### Minor Changes
