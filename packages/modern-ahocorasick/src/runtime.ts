@@ -1,4 +1,4 @@
-import type { AutomatonNode, CompactAutomaton } from './internal.js'
+import type { CompactAutomaton } from './internal.js'
 import type { Boundary, BoundaryContext, CompileStats, Match, Matcher, MatcherOptions, MatchStrategy } from './types.js'
 import { advanceCompact } from './internal.js'
 // Private interoperability across independently bundled optional entries. Neither
@@ -22,7 +22,7 @@ export interface Backend {
 }
 export interface Profile {
   units?: (grapheme: string) => string[]
-  backend?: (nodes: AutomatonNode[]) => Backend
+  backend?: (compact: CompactAutomaton) => Backend
 }
 export interface ScanSession<T> {
   readonly safeOffset: number

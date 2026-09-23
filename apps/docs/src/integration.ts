@@ -9,29 +9,40 @@ const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
 export function compile(keywords: string) {
   const patterns = parseKeywords(keywords)
   const matcher = new AhoCorasick(patterns)
-  const { nodes: automaton } = buildAutomaton(
+  const { compact: automaton } = buildAutomaton(
     patterns.map(pattern => ({ pattern })),
     segmenter,
   )
   const prefixes = ['']
-  // Trie parents always precede their children in the builder's node array.
-  const nodes: GraphNode[] = automaton.map((node, id) => {
-    for (const [label, target] of node.next) {
+  const symbols = [...automaton.symbols.keys()]
+  // Trie parents always precede their children in the builder's state IDs.
+  const nodes: GraphNode[] = Array.from({ length: automaton.failures.length }, (_, id) => {
+    const edges = []
+    for (let edge = automaton.edges[id]; edge < automaton.edges[id + 1]; edge++) {
+      const label = symbols[automaton.labels[edge]]
+      const target = automaton.targets[edge]
       prefixes[target] = prefixes[id] + label
+      edges.push({ label, target })
     }
+    // The visual graph keeps dictionary insertion order, independent of the
+    // sorted numeric labels used for binary search in the scanner.
+    edges.sort((a, b) => a.target - b.target)
+    const ownPatternIndices = Array.from(automaton.patterns.subarray(automaton.terminals[id], automaton.terminals[id + 1]))
     const patternIndices: number[] = []
-    for (let output = id; output !== -1; output = automaton[output].output) {
-      patternIndices.push(...automaton[output].terminals)
+    for (let output = id; output !== -1; output = automaton.outputs[output]) {
+      for (let index = automaton.terminals[output]; index < automaton.terminals[output + 1]; index++) {
+        patternIndices.push(automaton.patterns[index])
+      }
     }
     return {
       id,
       prefix: prefixes[id],
-      ownPatternIndices: [...node.terminals],
-      failure: node.failure,
-      terminal: node.terminals.length > 0,
+      ownPatternIndices,
+      failure: automaton.failures[id],
+      terminal: ownPatternIndices.length > 0,
       patternIndices,
       output: patternIndices.map(index => patterns[index]),
-      edges: [...node.next].map(([label, target]) => ({ label, target })),
+      edges,
     }
   })
   return { patterns, nodes, matcher }
