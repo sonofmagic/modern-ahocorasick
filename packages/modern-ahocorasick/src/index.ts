@@ -446,12 +446,40 @@ export default class AhoCorasick<T = unknown> {
       return
     }
     let state = 0
-    for (const { segment, index } of this.#segmenter.segment(text)) {
+    let ascii = asciiPrefix(text)
+    let native = ascii === undefined ? this.#segmenter.segment(text)[Symbol.iterator]() : undefined
+    let offset = 0
+    while (true) {
+      let segment: string
+      let end: number
+      // Separate next() call sites keep native and reusable ASCII iterators
+      // monomorphic without wrapping or allocating another value per grapheme.
+      if (ascii !== undefined) {
+        const next = ascii.next()
+        if (next.done) {
+          offset = ascii.position
+          if (offset === text.length) {
+            break
+          }
+          native = this.#segmenter.segment(text.slice(offset))[Symbol.iterator]()
+          ascii = undefined
+          continue
+        }
+        segment = next.value.segment
+        end = next.value.index + segment.length
+      }
+      else {
+        const next = native!.next()
+        if (next.done) {
+          break
+        }
+        segment = next.value.segment
+        end = offset + next.value.index + segment.length
+      }
       state = advanceCompact(this.#nodes, state, segment)
       if (this.#counts[state] === 0) {
         continue
       }
-      const end = index + segment.length
       // Own terminals are longest, followed by progressively shorter suffixes.
       for (let output = state; output !== -1; output = this.#nodes.outputs[output]) {
         for (let terminal = this.#nodes.terminals[output]; terminal < this.#nodes.terminals[output + 1]; terminal++) {
@@ -482,7 +510,36 @@ export default class AhoCorasick<T = unknown> {
     let lastCandidateStart = -1
     let earliest = -1
     let earliestEnd = -1
-    for (const { segment, index } of this.#segmenter.segment(text)) {
+    let ascii = asciiPrefix(text)
+    let native = ascii === undefined ? this.#segmenter.segment(text)[Symbol.iterator]() : undefined
+    let offset = 0
+    while (true) {
+      let segment: string
+      let end: number
+      // Carry the automaton and candidate window across this one-way switch.
+      // ICU starts at the last settled original-text grapheme boundary.
+      if (ascii !== undefined) {
+        const next = ascii.next()
+        if (next.done) {
+          offset = ascii.position
+          if (offset === text.length) {
+            break
+          }
+          native = this.#segmenter.segment(text.slice(offset))[Symbol.iterator]()
+          ascii = undefined
+          continue
+        }
+        segment = next.value.segment
+        end = next.value.index + segment.length
+      }
+      else {
+        const next = native!.next()
+        if (next.done) {
+          break
+        }
+        segment = next.value.segment
+        end = offset + next.value.index + segment.length
+      }
       state = advanceCompact(this.#nodes, state, segment)
       position++
       if (this.#counts[state] === 0 && cursor > lastCandidateStart) {
@@ -492,7 +549,6 @@ export default class AhoCorasick<T = unknown> {
         // Defer empty-window advancement until a candidate actually arrives.
         cursor = Math.max(cursor, position - capacity)
       }
-      const end = index + segment.length
       for (let output = this.#counts[state] === 0 ? -1 : state; output !== -1; output = this.#nodes.outputs[output]) {
         const terminal = this.#nodes.terminals[output]
         if (terminal === this.#nodes.terminals[output + 1]) {
