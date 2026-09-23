@@ -3,9 +3,18 @@ title: "后端选择与性能"
 description: "根据实际词典、输入和输出规模的测量结果选择后端。"
 ---
 
+<script setup>
+import PerformanceCharts from "../../src/PerformanceCharts.vue"
+import { data } from "../../src/performance.data"
+</script>
+
 # 后端选择与性能
 
 根据实际词典、输入和输出规模的测量结果选择后端。
+
+## 性能图表
+
+<PerformanceCharts :data="data" language="zh" />
 
 ## 后端选择
 

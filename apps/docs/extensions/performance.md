@@ -3,9 +3,18 @@ title: "Backends and performance"
 description: "Choose a backend using measurements of your dictionary, input and output volume."
 ---
 
+<script setup>
+import PerformanceCharts from "../src/PerformanceCharts.vue"
+import { data } from "../src/performance.data"
+</script>
+
 # Backends and performance
 
 Choose a backend using measurements of your dictionary, input and output volume.
+
+## Performance in charts
+
+<PerformanceCharts :data="data" language="en" />
 
 ## Backend choices
 

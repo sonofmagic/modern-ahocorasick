@@ -20,6 +20,8 @@ async function verify() {
     '/zh/api/options',
     '/stream/sessions',
     '/zh/stream/sessions',
+    '/extensions/performance',
+    '/zh/extensions/performance',
     '/visualization',
     '/zh/visualization',
   ]) {
